@@ -1,0 +1,213 @@
+/* ============================================
+   一問一答マッチング — スタイル
+   ============================================ */
+
+.matching-page {
+    padding: 40px 0 80px;
+    min-height: 70vh;
+}
+
+/* 進捗バー */
+.progress-container {
+    max-width: 600px;
+    margin: 0 auto 48px;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.progress-label {
+    font-size: 13px;
+    color: #666666;
+}
+
+.progress-percent {
+    font-size: 14px;
+    font-weight: 700;
+    color: #003366;
+}
+
+.progress-track {
+    width: 100%;
+    height: 8px;
+    background-color: #E8E8E8;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #003366, #0056b3);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+}
+
+.progress-step {
+    font-size: 13px;
+    color: #999999;
+    text-align: right;
+    margin-top: 6px;
+    margin-bottom: 0;
+}
+
+/* 質問コンテナ */
+.question-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.question-slide {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.question-text {
+    font-size: 22px;
+    font-weight: 500;
+    color: #003366;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.question-sub {
+    font-size: 14px;
+    color: #666666;
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.question-input {
+    margin-bottom: 24px;
+}
+
+/* セレクト（大きめ） */
+.select-large {
+    font-size: 18px;
+    padding: 14px 18px;
+    max-width: 400px;
+    margin: 0 auto;
+    display: block;
+}
+
+/* テキスト入力（大きめ） */
+.input-large {
+    font-size: 18px;
+    padding: 14px 18px;
+    max-width: 400px;
+    margin: 0 auto;
+    display: block;
+}
+
+.input-note {
+    font-size: 12px;
+    color: #999999;
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+/* カード型選択肢 */
+.option-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.option-cards-two {
+    grid-template-columns: 1fr 1fr;
+}
+
+.option-cards-multi {
+    grid-template-columns: 1fr 1fr;
+}
+
+.option-card {
+    cursor: pointer;
+    display: block;
+}
+
+.option-card input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.option-card-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 18px 16px;
+    background: #FFFFFF;
+    border: 2px solid #CCCCCC;
+    border-radius: 4px;
+    transition: border-color 0.2s, background-color 0.2s;
+    min-height: 64px;
+}
+
+.option-card input:checked + .option-card-inner {
+    border-color: #003366;
+    background-color: #EBF0F5;
+}
+
+.option-card:hover .option-card-inner {
+    border-color: #0056b3;
+}
+
+.option-card-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+}
+
+/* ナビゲーションボタン */
+.question-nav {
+    display: flex;
+    justify-content: space-between;
+    max-width: 600px;
+    margin: 32px auto 0;
+}
+
+.btn-back {
+    padding: 12px 28px;
+}
+
+.btn-next {
+    padding: 12px 40px;
+    font-size: 16px;
+    min-width: 140px;
+}
+
+.btn-next:disabled {
+    background-color: #CCCCCC;
+    cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .matching-page {
+        padding: 24px 0 60px;
+    }
+
+    .question-text {
+        font-size: 18px;
+    }
+
+    .option-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .question-nav {
+        padding: 0 16px;
+    }
+}

@@ -1,4 +1,19 @@
+# Environment
 .env
+
+# Node
 node_modules/
+
+# WordPress
 wp-config.php
 *.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  wordpress:
+    image: wordpress:6-php8.2-apache
+    container_name: subsidy-match-wp
+    restart: unless-stopped
+    ports:
+      - "${WP_PORT:-8080}:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: ${DB_USER:-wordpress}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:-wordpress}
+      WORDPRESS_DB_NAME: ${DB_NAME:-wordpress}
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./wp-content/themes/subsidy-match:/var/www/html/wp-content/themes/subsidy-match
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - subsidy-net
+
+  db:
+    image: mysql:8.0
+    container_name: subsidy-match-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-wordpress}
+      MYSQL_USER: ${DB_USER:-wordpress}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-wordpress}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpassword}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - subsidy-net
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: subsidy-match-pma
+    restart: unless-stopped
+    ports:
+      - "${PMA_PORT:-8081}:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: ${DB_USER:-wordpress}
+      PMA_PASSWORD: ${DB_PASSWORD:-wordpress}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - subsidy-net
+
+volumes:
+  wordpress_data:
+  db_data:
+
+networks:
+  subsidy-net:
+    driver: bridge
