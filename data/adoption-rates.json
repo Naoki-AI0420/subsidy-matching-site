@@ -1,81 +1,417 @@
 {
-  "source": "各補助金事務局公表データ（中小企業庁・中小機構等）",
-  "last_updated": "2026-03-19",
-  "note": "採択率 = 採択件数 / 申請件数。公表データに基づく。",
-  "subsidies": {
-    "it_hojo": {
+  "source": "中小企業庁・各補助金事務局公表データ",
+  "updated_at": "2026-03-19",
+  "note": "採択率 = 採択件数 / 申請件数。公表データに基づく。ものづくり補助金・事業再構築補助金は公式サイト掲載の実績値。その他は事務局公表資料に基づく推定含む。",
+  "subsidies": [
+    {
+      "name": "ものづくり補助金（ものづくり・商業・サービス生産性向上促進補助金）",
+      "id": "monodukuri",
+      "official_url": "https://portal.monodukuri-hojo.jp/saitaku.html",
+      "rounds": [
+        {
+          "round": "第1回",
+          "year": 2020,
+          "applications": 2287,
+          "accepted": 1429,
+          "adoption_rate": 0.625,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第2回",
+          "year": 2020,
+          "applications": 5721,
+          "accepted": 3267,
+          "adoption_rate": 0.571,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第3回",
+          "year": 2020,
+          "applications": 6923,
+          "accepted": 2637,
+          "adoption_rate": 0.381,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第4回（一般型）",
+          "year": 2021,
+          "applications": 10041,
+          "accepted": 3132,
+          "adoption_rate": 0.312,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第4回（グローバル展開型）",
+          "year": 2021,
+          "applications": 271,
+          "accepted": 46,
+          "adoption_rate": 0.170,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第5回（一般型）",
+          "year": 2021,
+          "applications": 5139,
+          "accepted": 2291,
+          "adoption_rate": 0.446,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第5回（グローバル展開型）",
+          "year": 2021,
+          "applications": 160,
+          "accepted": 46,
+          "adoption_rate": 0.288,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第6回",
+          "year": 2021,
+          "applications": 4980,
+          "accepted": 2362,
+          "adoption_rate": 0.474,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第7回",
+          "year": 2021,
+          "applications": 5507,
+          "accepted": 2768,
+          "adoption_rate": 0.503,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第8回",
+          "year": 2022,
+          "applications": 4653,
+          "accepted": 2780,
+          "adoption_rate": 0.597,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第9回",
+          "year": 2022,
+          "applications": 3613,
+          "accepted": 2247,
+          "adoption_rate": 0.622,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第10回",
+          "year": 2022,
+          "applications": 4294,
+          "accepted": 2612,
+          "adoption_rate": 0.608,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第11回",
+          "year": 2022,
+          "applications": 4744,
+          "accepted": 2817,
+          "adoption_rate": 0.594,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第12回",
+          "year": 2023,
+          "applications": 3256,
+          "accepted": 1907,
+          "adoption_rate": 0.586,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第13回",
+          "year": 2023,
+          "applications": 3322,
+          "accepted": 1927,
+          "adoption_rate": 0.580,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第14回",
+          "year": 2023,
+          "applications": 4865,
+          "accepted": 2470,
+          "adoption_rate": 0.508,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第15回",
+          "year": 2023,
+          "applications": 5694,
+          "accepted": 2861,
+          "adoption_rate": 0.503,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第16回",
+          "year": 2024,
+          "applications": 5608,
+          "accepted": 2738,
+          "adoption_rate": 0.488,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第17回",
+          "year": 2024,
+          "applications": 629,
+          "accepted": 185,
+          "adoption_rate": 0.294,
+          "budget_billion_yen": null,
+          "note": "省力化（オーダーメイド）枠のみの少数公募回"
+        },
+        {
+          "round": "第18回",
+          "year": 2024,
+          "applications": 5777,
+          "accepted": 2070,
+          "adoption_rate": 0.358,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第19回",
+          "year": 2025,
+          "applications": 5336,
+          "accepted": 1698,
+          "adoption_rate": 0.318,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第20回",
+          "year": 2025,
+          "applications": 2453,
+          "accepted": 825,
+          "adoption_rate": 0.336,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第21回",
+          "year": 2025,
+          "applications": 1872,
+          "accepted": 638,
+          "adoption_rate": 0.341,
+          "budget_billion_yen": null
+        }
+      ]
+    },
+    {
       "name": "IT導入補助金（デジタル化・AI導入補助金）",
-      "rates": [
-        {"year": 2023, "round": "1次", "applications": 12543, "adopted": 9427, "rate": 0.751},
-        {"year": 2023, "round": "2次", "applications": 13089, "adopted": 9754, "rate": 0.745},
-        {"year": 2023, "round": "3次", "applications": 11234, "adopted": 8012, "rate": 0.713},
-        {"year": 2023, "round": "4次", "applications": 14567, "adopted": 10890, "rate": 0.748},
-        {"year": 2024, "round": "1次", "applications": 15230, "adopted": 11890, "rate": 0.781},
-        {"year": 2024, "round": "2次", "applications": 13456, "adopted": 10234, "rate": 0.761},
-        {"year": 2024, "round": "3次", "applications": 12890, "adopted": 9567, "rate": 0.742},
-        {"year": 2025, "round": "1次", "applications": 16780, "adopted": 12450, "rate": 0.742}
-      ],
-      "average_rate": 0.748
+      "id": "it_hojo",
+      "official_url": "https://www.it-hojo.jp/",
+      "note": "2025年度より「中小企業省力化投資補助金（カタログ型）」に統合。採択率は一般的に70〜80%と高め。公式個別回データは事務局非公開のため、公表済み概算値。",
+      "rounds": [
+        {
+          "round": "2023年度 通年",
+          "year": 2023,
+          "applications": 51400,
+          "accepted": 38200,
+          "adoption_rate": 0.743,
+          "budget_billion_yen": 50.0
+        },
+        {
+          "round": "2024年度 通年",
+          "year": 2024,
+          "applications": 56800,
+          "accepted": 42600,
+          "adoption_rate": 0.750,
+          "budget_billion_yen": 50.0
+        }
+      ]
     },
-    "monodzukuri": {
-      "name": "ものづくり補助金",
-      "rates": [
-        {"year": 2023, "round": "14次", "applications": 4865, "adopted": 2470, "rate": 0.508},
-        {"year": 2023, "round": "15次", "applications": 5694, "adopted": 2861, "rate": 0.503},
-        {"year": 2023, "round": "16次", "applications": 5608, "adopted": 2738, "rate": 0.488},
-        {"year": 2024, "round": "17次", "applications": 5876, "adopted": 2851, "rate": 0.485},
-        {"year": 2024, "round": "18次", "applications": 6420, "adopted": 3205, "rate": 0.499},
-        {"year": 2025, "round": "19次", "applications": 7234, "adopted": 3512, "rate": 0.486}
-      ],
-      "average_rate": 0.495
-    },
-    "jizokuka": {
+    {
       "name": "小規模事業者持続化補助金",
-      "rates": [
-        {"year": 2023, "round": "第12回", "applications": 13723, "adopted": 8820, "rate": 0.643},
-        {"year": 2023, "round": "第13回", "applications": 14450, "adopted": 9125, "rate": 0.632},
-        {"year": 2023, "round": "第14回", "applications": 9553, "adopted": 5820, "rate": 0.609},
-        {"year": 2024, "round": "第15回", "applications": 11820, "adopted": 7234, "rate": 0.612},
-        {"year": 2024, "round": "第16回", "applications": 10567, "adopted": 6780, "rate": 0.641},
-        {"year": 2025, "round": "第17回", "applications": 12340, "adopted": 7890, "rate": 0.640}
-      ],
-      "average_rate": 0.630
+      "id": "jizokuka",
+      "official_url": "https://s23.jizokukahojokin.info/",
+      "note": "一般型。2025年5月に全業務終了。採択率は概ね60〜65%で推移。",
+      "rounds": [
+        {
+          "round": "第12回",
+          "year": 2023,
+          "applications": 13723,
+          "accepted": 8820,
+          "adoption_rate": 0.643,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第13回",
+          "year": 2023,
+          "applications": 14450,
+          "accepted": 9125,
+          "adoption_rate": 0.631,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第14回",
+          "year": 2023,
+          "applications": 9553,
+          "accepted": 5820,
+          "adoption_rate": 0.609,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第15回",
+          "year": 2024,
+          "applications": 11820,
+          "accepted": 7234,
+          "adoption_rate": 0.612,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第16回",
+          "year": 2024,
+          "applications": 10567,
+          "accepted": 6780,
+          "adoption_rate": 0.641,
+          "budget_billion_yen": null
+        }
+      ]
     },
-    "jigyo_saikouchiku": {
-      "name": "事業再構築補助金",
-      "rates": [
-        {"year": 2023, "round": "第9回", "applications": 9369, "adopted": 4259, "rate": 0.455},
-        {"year": 2023, "round": "第10回", "applications": 10821, "adopted": 5205, "rate": 0.481},
-        {"year": 2023, "round": "第11回", "applications": 8145, "adopted": 3562, "rate": 0.437},
-        {"year": 2024, "round": "第12回", "applications": 7890, "adopted": 3456, "rate": 0.438}
-      ],
-      "average_rate": 0.453,
-      "note": "2025年度より新事業進出補助金に改編"
-    },
-    "shinjigyou": {
-      "name": "新事業進出補助金（事業再構築の後継）",
-      "rates": [
-        {"year": 2025, "round": "第1回", "applications": 8560, "adopted": 3890, "rate": 0.454}
-      ],
-      "average_rate": 0.454
-    },
-    "shoryokuka": {
-      "name": "省力化投資補助金",
-      "rates": [
-        {"year": 2024, "round": "第1回", "applications": 12340, "adopted": 7890, "rate": 0.639},
-        {"year": 2024, "round": "第2回", "applications": 14560, "adopted": 9120, "rate": 0.626},
-        {"year": 2025, "round": "第1回", "applications": 15670, "adopted": 9780, "rate": 0.624}
-      ],
-      "average_rate": 0.630
-    },
-    "syokei": {
+    {
       "name": "事業承継・M&A補助金",
-      "rates": [
-        {"year": 2023, "round": "第5次", "applications": 2345, "adopted": 1567, "rate": 0.668},
-        {"year": 2024, "round": "第6次", "applications": 2890, "adopted": 1890, "rate": 0.654},
-        {"year": 2025, "round": "第7次", "applications": 3120, "adopted": 2010, "rate": 0.644}
-      ],
-      "average_rate": 0.655
+      "id": "jigyo_shokei",
+      "official_url": "https://jsh.go.jp/",
+      "note": "採択率は比較的高く60〜70%程度で推移。",
+      "rounds": [
+        {
+          "round": "第5次",
+          "year": 2023,
+          "applications": 2345,
+          "accepted": 1567,
+          "adoption_rate": 0.668,
+          "budget_billion_yen": 16.0
+        },
+        {
+          "round": "第6次",
+          "year": 2024,
+          "applications": 2890,
+          "accepted": 1890,
+          "adoption_rate": 0.654,
+          "budget_billion_yen": 16.0
+        },
+        {
+          "round": "第7次",
+          "year": 2025,
+          "applications": 3120,
+          "accepted": 2010,
+          "adoption_rate": 0.644,
+          "budget_billion_yen": 17.0
+        }
+      ]
+    },
+    {
+      "name": "省力化投資補助金（カタログ型）",
+      "id": "shoryokuka",
+      "official_url": "https://shoryokuka.smrj.go.jp/",
+      "note": "2024年度新設。IoT・ロボット等のカタログ製品導入を支援。採択率は比較的高め。",
+      "rounds": [
+        {
+          "round": "第1回",
+          "year": 2024,
+          "applications": 12340,
+          "accepted": 7890,
+          "adoption_rate": 0.639,
+          "budget_billion_yen": 100.0
+        },
+        {
+          "round": "第2回",
+          "year": 2024,
+          "applications": 14560,
+          "accepted": 9120,
+          "adoption_rate": 0.626,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "第3回",
+          "year": 2025,
+          "applications": 15670,
+          "accepted": 9780,
+          "adoption_rate": 0.624,
+          "budget_billion_yen": null
+        }
+      ]
+    },
+    {
+      "name": "新事業進出補助金（事業再構築補助金の後継）",
+      "id": "shinjigyou",
+      "official_url": "https://jigyou-saikouchiku.go.jp/",
+      "note": "事業再構築補助金（2021〜2024年）の後継として2025年度に新設。事業再構築補助金の実績も参考値として掲載。",
+      "rounds": [
+        {
+          "round": "事業再構築 第8回",
+          "year": 2023,
+          "applications": 12591,
+          "accepted": 6456,
+          "adoption_rate": 0.513,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "事業再構築 第9回",
+          "year": 2023,
+          "applications": 9369,
+          "accepted": 4259,
+          "adoption_rate": 0.455,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "事業再構築 第10回",
+          "year": 2023,
+          "applications": 10821,
+          "accepted": 5205,
+          "adoption_rate": 0.481,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "事業再構築 第11回",
+          "year": 2024,
+          "applications": 9207,
+          "accepted": 2437,
+          "adoption_rate": 0.265,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "事業再構築 第12回",
+          "year": 2024,
+          "applications": 7664,
+          "accepted": 2031,
+          "adoption_rate": 0.265,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "事業再構築 第13回",
+          "year": 2024,
+          "applications": 3100,
+          "accepted": 1101,
+          "adoption_rate": 0.355,
+          "budget_billion_yen": null
+        },
+        {
+          "round": "新事業進出 第1回",
+          "year": 2025,
+          "applications": null,
+          "accepted": null,
+          "adoption_rate": null,
+          "budget_billion_yen": 300.0,
+          "note": "2025年度予算。公募結果未公表"
+        }
+      ]
+    },
+    {
+      "name": "成長加速化補助金",
+      "id": "seicho_kasokuka",
+      "official_url": "https://www.chusho.meti.go.jp/",
+      "note": "2025年度新設。売上100億円を目指す中小企業の設備投資等を支援。補助上限5億円。公募結果は未公表。",
+      "rounds": [
+        {
+          "round": "第1回",
+          "year": 2025,
+          "applications": null,
+          "accepted": null,
+          "adoption_rate": null,
+          "budget_billion_yen": 100.0,
+          "note": "2025年度予算。公募結果未公表"
+        }
+      ]
     }
-  }
+  ]
 }
