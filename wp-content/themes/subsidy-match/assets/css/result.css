@@ -1,44 +1,83 @@
 /* ============================================
-   結果画面 — スタイル
+   結果画面 — 営業提案書スタイル
    ============================================ */
 
 .result-container {
-    max-width: 700px;
+    max-width: 760px;
     margin: 0 auto;
     animation: fadeIn 0.4s ease;
 }
 
-.result-header {
+/* ========== 提案書ヘッダー ========== */
+.proposal-header {
     text-align: center;
     margin-bottom: 40px;
-    padding: 32px 0;
-    border-bottom: 2px solid #003366;
+    padding: 40px 24px 32px;
+    background: linear-gradient(135deg, #003366 0%, #004d99 100%);
+    border-radius: 4px;
+    color: #FFFFFF;
 }
 
-.result-header h2 {
+.proposal-header-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    padding: 4px 16px;
+    margin-bottom: 16px;
+}
+
+.proposal-header h2 {
     font-size: 24px;
-    color: #003366;
+    font-weight: 700;
     margin-bottom: 8px;
+    color: #FFFFFF;
 }
 
-.result-header p {
+.proposal-header p {
     font-size: 14px;
-    color: #666666;
+    color: rgba(255, 255, 255, 0.85);
     margin-bottom: 0;
 }
 
-.result-count {
-    font-size: 36px;
-    font-weight: 700;
-    color: #003366;
-    display: block;
-    margin: 8px 0;
+/* ========== セクション共通 ========== */
+.proposal-section {
+    margin-bottom: 32px;
 }
 
-/* 補助金カード */
+.proposal-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #003366;
+    margin-bottom: 20px;
+}
+
+.proposal-section-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #003366;
+    margin: 0;
+}
+
+.proposal-section-count {
+    font-size: 14px;
+    font-weight: 600;
+    color: #003366;
+    background: #E8EEF5;
+    padding: 4px 12px;
+    border-radius: 2px;
+}
+
+/* ========== 補助金カード ========== */
 .subsidy-card {
     background: #FFFFFF;
-    border: 1px solid #CCCCCC;
+    border: 1px solid #D0D0D0;
     border-left: 4px solid #003366;
     border-radius: 4px;
     padding: 24px;
@@ -49,37 +88,81 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     gap: 12px;
 }
 
 .subsidy-card-title {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
     color: #003366;
     margin: 0;
+    line-height: 1.4;
 }
 
 .subsidy-card-badge {
     flex-shrink: 0;
 }
 
-.subsidy-card-amount {
-    font-size: 20px;
-    font-weight: 700;
-    color: #333333;
-    margin-bottom: 8px;
+.badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
 }
 
-.subsidy-card-amount span {
-    font-size: 14px;
-    font-weight: 400;
-    color: #666666;
+.badge-high {
+    background: #E8F5E9;
+    color: #2E7D32;
+    border: 1px solid #C8E6C9;
+}
+
+.badge-medium {
+    background: #FFF8E1;
+    color: #F57F17;
+    border: 1px solid #FFECB3;
+}
+
+.badge-low {
+    background: #F5F5F5;
+    color: #757575;
+    border: 1px solid #E0E0E0;
+}
+
+/* 補助金詳細グリッド */
+.subsidy-card-details {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 12px;
+    padding: 12px 16px;
+    background: #F8F9FA;
+    border-radius: 2px;
+}
+
+.subsidy-detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.subsidy-detail-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #888888;
+    letter-spacing: 0.05em;
+}
+
+.subsidy-detail-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #333333;
 }
 
 .subsidy-card-summary {
     font-size: 14px;
-    color: #666666;
+    color: #555555;
     margin-bottom: 12px;
     line-height: 1.7;
 }
@@ -93,7 +176,7 @@
 }
 
 .subsidy-card-deadline {
-    font-weight: 500;
+    font-weight: 600;
     color: #C62828;
 }
 
@@ -109,7 +192,7 @@
     text-decoration: underline;
 }
 
-/* 適合度バッジ色 */
+/* 適合度で左ボーダー色を変更 */
 .subsidy-card[data-match="high"] {
     border-left-color: #2E7D32;
 }
@@ -122,28 +205,268 @@
     border-left-color: #757575;
 }
 
-/* CTA セクション */
-.result-cta {
-    background-color: #F5F5F5;
-    border: 1px solid #CCCCCC;
+/* ========== DX課題セクション ========== */
+.proposal-dx-section {
+    background: #FAFBFC;
+    border: 1px solid #D0D0D0;
     border-radius: 4px;
-    padding: 32px;
-    text-align: center;
-    margin-top: 32px;
+    padding: 28px 24px;
 }
 
-.result-cta h3 {
-    font-size: 20px;
-    margin-bottom: 12px;
+.proposal-dx-section .proposal-section-header {
+    border-bottom-color: #003366;
 }
 
-.result-cta p {
-    font-size: 14px;
-    color: #666666;
+.dx-level-card {
+    background: #FFFFFF;
+    border: 1px solid #D0D0D0;
+    border-radius: 4px;
+    padding: 20px;
     margin-bottom: 20px;
 }
 
-/* ローディング */
+.dx-level-badge {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 16px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+}
+
+.dx-level-beginner {
+    background: #FFF3E0;
+    color: #E65100;
+    border: 1px solid #FFE0B2;
+}
+
+.dx-level-developing {
+    background: #E3F2FD;
+    color: #1565C0;
+    border: 1px solid #BBDEFB;
+}
+
+.dx-level-advanced {
+    background: #E8F5E9;
+    color: #2E7D32;
+    border: 1px solid #C8E6C9;
+}
+
+.dx-level-card p {
+    font-size: 14px;
+    color: #555555;
+    margin: 0;
+    line-height: 1.7;
+}
+
+.dx-issues-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px;
+}
+
+.dx-issues-list li {
+    font-size: 14px;
+    color: #333333;
+    padding: 8px 0 8px 24px;
+    border-bottom: 1px solid #E8E8E8;
+    position: relative;
+    line-height: 1.6;
+}
+
+.dx-issues-list li:last-child {
+    border-bottom: none;
+}
+
+.dx-issues-list li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    background: #C62828;
+    border-radius: 50%;
+}
+
+.dx-pain-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.dx-pain-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #003366;
+    background: #E8EEF5;
+    border: 1px solid #BDD0E7;
+    border-radius: 2px;
+    padding: 4px 12px;
+}
+
+/* ========== おすすめシステム導入 ========== */
+.proposal-recommend-lead {
+    font-size: 14px;
+    color: #555555;
+    margin-bottom: 20px;
+    line-height: 1.7;
+}
+
+.recommend-card {
+    background: #FFFFFF;
+    border: 1px solid #D0D0D0;
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 16px;
+}
+
+.recommend-card-header h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #003366;
+    margin: 0 0 8px;
+}
+
+.recommend-card-desc {
+    font-size: 14px;
+    color: #555555;
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.recommend-card-cost {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #F8F9FA;
+    border-radius: 2px;
+}
+
+.recommend-cost-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.recommend-cost-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #888888;
+}
+
+.recommend-cost-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333333;
+}
+
+.recommend-cost-arrow {
+    font-size: 20px;
+    color: #003366;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.recommend-cost-actual {
+    flex: 1;
+}
+
+.recommend-cost-highlight {
+    color: #C62828;
+}
+
+/* ========== CTA セクション ========== */
+.proposal-cta-section {
+    background: #003366;
+    border-radius: 4px;
+    padding: 40px 32px;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.proposal-cta-section h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 24px;
+}
+
+.proposal-steps {
+    text-align: left;
+    margin-bottom: 32px;
+}
+
+.proposal-step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.proposal-step-item:last-child {
+    border-bottom: none;
+}
+
+.proposal-step-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+    flex-shrink: 0;
+}
+
+.proposal-step-content strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 4px;
+}
+
+.proposal-step-content p {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.proposal-cta-btn {
+    display: inline-block;
+    background: #FFFFFF;
+    color: #003366;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 16px 48px;
+    border-radius: 4px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.proposal-cta-btn:hover {
+    opacity: 0.9;
+}
+
+.proposal-cta-note {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 12px;
+    margin-bottom: 0;
+}
+
+/* ========== ローディング ========== */
 .result-loading {
     text-align: center;
     padding: 60px 0;
@@ -168,19 +491,16 @@
     color: #666666;
 }
 
-/* 結果なし */
-.result-empty {
-    text-align: center;
-    padding: 48px 0;
-}
-
-.result-empty p {
-    font-size: 16px;
-    color: #666666;
-}
-
-/* Responsive */
+/* ========== Responsive ========== */
 @media (max-width: 768px) {
+    .proposal-header {
+        padding: 32px 16px 24px;
+    }
+
+    .proposal-header h2 {
+        font-size: 20px;
+    }
+
     .subsidy-card {
         padding: 20px 16px;
     }
@@ -189,13 +509,38 @@
         flex-direction: column;
     }
 
+    .subsidy-card-details {
+        flex-direction: column;
+        gap: 12px;
+    }
+
     .subsidy-card-meta {
         flex-direction: column;
         align-items: flex-start;
         gap: 4px;
     }
 
-    .result-cta {
-        padding: 24px 16px;
+    .proposal-dx-section {
+        padding: 20px 16px;
+    }
+
+    .recommend-card-cost {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .recommend-cost-arrow {
+        transform: rotate(90deg);
+    }
+
+    .proposal-cta-section {
+        padding: 32px 16px;
+    }
+
+    .proposal-cta-btn {
+        padding: 14px 32px;
+        font-size: 15px;
+        width: 100%;
+        text-align: center;
     }
 }

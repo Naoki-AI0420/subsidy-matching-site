@@ -53,8 +53,18 @@ function subsidy_match_handle_match($request) {
                         ? array_map('sanitize_text_field', $params['challenges'])
                         : array();
     $annual_revenue = sanitize_text_field($params['annual_revenue'] ?? '');
-    $has_experience = isset($params['has_experience']) ? (int) $params['has_experience'] : 0;
-    $email          = sanitize_email($params['email'] ?? '');
+    $has_experience    = isset($params['has_experience']) ? (int) $params['has_experience'] : 0;
+    $email             = sanitize_email($params['email'] ?? '');
+
+    // DX関連パラメータ
+    $dx_schedule       = sanitize_text_field($params['dx_schedule'] ?? '');
+    $dx_invoice        = sanitize_text_field($params['dx_invoice'] ?? '');
+    $dx_crm            = sanitize_text_field($params['dx_crm'] ?? '');
+    $dx_ec             = sanitize_text_field($params['dx_ec'] ?? '');
+    $dx_communication  = sanitize_text_field($params['dx_communication'] ?? '');
+    $dx_pain           = isset($params['dx_pain']) && is_array($params['dx_pain'])
+                           ? array_map('sanitize_text_field', $params['dx_pain'])
+                           : array();
 
     // 全補助金取得
     $subsidies = get_posts(array(
@@ -99,17 +109,42 @@ function subsidy_match_handle_match($request) {
             $score += 15;
         }
 
-        // 課題マッチ（25点）
+        // 課題マッチ（20点）
         $target_challenges = get_post_meta($post->ID, '_subsidy_target_challenges', true);
         $target_challenges = is_array($target_challenges) ? $target_challenges : array();
         if (!empty($challenges) && !empty($target_challenges)) {
             $intersect = array_intersect($challenges, $target_challenges);
             if (count($intersect) > 0) {
                 $ratio = count($intersect) / count($target_challenges);
-                $score += (int) round(25 * min($ratio * 1.5, 1.0));
+                $score += (int) round(20 * min($ratio * 1.5, 1.0));
             }
         } elseif (empty($target_challenges)) {
-            $score += 25;
+            $score += 20;
+        }
+
+        // DX課題ボーナス（+10点）— IT系補助金との親和性
+        $dx_analog_count = 0;
+        if (in_array($dx_schedule, array('paper', 'none'))) $dx_analog_count++;
+        if ($dx_invoice === 'handwrite') $dx_analog_count++;
+        if (in_array($dx_crm, array('paper', 'none'))) $dx_analog_count++;
+        if ($dx_ec === 'none') $dx_analog_count++;
+        if ($dx_communication === 'verbal') $dx_analog_count++;
+
+        $subsidy_category = get_post_meta($post->ID, '_subsidy_category', true);
+        $is_it_subsidy = in_array($subsidy_category, array('it', 'dx', 'digital'));
+        // IT導入補助金など名称ベースの判定
+        if (!$is_it_subsidy && (
+            strpos($post->post_title, 'IT') !== false ||
+            strpos($post->post_title, 'デジタル') !== false ||
+            strpos($post->post_title, 'DX') !== false
+        )) {
+            $is_it_subsidy = true;
+        }
+
+        if ($dx_analog_count >= 2 && $is_it_subsidy) {
+            $score += 10;
+        } elseif ($dx_analog_count >= 1 && $is_it_subsidy) {
+            $score += 5;
         }
 
         // 補助金経験者ボーナス（+5点）
@@ -166,26 +201,37 @@ function subsidy_match_handle_match($request) {
         return $rate_b <=> $rate_a;
     });
 
+    // DX分析結果
+    $dx_analysis = subsidy_match_analyze_dx($dx_schedule, $dx_invoice, $dx_crm, $dx_ec, $dx_communication, $dx_pain);
+
     // リード保存
     $lead_id = 0;
     if ($email) {
         $lead_id = subsidy_match_save_lead(array(
-            'email'          => $email,
-            'prefecture'     => $prefecture,
-            'industry'       => $industry,
-            'employee_size'  => $employee_size,
-            'capital'        => $capital,
-            'challenges'     => wp_json_encode($challenges),
-            'annual_revenue' => $annual_revenue,
-            'has_experience' => $has_experience,
-            'matched_ids'    => wp_json_encode(array_column($results, 'id')),
+            'email'            => $email,
+            'prefecture'       => $prefecture,
+            'industry'         => $industry,
+            'employee_size'    => $employee_size,
+            'capital'          => $capital,
+            'challenges'       => wp_json_encode($challenges),
+            'annual_revenue'   => $annual_revenue,
+            'has_experience'   => $has_experience,
+            'matched_ids'      => wp_json_encode(array_column($results, 'id')),
+            'dx_schedule'      => $dx_schedule,
+            'dx_invoice'       => $dx_invoice,
+            'dx_crm'           => $dx_crm,
+            'dx_ec'            => $dx_ec,
+            'dx_communication' => $dx_communication,
+            'dx_pain'          => wp_json_encode($dx_pain),
+            'dx_level'         => $dx_analysis['dx_level'],
         ));
     }
 
     return new WP_REST_Response(array(
-        'success' => true,
-        'results' => $results,
-        'lead_id' => $lead_id,
+        'success'     => true,
+        'results'     => $results,
+        'lead_id'     => $lead_id,
+        'dx_analysis' => $dx_analysis,
     ), 200);
 }
 
@@ -343,6 +389,63 @@ function subsidy_match_handle_stats($request) {
         'by_region'   => $regions ?: array(),
         'last_import' => get_option('subsidy_last_import_at', ''),
     ), 200);
+}
+
+/**
+ * DX課題分析
+ */
+function subsidy_match_analyze_dx($schedule, $invoice, $crm, $ec, $communication, $pain) {
+    $issues = array();
+    $analog_count = 0;
+
+    if (in_array($schedule, array('paper', 'none'))) {
+        $issues[] = '予約・スケジュール管理のデジタル化が未対応';
+        $analog_count++;
+    } elseif ($schedule === 'excel') {
+        $issues[] = '予約管理がExcelベースで属人化リスクあり';
+    }
+
+    if ($invoice === 'handwrite') {
+        $issues[] = '請求書・見積書が手書きで非効率';
+        $analog_count++;
+    } elseif ($invoice === 'excel') {
+        $issues[] = '請求業務がExcelベースで転記ミスリスクあり';
+    }
+
+    if (in_array($crm, array('paper', 'none'))) {
+        $issues[] = '顧客情報が一元管理されていない';
+        $analog_count++;
+    } elseif ($crm === 'excel') {
+        $issues[] = '顧客管理がExcelベースで共有・活用が限定的';
+    }
+
+    if ($ec === 'none') {
+        $issues[] = 'オンライン販売チャネルが未整備';
+        $analog_count++;
+    } elseif ($ec === 'considering') {
+        $issues[] = 'EC導入を検討中 — 補助金活用の好機';
+    }
+
+    if ($communication === 'verbal') {
+        $issues[] = '情報共有が口頭中心で記録が残らない';
+        $analog_count++;
+    } elseif ($communication === 'email') {
+        $issues[] = '情報共有がメール中心でリアルタイム性に課題';
+    }
+
+    if ($analog_count >= 4) {
+        $dx_level = 'beginner';
+    } elseif ($analog_count >= 2) {
+        $dx_level = 'developing';
+    } else {
+        $dx_level = 'advanced';
+    }
+
+    return array(
+        'dx_level'    => $dx_level,
+        'issues'      => $issues,
+        'pain_points' => $pain,
+    );
 }
 
 /**

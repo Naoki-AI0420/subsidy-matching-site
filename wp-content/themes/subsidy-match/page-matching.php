@@ -20,7 +20,7 @@ get_header();
             <div class="progress-track">
                 <div class="progress-bar" style="width: 0%"></div>
             </div>
-            <p class="progress-step">質問 <span class="current-step">1</span> / <span class="total-steps">8</span></p>
+            <p class="progress-step">質問 <span class="current-step">1</span> / <span class="total-steps">14</span></p>
         </div>
 
         <!-- 質問コンテナ -->
@@ -211,8 +211,206 @@ get_header();
                 </div>
             </div>
 
-            <!-- Q6: 売上規模 -->
+            <!-- Q6: DX — 予約・スケジュール管理 -->
             <div class="question-slide" data-step="6" style="display:none">
+                <h2 class="question-text">予約やスケジュール管理はどのようにされていますか？</h2>
+                <p class="question-sub">現在のご状況に最も近いものをお選びください</p>
+                <div class="question-input">
+                    <div class="option-cards">
+                        <label class="option-card">
+                            <input type="radio" name="dx_schedule" value="paper">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">紙の台帳・ノート</span>
+                            </span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="dx_schedule" value="excel">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">Excel・スプレッドシート</span>
+                            </span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="dx_schedule" value="system">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">専用システム・アプリ</span>
+                            </span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="dx_schedule" value="none">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">特に管理していない</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q7: DX — 請求書・見積書 -->
+            <div class="question-slide" data-step="7" style="display:none">
+                <h2 class="question-text">請求書・見積書の作成方法を教えてください</h2>
+                <p class="question-sub">現在のご状況に最も近いものをお選びください</p>
+                <div class="question-input">
+                    <div class="option-cards">
+                        <label class="option-card">
+                            <input type="radio" name="dx_invoice" value="handwrite">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">手書き・紙ベース</span>
+                            </span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="dx_invoice" value="excel">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">Excel・Word</span>
+                            </span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="dx_invoice" value="cloud">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">クラウド会計・請求ソフト</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q8: DX — 顧客管理 -->
+            <div class="question-slide" data-step="8" style="display:none">
+                <h2 class="question-text">顧客情報の管理方法を教えてください</h2>
+                <p class="question-sub">現在のご状況に最も近いものをお選びください</p>
+                <div class="question-input">
+                    <div class="option-cards">
+                        <label class="option-card">
+                            <input type="radio" name="dx_crm" value="paper">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">紙・名刺ファイル</span>
+                            </span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="dx_crm" value="excel">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">Excel・スプレッドシート</span>
+                            </span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="dx_crm" value="crm">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">CRM・顧客管理システム</span>
+                            </span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="dx_crm" value="none">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">特に管理していない</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q9: DX — EC・オンライン販売 -->
+            <div class="question-slide" data-step="9" style="display:none">
+                <h2 class="question-text">ECサイトやオンライン販売は行っていますか？</h2>
+                <p class="question-sub">現在のご状況に最も近いものをお選びください</p>
+                <div class="question-input">
+                    <div class="option-cards">
+                        <label class="option-card">
+                            <input type="radio" name="dx_ec" value="active">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">運用している</span>
+                            </span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="dx_ec" value="considering">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">検討中・準備中</span>
+                            </span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="dx_ec" value="none">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">行っていない</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q10: DX — 社内情報共有 -->
+            <div class="question-slide" data-step="10" style="display:none">
+                <h2 class="question-text">社内の情報共有はどのようにされていますか？</h2>
+                <p class="question-sub">主な連絡・共有手段をお選びください</p>
+                <div class="question-input">
+                    <div class="option-cards">
+                        <label class="option-card">
+                            <input type="radio" name="dx_communication" value="verbal">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">口頭・電話中心</span>
+                            </span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="dx_communication" value="email">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">メール中心</span>
+                            </span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="dx_communication" value="chat">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">チャットツール（Slack等）</span>
+                            </span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="dx_communication" value="groupware">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">グループウェア導入済</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q11: DX — 現在の課題 -->
+            <div class="question-slide" data-step="11" style="display:none">
+                <h2 class="question-text">現在、特に困っていることはありますか？</h2>
+                <p class="question-sub">該当するものを全てお選びください（複数選択可）</p>
+                <div class="question-input">
+                    <div class="option-cards option-cards-multi">
+                        <label class="option-card option-card-checkbox">
+                            <input type="checkbox" name="dx_pain" value="labor_shortage">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">人手不足</span>
+                            </span>
+                        </label>
+                        <label class="option-card option-card-checkbox">
+                            <input type="checkbox" name="dx_pain" value="sales_decline">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">売上低下</span>
+                            </span>
+                        </label>
+                        <label class="option-card option-card-checkbox">
+                            <input type="checkbox" name="dx_pain" value="cost_reduction">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">コスト削減</span>
+                            </span>
+                        </label>
+                        <label class="option-card option-card-checkbox">
+                            <input type="checkbox" name="dx_pain" value="efficiency">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">業務効率化</span>
+                            </span>
+                        </label>
+                        <label class="option-card option-card-checkbox">
+                            <input type="checkbox" name="dx_pain" value="new_business">
+                            <span class="option-card-inner">
+                                <span class="option-card-text">新規事業の立ち上げ</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q12: 売上規模 -->
+            <div class="question-slide" data-step="12" style="display:none">
                 <h2 class="question-text">年間売上規模を教えてください</h2>
                 <p class="question-sub">直近の事業年度の売上高をお選びください</p>
                 <div class="question-input">
@@ -251,8 +449,8 @@ get_header();
                 </div>
             </div>
 
-            <!-- Q7: 補助金申請経験 -->
-            <div class="question-slide" data-step="7" style="display:none">
+            <!-- Q13: 補助金申請経験 -->
+            <div class="question-slide" data-step="13" style="display:none">
                 <h2 class="question-text">これまでに補助金を申請されたことはありますか？</h2>
                 <p class="question-sub">過去の申請経験の有無をお選びください</p>
                 <div class="question-input">
@@ -273,8 +471,8 @@ get_header();
                 </div>
             </div>
 
-            <!-- Q8: メールアドレス -->
-            <div class="question-slide" data-step="8" style="display:none">
+            <!-- Q14: メールアドレス -->
+            <div class="question-slide" data-step="14" style="display:none">
                 <h2 class="question-text">メールアドレスを入力してください</h2>
                 <p class="question-sub">診断結果をお送りいたします</p>
                 <div class="question-input">
