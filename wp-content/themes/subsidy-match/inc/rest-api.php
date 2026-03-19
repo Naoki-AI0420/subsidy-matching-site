@@ -51,6 +51,9 @@ function subsidy_match_handle_match($request) {
 
     $results = array();
 
+    // 売上規模から資本金推定によるボーナス判定
+    $revenue_scale = subsidy_match_parse_revenue($annual_revenue);
+
     foreach ($subsidies as $post) {
         $score = 0;
 
@@ -95,6 +98,20 @@ function subsidy_match_handle_match($request) {
             $score += 25;
         }
 
+        // 補助金経験者ボーナス（+5点）
+        if ($has_experience && $score >= 40) {
+            $score += 5;
+        }
+
+        // 売上規模と補助金上限額の適合性ボーナス（+5点）
+        $max_amount = (int) get_post_meta($post->ID, '_subsidy_max_amount', true);
+        if ($revenue_scale > 0 && $max_amount > 0) {
+            // 売上の10%以内の補助金額なら適合性が高い
+            if ($max_amount <= $revenue_scale * 0.1) {
+                $score += 5;
+            }
+        }
+
         // 適合度
         if ($score >= 70) {
             $match_level = 'high';
@@ -107,22 +124,32 @@ function subsidy_match_handle_match($request) {
         // 低スコアは除外
         if ($score < 30) continue;
 
+        // 採択率データ取得
+        $adoption_rate = get_post_meta($post->ID, '_subsidy_adoption_rate', true);
+        $adoption_rate = $adoption_rate ? (float) $adoption_rate : null;
+
         $results[] = array(
-            'id'           => $post->ID,
-            'title'        => $post->post_title,
-            'max_amount'   => (int) get_post_meta($post->ID, '_subsidy_max_amount', true),
-            'rate'         => get_post_meta($post->ID, '_subsidy_rate', true),
-            'summary'      => get_post_meta($post->ID, '_subsidy_summary', true),
-            'deadline'     => get_post_meta($post->ID, '_subsidy_deadline', true),
-            'official_url' => get_post_meta($post->ID, '_subsidy_official_url', true),
-            'score'        => $score,
-            'match_level'  => $match_level,
+            'id'             => $post->ID,
+            'title'          => $post->post_title,
+            'max_amount'     => $max_amount,
+            'rate'           => get_post_meta($post->ID, '_subsidy_rate', true),
+            'summary'        => get_post_meta($post->ID, '_subsidy_summary', true),
+            'deadline'       => get_post_meta($post->ID, '_subsidy_deadline', true),
+            'official_url'   => get_post_meta($post->ID, '_subsidy_official_url', true),
+            'score'          => $score,
+            'match_level'    => $match_level,
+            'adoption_rate'  => $adoption_rate,
         );
     }
 
-    // スコア降順ソート
+    // スコア降順ソート（同スコアの場合は採択率の高い順）
     usort($results, function ($a, $b) {
-        return $b['score'] - $a['score'];
+        if ($b['score'] !== $a['score']) {
+            return $b['score'] - $a['score'];
+        }
+        $rate_a = $a['adoption_rate'] ?? 0;
+        $rate_b = $b['adoption_rate'] ?? 0;
+        return $rate_b <=> $rate_a;
     });
 
     // リード保存
@@ -184,4 +211,25 @@ function subsidy_match_handle_contact($request) {
         'success' => true,
         'message' => 'お問い合わせを受け付けました。',
     ), 200);
+}
+
+/**
+ * 売上テキストを数値（円）に変換
+ */
+function subsidy_match_parse_revenue($text) {
+    if (empty($text)) return 0;
+
+    $text = str_replace(array(',', ' ', '　'), '', $text);
+
+    if (preg_match('/(\d+(?:\.\d+)?)\s*億/', $text, $m)) {
+        return (int) ($m[1] * 100000000);
+    }
+    if (preg_match('/(\d+(?:\.\d+)?)\s*万/', $text, $m)) {
+        return (int) ($m[1] * 10000);
+    }
+    if (preg_match('/(\d+)/', $text, $m)) {
+        return (int) $m[1];
+    }
+
+    return 0;
 }

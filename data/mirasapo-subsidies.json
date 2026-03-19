@@ -1,0 +1,163 @@
+{
+  "source": "mirasapo-plus.go.jp",
+  "scraped_at": "2026-03-19T17:46:35+09:00",
+  "total_count": 10,
+  "items": [
+    {
+      "id": "shoryokuka",
+      "name": "省力化投資補助金",
+      "url": "https://mirasapo-plus.go.jp/subsidy/shoryokuka/",
+      "max_amount": 100000000,
+      "rate": "1/2～2/3",
+      "target_challenges": [
+        "equipment"
+      ],
+      "target_industries": [],
+      "summary": "人手不足解消のための省力化設備・システム投資を支援。カタログ注文型と一般型の2種類。",
+      "max_amount_scraped": 100000000,
+      "amount_text": "1億円",
+      "rate_scraped": "1/2"
+    },
+    {
+      "id": "manufacturing",
+      "name": "ものづくり補助金",
+      "url": "https://mirasapo-plus.go.jp/subsidy/manufacturing",
+      "max_amount": 40000000,
+      "rate": "1/2～2/3",
+      "target_challenges": [
+        "equipment",
+        "rnd"
+      ],
+      "target_industries": [
+        "manufacturing",
+        "construction",
+        "information_technology",
+        "professional_services"
+      ],
+      "summary": "新製品・サービス開発や海外展開のための設備投資を支援。製品・サービス高付加価値化枠とグローバル枠。",
+      "max_amount_scraped": 40000000,
+      "amount_text": "4,000万円",
+      "rate_scraped": "1/2～2/3",
+      "meta_description": "新規事業や設備投資をサポートする「ものづくり補助金」についての解説、活用事例をご紹介しています。"
+    },
+    {
+      "id": "ithojo",
+      "name": "デジタル化・AI導入補助金（旧IT導入補助金）",
+      "url": "https://mirasapo-plus.go.jp/subsidy/ithojo",
+      "max_amount": 4500000,
+      "rate": "1/2～4/5",
+      "target_challenges": [
+        "it_dx"
+      ],
+      "target_industries": [],
+      "summary": "ITツール・AI導入による生産性向上・DX推進を支援。通常枠、インボイス枠、セキュリティ枠等。",
+      "max_amount_scraped": 4500000,
+      "amount_text": "450万円",
+      "rate_scraped": "1/2～4/5",
+      "meta_description": "ITツール導入をサポートする「IT導入補助金」についての解説、活用事例をご紹介しています。"
+    },
+    {
+      "id": "jizokuka",
+      "name": "小規模事業者持続化補助金",
+      "url": "https://mirasapo-plus.go.jp/subsidy/jizokuka/",
+      "max_amount": 2500000,
+      "rate": "2/3",
+      "target_challenges": [
+        "equipment",
+        "it_dx"
+      ],
+      "target_industries": [],
+      "target_employee_size": [
+        "1-5",
+        "6-20"
+      ],
+      "summary": "販路開拓・業務効率化を支援。経営計画を商工会議所等と策定して申請。一般型・災害支援枠・創業型。",
+      "max_amount_scraped": 2500000,
+      "amount_text": "250万円",
+      "rate_scraped": "2/3",
+      "meta_description": "商品の宣伝やホームページ解説など販路開拓の取り組みをサポートする「小規模事業者持続化補助金」についての解説、活用事例をご紹介しています。"
+    },
+    {
+      "id": "syokei",
+      "name": "事業承継・M&A補助金",
+      "url": "https://mirasapo-plus.go.jp/subsidy/syokei/",
+      "max_amount": 20000000,
+      "rate": "1/3～2/3",
+      "target_challenges": [
+        "succession"
+      ],
+      "target_industries": [],
+      "summary": "事業承継・M&Aに伴う設備投資や専門家活用費用を支援。承継促進枠・専門家活用枠・PMI推進枠。",
+      "rate_scraped": "1/3～2/3"
+    },
+    {
+      "id": "shinjigyou",
+      "name": "新事業進出補助金",
+      "url": "https://mirasapo-plus.go.jp/subsidy/shinjigyou/",
+      "max_amount": 90000000,
+      "rate": "1/2",
+      "target_challenges": [
+        "equipment",
+        "rnd"
+      ],
+      "target_industries": [],
+      "summary": "既存事業と異なる新分野への大胆な挑戦を支援。設備・システム構築・建物費等が対象。",
+      "max_amount_scraped": 90000000,
+      "amount_text": "9,000万円",
+      "rate_scraped": "1/2"
+    },
+    {
+      "id": "seityo",
+      "name": "成長加速化補助金",
+      "url": "https://mirasapo-plus.go.jp/subsidy/seityo/",
+      "max_amount": 500000000,
+      "rate": "1/2",
+      "target_challenges": [
+        "equipment",
+        "overseas"
+      ],
+      "target_industries": [],
+      "summary": "100億企業を目指す成長志向の中小企業の大規模投資を支援。工場新設・設備増強等。",
+      "rate_scraped": "1/2"
+    },
+    {
+      "id": "shoene",
+      "name": "省エネ補助金",
+      "url": "https://syouenehojyokin.sii.or.jp/",
+      "max_amount": 100000000,
+      "rate": "1/3～1/2",
+      "target_challenges": [
+        "equipment"
+      ],
+      "target_industries": [],
+      "summary": "省エネルギー設備への更新や運用改善を支援。高効率空調・照明LED・ボイラー等の設備導入。",
+      "meta_description": "çã¨ãã»éåç³è»¢æè£å©éã®ç³è«ãæ¤è¨ããéã«ãSIIã®ãã¼ã«ãäºæ¥­ãæ´»ç¨ãã¦ã¿ãªãã¾ã®ãçã¨ããããµãã¼ããã¾ãã"
+    },
+    {
+      "id": "koyou_chosei",
+      "name": "雇用調整助成金",
+      "url": "https://mirasapo-plus.go.jp/subsidy/koyouchousei/",
+      "max_amount": 0,
+      "rate": "2/3～3/4",
+      "target_challenges": [
+        "hiring"
+      ],
+      "target_industries": [],
+      "summary": "経済的理由で事業縮小した企業の休業手当・教育訓練費・出向費用を助成。日額上限あり。",
+      "amount_note": "1人1日あたり上限8,490円"
+    },
+    {
+      "id": "gyoumu_kaizen",
+      "name": "業務改善助成金",
+      "url": "https://mirasapo-plus.go.jp/subsidy/gyoumukaizen/",
+      "max_amount": 6000000,
+      "rate": "3/4～9/10",
+      "target_challenges": [
+        "equipment",
+        "hiring"
+      ],
+      "target_industries": [],
+      "summary": "事業場内最低賃金引き上げと設備投資を一体的に支援。最低賃金引上げ額に応じて助成。"
+    }
+  ]
+}

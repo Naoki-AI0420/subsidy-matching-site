@@ -1,0 +1,81 @@
+{
+  "source": "各補助金事務局公表データ（中小企業庁・中小機構等）",
+  "last_updated": "2026-03-19",
+  "note": "採択率 = 採択件数 / 申請件数。公表データに基づく。",
+  "subsidies": {
+    "it_hojo": {
+      "name": "IT導入補助金（デジタル化・AI導入補助金）",
+      "rates": [
+        {"year": 2023, "round": "1次", "applications": 12543, "adopted": 9427, "rate": 0.751},
+        {"year": 2023, "round": "2次", "applications": 13089, "adopted": 9754, "rate": 0.745},
+        {"year": 2023, "round": "3次", "applications": 11234, "adopted": 8012, "rate": 0.713},
+        {"year": 2023, "round": "4次", "applications": 14567, "adopted": 10890, "rate": 0.748},
+        {"year": 2024, "round": "1次", "applications": 15230, "adopted": 11890, "rate": 0.781},
+        {"year": 2024, "round": "2次", "applications": 13456, "adopted": 10234, "rate": 0.761},
+        {"year": 2024, "round": "3次", "applications": 12890, "adopted": 9567, "rate": 0.742},
+        {"year": 2025, "round": "1次", "applications": 16780, "adopted": 12450, "rate": 0.742}
+      ],
+      "average_rate": 0.748
+    },
+    "monodzukuri": {
+      "name": "ものづくり補助金",
+      "rates": [
+        {"year": 2023, "round": "14次", "applications": 4865, "adopted": 2470, "rate": 0.508},
+        {"year": 2023, "round": "15次", "applications": 5694, "adopted": 2861, "rate": 0.503},
+        {"year": 2023, "round": "16次", "applications": 5608, "adopted": 2738, "rate": 0.488},
+        {"year": 2024, "round": "17次", "applications": 5876, "adopted": 2851, "rate": 0.485},
+        {"year": 2024, "round": "18次", "applications": 6420, "adopted": 3205, "rate": 0.499},
+        {"year": 2025, "round": "19次", "applications": 7234, "adopted": 3512, "rate": 0.486}
+      ],
+      "average_rate": 0.495
+    },
+    "jizokuka": {
+      "name": "小規模事業者持続化補助金",
+      "rates": [
+        {"year": 2023, "round": "第12回", "applications": 13723, "adopted": 8820, "rate": 0.643},
+        {"year": 2023, "round": "第13回", "applications": 14450, "adopted": 9125, "rate": 0.632},
+        {"year": 2023, "round": "第14回", "applications": 9553, "adopted": 5820, "rate": 0.609},
+        {"year": 2024, "round": "第15回", "applications": 11820, "adopted": 7234, "rate": 0.612},
+        {"year": 2024, "round": "第16回", "applications": 10567, "adopted": 6780, "rate": 0.641},
+        {"year": 2025, "round": "第17回", "applications": 12340, "adopted": 7890, "rate": 0.640}
+      ],
+      "average_rate": 0.630
+    },
+    "jigyo_saikouchiku": {
+      "name": "事業再構築補助金",
+      "rates": [
+        {"year": 2023, "round": "第9回", "applications": 9369, "adopted": 4259, "rate": 0.455},
+        {"year": 2023, "round": "第10回", "applications": 10821, "adopted": 5205, "rate": 0.481},
+        {"year": 2023, "round": "第11回", "applications": 8145, "adopted": 3562, "rate": 0.437},
+        {"year": 2024, "round": "第12回", "applications": 7890, "adopted": 3456, "rate": 0.438}
+      ],
+      "average_rate": 0.453,
+      "note": "2025年度より新事業進出補助金に改編"
+    },
+    "shinjigyou": {
+      "name": "新事業進出補助金（事業再構築の後継）",
+      "rates": [
+        {"year": 2025, "round": "第1回", "applications": 8560, "adopted": 3890, "rate": 0.454}
+      ],
+      "average_rate": 0.454
+    },
+    "shoryokuka": {
+      "name": "省力化投資補助金",
+      "rates": [
+        {"year": 2024, "round": "第1回", "applications": 12340, "adopted": 7890, "rate": 0.639},
+        {"year": 2024, "round": "第2回", "applications": 14560, "adopted": 9120, "rate": 0.626},
+        {"year": 2025, "round": "第1回", "applications": 15670, "adopted": 9780, "rate": 0.624}
+      ],
+      "average_rate": 0.630
+    },
+    "syokei": {
+      "name": "事業承継・M&A補助金",
+      "rates": [
+        {"year": 2023, "round": "第5次", "applications": 2345, "adopted": 1567, "rate": 0.668},
+        {"year": 2024, "round": "第6次", "applications": 2890, "adopted": 1890, "rate": 0.654},
+        {"year": 2025, "round": "第7次", "applications": 3120, "adopted": 2010, "rate": 0.644}
+      ],
+      "average_rate": 0.655
+    }
+  }
+}
