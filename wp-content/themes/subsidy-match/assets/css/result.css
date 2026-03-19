@@ -1,0 +1,201 @@
+/* ============================================
+   結果画面 — スタイル
+   ============================================ */
+
+.result-container {
+    max-width: 700px;
+    margin: 0 auto;
+    animation: fadeIn 0.4s ease;
+}
+
+.result-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 32px 0;
+    border-bottom: 2px solid #003366;
+}
+
+.result-header h2 {
+    font-size: 24px;
+    color: #003366;
+    margin-bottom: 8px;
+}
+
+.result-header p {
+    font-size: 14px;
+    color: #666666;
+    margin-bottom: 0;
+}
+
+.result-count {
+    font-size: 36px;
+    font-weight: 700;
+    color: #003366;
+    display: block;
+    margin: 8px 0;
+}
+
+/* 補助金カード */
+.subsidy-card {
+    background: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-left: 4px solid #003366;
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 16px;
+}
+
+.subsidy-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    gap: 12px;
+}
+
+.subsidy-card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #003366;
+    margin: 0;
+}
+
+.subsidy-card-badge {
+    flex-shrink: 0;
+}
+
+.subsidy-card-amount {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333333;
+    margin-bottom: 8px;
+}
+
+.subsidy-card-amount span {
+    font-size: 14px;
+    font-weight: 400;
+    color: #666666;
+}
+
+.subsidy-card-summary {
+    font-size: 14px;
+    color: #666666;
+    margin-bottom: 12px;
+    line-height: 1.7;
+}
+
+.subsidy-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    font-size: 13px;
+    color: #666666;
+}
+
+.subsidy-card-deadline {
+    font-weight: 500;
+    color: #C62828;
+}
+
+.subsidy-card-link {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #0056b3;
+}
+
+.subsidy-card-link:hover {
+    text-decoration: underline;
+}
+
+/* 適合度バッジ色 */
+.subsidy-card[data-match="high"] {
+    border-left-color: #2E7D32;
+}
+
+.subsidy-card[data-match="medium"] {
+    border-left-color: #F9A825;
+}
+
+.subsidy-card[data-match="low"] {
+    border-left-color: #757575;
+}
+
+/* CTA セクション */
+.result-cta {
+    background-color: #F5F5F5;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    padding: 32px;
+    text-align: center;
+    margin-top: 32px;
+}
+
+.result-cta h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.result-cta p {
+    font-size: 14px;
+    color: #666666;
+    margin-bottom: 20px;
+}
+
+/* ローディング */
+.result-loading {
+    text-align: center;
+    padding: 60px 0;
+}
+
+.result-loading .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #E8E8E8;
+    border-top-color: #003366;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.result-loading p {
+    font-size: 14px;
+    color: #666666;
+}
+
+/* 結果なし */
+.result-empty {
+    text-align: center;
+    padding: 48px 0;
+}
+
+.result-empty p {
+    font-size: 16px;
+    color: #666666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .subsidy-card {
+        padding: 20px 16px;
+    }
+
+    .subsidy-card-header {
+        flex-direction: column;
+    }
+
+    .subsidy-card-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .result-cta {
+        padding: 24px 16px;
+    }
+}
