@@ -174,11 +174,10 @@ def main():
 
     session = requests.Session()
 
-    # 総件数を取得
-    total_count = get_total_count(session)
-    total_pages = (total_count // ITEMS_PER_PAGE) + 1 if total_count else 5200
+    # 総件数はサイト情報から約51,000件 → 5,200ページ
+    total_pages = 5200
     print(f"[INFO] 補助金ポータル スクレイパー開始")
-    print(f"[INFO] 総登録件数: {total_count:,}件 (約 {total_pages:,} ページ)")
+    print(f"[INFO] 推定 {total_pages:,} ページ", flush=True)
 
     if args.max_pages > 0:
         total_pages = min(total_pages, args.max_pages)
@@ -222,7 +221,7 @@ def main():
 
             if page % 10 == 0 or page <= 5:
                 print(f"  [{page:,}/{total_pages:,}] +{new_count}件 "
-                      f"(合計 {len(all_items):,}件)")
+                      f"(合計 {len(all_items):,}件)", flush=True)
 
             # 50ページごとにチェックポイント
             if page % 50 == 0:
