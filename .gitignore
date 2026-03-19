@@ -1,0 +1,4 @@
+.env
+node_modules/
+wp-config.php
+*.log
