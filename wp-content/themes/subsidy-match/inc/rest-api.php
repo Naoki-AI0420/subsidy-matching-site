@@ -22,6 +22,20 @@ function subsidy_match_register_routes() {
         'callback'            => 'subsidy_match_handle_contact',
         'permission_callback' => '__return_true',
     ));
+
+    // 補助金一覧（フィルタ付き）
+    register_rest_route('subsidy/v1', '/subsidies', array(
+        'methods'             => 'GET',
+        'callback'            => 'subsidy_match_handle_list',
+        'permission_callback' => '__return_true',
+    ));
+
+    // 統計情報
+    register_rest_route('subsidy/v1', '/stats', array(
+        'methods'             => 'GET',
+        'callback'            => 'subsidy_match_handle_stats',
+        'permission_callback' => '__return_true',
+    ));
 }
 add_action('rest_api_init', 'subsidy_match_register_routes');
 
@@ -210,6 +224,124 @@ function subsidy_match_handle_contact($request) {
     return new WP_REST_Response(array(
         'success' => true,
         'message' => 'お問い合わせを受け付けました。',
+    ), 200);
+}
+
+/**
+ * 補助金一覧取得（フィルタ付き）
+ */
+function subsidy_match_handle_list($request) {
+    $page     = max(1, (int) $request->get_param('page'));
+    $per_page = min(100, max(1, (int) ($request->get_param('per_page') ?: 20)));
+    $region   = sanitize_text_field($request->get_param('region') ?: '');
+    $status   = sanitize_text_field($request->get_param('status') ?: '');
+    $search   = sanitize_text_field($request->get_param('search') ?: '');
+    $source   = sanitize_text_field($request->get_param('source') ?: '');
+
+    $args = array(
+        'post_type'      => 'subsidy',
+        'posts_per_page' => $per_page,
+        'paged'          => $page,
+        'post_status'    => 'publish',
+        'orderby'        => 'meta_value_num',
+        'meta_key'       => '_subsidy_match_priority',
+        'order'          => 'DESC',
+    );
+
+    if ($search) {
+        $args['s'] = $search;
+    }
+
+    $meta_query = array('relation' => 'AND');
+
+    if ($region) {
+        $meta_query[] = array(
+            'relation' => 'OR',
+            array(
+                'key'     => '_subsidy_target_regions',
+                'value'   => $region,
+                'compare' => 'LIKE',
+            ),
+            array(
+                'key'     => '_subsidy_target_regions',
+                'value'   => 'all',
+                'compare' => 'LIKE',
+            ),
+        );
+    }
+
+    if ($source) {
+        $meta_query[] = array(
+            'key'   => '_subsidy_data_source',
+            'value' => $source,
+        );
+    }
+
+    if (count($meta_query) > 1) {
+        $args['meta_query'] = $meta_query;
+    }
+
+    $query = new WP_Query($args);
+    $items = array();
+
+    foreach ($query->posts as $post) {
+        $items[] = array(
+            'id'           => $post->ID,
+            'title'        => $post->post_title,
+            'max_amount'   => (int) get_post_meta($post->ID, '_subsidy_max_amount', true),
+            'rate'         => get_post_meta($post->ID, '_subsidy_rate', true),
+            'summary'      => get_post_meta($post->ID, '_subsidy_summary', true),
+            'deadline'     => get_post_meta($post->ID, '_subsidy_deadline', true),
+            'official_url' => get_post_meta($post->ID, '_subsidy_official_url', true),
+            'region'       => get_post_meta($post->ID, '_subsidy_target_regions', true),
+            'source'       => get_post_meta($post->ID, '_subsidy_data_source', true),
+        );
+    }
+
+    return new WP_REST_Response(array(
+        'success'    => true,
+        'items'      => $items,
+        'total'      => (int) $query->found_posts,
+        'pages'      => (int) $query->max_num_pages,
+        'page'       => $page,
+        'per_page'   => $per_page,
+    ), 200);
+}
+
+/**
+ * 統計情報
+ */
+function subsidy_match_handle_stats($request) {
+    $total = wp_count_posts('subsidy');
+    $published = (int) $total->publish;
+
+    // ソース別集計
+    global $wpdb;
+    $sources = $wpdb->get_results(
+        "SELECT meta_value AS source, COUNT(*) AS count
+         FROM {$wpdb->postmeta}
+         WHERE meta_key = '_subsidy_data_source'
+         GROUP BY meta_value",
+        ARRAY_A
+    );
+
+    // 地域別上位
+    $regions = $wpdb->get_results(
+        "SELECT meta_value AS region, COUNT(*) AS count
+         FROM {$wpdb->postmeta}
+         WHERE meta_key = '_subsidy_target_regions'
+         GROUP BY meta_value
+         ORDER BY count DESC
+         LIMIT 10",
+        ARRAY_A
+    );
+
+    return new WP_REST_Response(array(
+        'success'     => true,
+        'total'       => $published,
+        'by_source'   => $sources ?: array(),
+        'by_region'   => $regions ?: array(),
+        'last_import' => get_option('subsidy_last_import_at', ''),
     ), 200);
 }
 
