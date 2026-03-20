@@ -201,6 +201,24 @@ function subsidy_match_handle_match($request) {
             $match_level = 'low';
         }
 
+        // 地域マッチ必須 — 地域が異なる補助金は表示しない
+        // 地域スコアが0 = 都道府県が違う（「全国」でもない）
+        $region_matched = false;
+        if (!empty($target_regions)) {
+            $region_matched = in_array('all', $target_regions) || in_array($prefecture, $target_regions) || in_array($prefecture_name, $target_regions);
+        } elseif (!empty($single_region)) {
+            $region_matched = ($single_region === '全国' || $single_region === $prefecture_name || strpos($single_region, $prefecture_name) !== false);
+            // 「神奈川」→「神奈川県」の部分一致対応
+            if (!$region_matched && mb_strlen($prefecture_name) > 2) {
+                $pref_short = mb_substr($prefecture_name, 0, mb_strlen($prefecture_name) - 1);
+                $region_matched = (strpos($single_region, $pref_short) !== false);
+            }
+        } else {
+            $region_matched = true; // 地域情報なし = 全国対象
+        }
+
+        if (!$region_matched) continue;
+
         // 低スコアは除外
         if ($score < 30) continue;
 
