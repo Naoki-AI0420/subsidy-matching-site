@@ -169,10 +169,10 @@ get_header();
             <div class="expert-card">
                 <div class="expert-header">
                     <div class="expert-avatar">
-                        <span>山</span>
+                        <span>中</span>
                     </div>
                     <div class="expert-info">
-                        <span class="expert-name">山田 太郎 氏</span>
+                        <span class="expert-name">中村 雅彦 氏</span>
                         <span class="expert-title">中小企業診断士 / 経営コンサルタント</span>
                     </div>
                 </div>
@@ -402,10 +402,10 @@ get_header();
             <div class="expert-card">
                 <div class="expert-header">
                     <div class="expert-avatar">
-                        <span>山</span>
+                        <span>中</span>
                     </div>
                     <div class="expert-info">
-                        <span class="expert-name">山田 太郎 氏</span>
+                        <span class="expert-name">中村 雅彦 氏</span>
                         <span class="expert-title">中小企業診断士 / 経営コンサルタント</span>
                     </div>
                 </div>
