@@ -26,6 +26,9 @@ get_header();
         <!-- 金額チラ見せメッセージ -->
         <div id="amount-teaser" class="amount-teaser" style="display:none"></div>
 
+        <!-- サンクコスト強化: 暫定候補メッセージ -->
+        <div id="sunk-cost-msg" class="sunk-cost-msg" style="display:none"></div>
+
         <!-- 質問コンテナ -->
         <div class="question-container">
 

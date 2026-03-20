@@ -246,12 +246,12 @@ p {
 }
 
 .btn-primary {
-    background-color: #003366;
+    background-color: #E8594F;
     color: #FFFFFF;
 }
 
 .btn-primary:hover {
-    background-color: #002244;
+    background-color: #D04A40;
     color: #FFFFFF;
 }
 
@@ -376,6 +376,100 @@ textarea.form-control {
 .mb-8 { margin-bottom: 8px; }
 .mb-16 { margin-bottom: 16px; }
 .mb-24 { margin-bottom: 24px; }
+
+/* Staff / Operator section */
+.section-staff {
+    padding: 60px 0;
+    background: #F8F9FA;
+}
+
+.staff-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.staff-avatar-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.staff-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #E8594F 0%, #F09090 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.staff-avatar::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 20px;
+    height: 20px;
+    background: #2E7D32;
+    border-radius: 50%;
+    border: 2px solid #F8F9FA;
+}
+
+.staff-avatar svg {
+    width: 36px;
+    height: 36px;
+    fill: #FFFFFF;
+}
+
+.staff-speech-bubble {
+    background: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 16px 24px;
+    position: relative;
+    text-align: left;
+    font-size: 15px;
+    color: #333333;
+    line-height: 1.7;
+}
+
+.staff-speech-bubble::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 24px;
+    width: 16px;
+    height: 16px;
+    background: #FFFFFF;
+    border-left: 1px solid #E0E0E0;
+    border-bottom: 1px solid #E0E0E0;
+    transform: rotate(45deg);
+}
+
+.staff-message {
+    font-size: 15px;
+    color: #555555;
+    line-height: 1.8;
+    margin-bottom: 24px;
+}
+
+.staff-hours {
+    font-size: 13px;
+    color: #888888;
+    margin-top: 16px;
+    margin-bottom: 0;
+}
+
+/* Female testimonial avatar variant */
+.testimonial-avatar-female {
+    background-color: #E8594F;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
