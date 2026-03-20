@@ -66,6 +66,21 @@ function subsidy_match_handle_match($request) {
                            ? array_map('sanitize_text_field', $params['dx_pain'])
                            : array();
 
+    // 都道府県コード → 名前マッピング
+    $pref_map = array(
+        '01'=>'北海道','02'=>'青森県','03'=>'岩手県','04'=>'宮城県','05'=>'秋田県',
+        '06'=>'山形県','07'=>'福島県','08'=>'茨城県','09'=>'栃木県','10'=>'群馬県',
+        '11'=>'埼玉県','12'=>'千葉県','13'=>'東京都','14'=>'神奈川県','15'=>'新潟県',
+        '16'=>'富山県','17'=>'石川県','18'=>'福井県','19'=>'山梨県','20'=>'長野県',
+        '21'=>'岐阜県','22'=>'静岡県','23'=>'愛知県','24'=>'三重県','25'=>'滋賀県',
+        '26'=>'京都府','27'=>'大阪府','28'=>'兵庫県','29'=>'奈良県','30'=>'和歌山県',
+        '31'=>'鳥取県','32'=>'島根県','33'=>'岡山県','34'=>'広島県','35'=>'山口県',
+        '36'=>'徳島県','37'=>'香川県','38'=>'愛媛県','39'=>'高知県','40'=>'福岡県',
+        '41'=>'佐賀県','42'=>'長崎県','43'=>'熊本県','44'=>'大分県','45'=>'宮崎県',
+        '46'=>'鹿児島県','47'=>'沖縄県',
+    );
+    $prefecture_name = isset($pref_map[$prefecture]) ? $pref_map[$prefecture] : $prefecture;
+
     // 全補助金取得
     $subsidies = get_posts(array(
         'post_type'      => 'subsidy',
@@ -82,9 +97,25 @@ function subsidy_match_handle_match($request) {
         $score = 0;
 
         // 地域マッチ（20点）
+        // _subsidy_target_regions（配列）と _subsidy_region（インポート時の単一文字列）の両方をチェック
         $target_regions = get_post_meta($post->ID, '_subsidy_target_regions', true);
         $target_regions = is_array($target_regions) ? $target_regions : array();
-        if (empty($target_regions) || in_array('all', $target_regions) || in_array($prefecture, $target_regions)) {
+        $single_region  = get_post_meta($post->ID, '_subsidy_region', true);
+
+        if (!empty($target_regions)) {
+            // 配列がある場合：従来のロジック
+            if (in_array('all', $target_regions) || in_array($prefecture, $target_regions) || in_array($prefecture_name, $target_regions)) {
+                $score += 20;
+            }
+        } elseif (!empty($single_region)) {
+            // インポートデータ：_subsidy_region（文字列）で地域マッチ
+            // "全国" or ユーザーの都道府県名を含むかチェック
+            if ($single_region === '全国' || $single_region === $prefecture_name || strpos($single_region, $prefecture_name) !== false) {
+                $score += 20;
+            }
+            // マッチしない場合は0点（地域が違う補助金は除外される方向）
+        } else {
+            // 地域情報なし → 全国対象とみなす
             $score += 20;
         }
 
