@@ -115,9 +115,9 @@ get_header();
                         <p>自社に合う補助金が3件も見つかりました。IT導入補助金で会計ソフトを導入し、月20時間の事務作業を削減できました。</p>
                     </div>
                     <div class="testimonial-author">
-                        <div class="testimonial-avatar">A</div>
+                        <img class="testimonial-avatar-img" src="<?php echo get_template_directory_uri(); ?>/assets/images/testimonial-man1.jpg" alt="田中様" loading="lazy">
                         <div class="testimonial-info">
-                            <span class="testimonial-name">A社 代表取締役</span>
+                            <span class="testimonial-name">田中 裕介 様</span>
                             <span class="testimonial-detail">飲食業・東京都・従業員8名</span>
                         </div>
                     </div>
@@ -127,9 +127,9 @@ get_header();
                         <p>補助金の存在は知っていましたが、種類が多すぎて諦めていました。診断で該当する制度がすぐにわかり、1,000万円の補助を受けられました。</p>
                     </div>
                     <div class="testimonial-author">
-                        <div class="testimonial-avatar">B</div>
+                        <img class="testimonial-avatar-img" src="<?php echo get_template_directory_uri(); ?>/assets/images/testimonial-man2.jpg" alt="佐藤様" loading="lazy">
                         <div class="testimonial-info">
-                            <span class="testimonial-name">B社 総務部長</span>
+                            <span class="testimonial-name">佐藤 健一 様</span>
                             <span class="testimonial-detail">製造業・宮城県・従業員15名</span>
                         </div>
                     </div>
@@ -139,9 +139,9 @@ get_header();
                         <p>持続化補助金でECサイトを構築。オンライン売上が月商の40%を占めるまでに成長しました。まずは診断してみることをお勧めします。</p>
                     </div>
                     <div class="testimonial-author">
-                        <div class="testimonial-avatar">C</div>
+                        <img class="testimonial-avatar-img" src="<?php echo get_template_directory_uri(); ?>/assets/images/testimonial-man3.jpg" alt="山本様" loading="lazy">
                         <div class="testimonial-info">
-                            <span class="testimonial-name">C社 代表</span>
+                            <span class="testimonial-name">山本 誠 様</span>
                             <span class="testimonial-detail">小売業・大阪府・従業員3名</span>
                         </div>
                     </div>
@@ -151,9 +151,9 @@ get_header();
                         <p>事務員2名の小さなサロンですが、IT導入補助金で150万円をいただき、予約システムを導入できました。お客様の予約がスムーズになり、リピート率が20%上がりました。</p>
                     </div>
                     <div class="testimonial-author">
-                        <div class="testimonial-avatar testimonial-avatar-female">D</div>
+                        <img class="testimonial-avatar-img" src="<?php echo get_template_directory_uri(); ?>/assets/images/testimonial-woman1.jpg" alt="鈴木様" loading="lazy">
                         <div class="testimonial-info">
-                            <span class="testimonial-name">美容サロン経営 D様</span>
+                            <span class="testimonial-name">鈴木 美咲 様</span>
                             <span class="testimonial-detail">サービス業・埼玉県・従業員2名</span>
                         </div>
                     </div>
@@ -348,9 +348,9 @@ get_header();
                         <p>自社に合う補助金が3件も見つかりました。IT導入補助金で会計ソフトを導入し、月20時間の事務作業を削減できました。</p>
                     </div>
                     <div class="testimonial-author">
-                        <div class="testimonial-avatar">A</div>
+                        <img class="testimonial-avatar-img" src="<?php echo get_template_directory_uri(); ?>/assets/images/testimonial-man1.jpg" alt="田中様" loading="lazy">
                         <div class="testimonial-info">
-                            <span class="testimonial-name">A社 代表取締役</span>
+                            <span class="testimonial-name">田中 裕介 様</span>
                             <span class="testimonial-detail">飲食業・東京都・従業員8名</span>
                         </div>
                     </div>
@@ -360,9 +360,9 @@ get_header();
                         <p>補助金の存在は知っていましたが、種類が多すぎて諦めていました。診断で該当する制度がすぐにわかり、1,000万円の補助を受けられました。</p>
                     </div>
                     <div class="testimonial-author">
-                        <div class="testimonial-avatar">B</div>
+                        <img class="testimonial-avatar-img" src="<?php echo get_template_directory_uri(); ?>/assets/images/testimonial-man2.jpg" alt="佐藤様" loading="lazy">
                         <div class="testimonial-info">
-                            <span class="testimonial-name">B社 総務部長</span>
+                            <span class="testimonial-name">佐藤 健一 様</span>
                             <span class="testimonial-detail">製造業・宮城県・従業員15名</span>
                         </div>
                     </div>
@@ -372,9 +372,9 @@ get_header();
                         <p>持続化補助金でECサイトを構築。オンライン売上が月商の40%を占めるまでに成長しました。まずは診断してみることをお勧めします。</p>
                     </div>
                     <div class="testimonial-author">
-                        <div class="testimonial-avatar">C</div>
+                        <img class="testimonial-avatar-img" src="<?php echo get_template_directory_uri(); ?>/assets/images/testimonial-man3.jpg" alt="山本様" loading="lazy">
                         <div class="testimonial-info">
-                            <span class="testimonial-name">C社 代表</span>
+                            <span class="testimonial-name">山本 誠 様</span>
                             <span class="testimonial-detail">小売業・大阪府・従業員3名</span>
                         </div>
                     </div>
@@ -384,9 +384,9 @@ get_header();
                         <p>事務員2名の小さなサロンですが、IT導入補助金で150万円をいただき、予約システムを導入できました。リピート率が20%上がりました。</p>
                     </div>
                     <div class="testimonial-author">
-                        <div class="testimonial-avatar testimonial-avatar-female">D</div>
+                        <img class="testimonial-avatar-img" src="<?php echo get_template_directory_uri(); ?>/assets/images/testimonial-woman1.jpg" alt="鈴木様" loading="lazy">
                         <div class="testimonial-info">
-                            <span class="testimonial-name">美容サロン経営 D様</span>
+                            <span class="testimonial-name">鈴木 美咲 様</span>
                             <span class="testimonial-detail">サービス業・埼玉県・従業員2名</span>
                         </div>
                     </div>
@@ -593,7 +593,7 @@ body.lp-sns .lp-listing-only { display: none !important; }
 body.lp-sns .lp-sns-only { display: block; }
 
 /* Hero */
-.hero { background: linear-gradient(rgba(0,51,102,0.88), rgba(0,51,102,0.92)), url('<?php echo get_template_directory_uri(); ?>/assets/images/jp-business-meeting.jpg') center/cover no-repeat; color: #FFFFFF; padding: 80px 0; text-align: center; }
+.hero { background: linear-gradient(rgba(0,51,102,0.85), rgba(0,51,102,0.90)), url('<?php echo get_template_directory_uri(); ?>/assets/images/hero-japanese-office.jpg') center/cover no-repeat; color: #FFFFFF; padding: 80px 0; text-align: center; }
 .hero-label { font-size: 14px; font-weight: 500; letter-spacing: 2px; margin-bottom: 16px; opacity: 0.9; }
 .hero-title { font-size: 32px; font-weight: 700; color: #FFFFFF; margin-bottom: 20px; line-height: 1.5; }
 .hero-description { font-size: 16px; margin-bottom: 32px; opacity: 0.9; line-height: 1.8; }
@@ -671,6 +671,9 @@ body.lp-sns .lp-sns-only { display: block; }
 .testimonial-bubble::after { content: ''; position: absolute; bottom: -8px; left: 32px; width: 16px; height: 16px; background: #FFFFFF; border-right: 1px solid #E0E0E0; border-bottom: 1px solid #E0E0E0; transform: rotate(45deg); }
 .testimonial-bubble p { font-size: 14px; color: #333333; line-height: 1.8; margin: 0; }
 .testimonial-author { display: flex; align-items: center; gap: 12px; padding-left: 8px; }
+.microcopy { font-size: 13px; color: #888; margin-top: 8px; text-align: center; }
+.hero .microcopy { color: rgba(255,255,255,0.75); }
+.testimonial-avatar-img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid #e0e0e0; }
 .testimonial-avatar { width: 44px; height: 44px; border-radius: 50%; background-color: #003366; color: #FFFFFF; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .testimonial-info { display: flex; flex-direction: column; }
 .testimonial-name { font-size: 13px; font-weight: 700; color: #333333; }
