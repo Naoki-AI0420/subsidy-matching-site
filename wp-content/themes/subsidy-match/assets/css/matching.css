@@ -47,11 +47,32 @@
 }
 
 .progress-step {
-    font-size: 13px;
-    color: #999999;
+    font-size: 15px;
+    font-weight: 700;
+    color: #003366;
     text-align: right;
-    margin-top: 6px;
+    margin-top: 8px;
     margin-bottom: 0;
+}
+
+/* 金額チラ見せメッセージ */
+.amount-teaser {
+    max-width: 600px;
+    margin: 0 auto 24px;
+    padding: 14px 20px;
+    background-color: #FFF9E6;
+    border: 1px solid #F0E4B0;
+    border-left: 4px solid #F9A825;
+    border-radius: 2px;
+    font-size: 15px;
+    color: #1a3353;
+    line-height: 1.6;
+    animation: fadeIn 0.5s ease;
+}
+
+.amount-teaser strong {
+    color: #C62828;
+    font-weight: 700;
 }
 
 /* 質問コンテナ */
@@ -62,6 +83,12 @@
 
 .question-slide {
     animation: fadeIn 0.3s ease;
+    background: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    border-left: 4px solid #1a3353;
+    border-radius: 2px;
+    padding: 32px 28px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 @keyframes fadeIn {
@@ -112,6 +139,18 @@
     text-align: center;
     margin-top: 8px;
     margin-bottom: 0;
+}
+
+.email-skip-link {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
+    font-size: 13px;
+    color: #666666;
+}
+
+.email-skip-link:hover {
+    color: #003366;
 }
 
 /* カード型選択肢 */

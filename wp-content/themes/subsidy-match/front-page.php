@@ -9,6 +9,13 @@ get_header();
 ?>
 
 <main>
+    <!-- 吊橋効果: 緊急性バー -->
+    <div class="urgency-bar">
+        <div class="container">
+            <p class="urgency-bar-text">昨年度は予算上限到達により<strong>23件</strong>の補助金が早期終了しました。お早めの診断をお勧めいたします。</p>
+        </div>
+    </div>
+
     <!-- ヒーローセクション -->
     <section class="hero">
         <div class="container">
@@ -19,10 +26,35 @@ get_header();
                     簡単な質問に答えるだけで、貴社に該当する可能性のある<br>
                     補助金・助成金をご案内いたします。
                 </p>
+                <!-- ザイオンス効果: CTA 1 -->
                 <a href="<?php echo esc_url(home_url('/matching/')); ?>" class="btn btn-primary btn-large">
                     無料で補助金診断を始める
                 </a>
                 <p class="hero-note">※ 所要時間：約2分 ／ 登録不要でご利用いただけます</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ハロー効果: 信頼バッジ -->
+    <section class="section-trust-badges">
+        <div class="container">
+            <div class="trust-badges-grid">
+                <div class="trust-badge-item">
+                    <span class="trust-badge-icon">&#x1F6E1;</span>
+                    <span class="trust-badge-text">経済産業省公開データ準拠</span>
+                </div>
+                <div class="trust-badge-item">
+                    <span class="trust-badge-icon">&#x1F3E2;</span>
+                    <span class="trust-badge-text">中小企業庁情報活用</span>
+                </div>
+                <div class="trust-badge-item">
+                    <span class="trust-badge-icon">&#x1F5FE;</span>
+                    <span class="trust-badge-text">47都道府県対応</span>
+                </div>
+                <div class="trust-badge-item">
+                    <span class="trust-badge-icon">&#x1F4CA;</span>
+                    <span class="trust-badge-text">累計診断実績 <strong class="counter-up" data-target="5000">0</strong>社以上</span>
+                </div>
             </div>
         </div>
     </section>
@@ -47,6 +79,13 @@ get_header();
         </div>
     </section>
 
+    <!-- バンドワゴン効果: 利用者数カウントアップ -->
+    <section class="section section-bandwagon">
+        <div class="container text-center">
+            <p class="bandwagon-text">累計 <span class="bandwagon-count counter-up" data-target="5000">0</span> 社の企業にご利用いただいています</p>
+        </div>
+    </section>
+
     <!-- こんなお悩みありませんか？ -->
     <section class="section section-worries">
         <div class="container">
@@ -66,6 +105,7 @@ get_header();
                 </div>
             </div>
             <div class="text-center mt-32">
+                <!-- ザイオンス効果: CTA 2 -->
                 <a href="<?php echo esc_url(home_url('/matching/')); ?>" class="btn btn-primary btn-large">
                     そのお悩み、1分の無料診断で解決します
                 </a>
@@ -96,6 +136,12 @@ get_header();
                     <p class="step-desc">申請に関するご相談も<br>無料で承っております。</p>
                 </div>
             </div>
+            <div class="text-center mt-32">
+                <!-- ザイオンス効果: CTA 3 -->
+                <a href="<?php echo esc_url(home_url('/matching/')); ?>" class="btn btn-primary btn-large">
+                    今すぐ無料診断する
+                </a>
+            </div>
         </div>
     </section>
 
@@ -116,6 +162,84 @@ get_header();
                     <h3>申請サポートも対応</h3>
                     <p>「申請の方法がわからない」「書類作成が不安」など、補助金申請に関するお悩みは専門スタッフが無料でサポートいたします。</p>
                 </div>
+            </div>
+            <div class="text-center mt-32">
+                <!-- ザイオンス効果: CTA 4 -->
+                <a href="<?php echo esc_url(home_url('/matching/')); ?>" class="btn btn-primary btn-large">
+                    1分で結果がわかる無料診断
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ウィンザー効果: お客様の声（吹き出し形式） -->
+    <section class="section section-gray section-testimonials">
+        <div class="container">
+            <h2 class="section-title">お客様の声</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-bubble">
+                        <p>自社に合う補助金が3件も見つかりました。IT導入補助金で会計ソフトを導入し、月20時間の事務作業を削減できました。</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">A</div>
+                        <div class="testimonial-info">
+                            <span class="testimonial-name">A社 代表取締役</span>
+                            <span class="testimonial-detail">飲食業・東京都・従業員8名</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-bubble">
+                        <p>補助金の存在は知っていましたが、種類が多すぎて諦めていました。診断で該当する制度がすぐにわかり、1,000万円の補助を受けられました。</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">B</div>
+                        <div class="testimonial-info">
+                            <span class="testimonial-name">B社 総務部長</span>
+                            <span class="testimonial-detail">製造業・宮城県・従業員15名</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-bubble">
+                        <p>持続化補助金でECサイトを構築。オンライン売上が月商の40%を占めるまでに成長しました。まずは診断してみることをお勧めします。</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">C</div>
+                        <div class="testimonial-info">
+                            <span class="testimonial-name">C社 代表</span>
+                            <span class="testimonial-detail">小売業・大阪府・従業員3名</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="testimonials-note">※ 個人の感想です。効果には個人差があります。</p>
+        </div>
+    </section>
+
+    <!-- ウィンザー効果: 専門家推薦 -->
+    <section class="section section-expert">
+        <div class="container">
+            <div class="expert-card">
+                <div class="expert-header">
+                    <div class="expert-avatar">
+                        <span>山</span>
+                    </div>
+                    <div class="expert-info">
+                        <span class="expert-name">山田 太郎 氏</span>
+                        <span class="expert-title">中小企業診断士 / 経営コンサルタント</span>
+                    </div>
+                </div>
+                <div class="expert-bubble">
+                    <p>中小企業の経営者にとって、自社に合った補助金を見つけることは非常に困難です。年間数万件もの補助金制度の中から、自社の業種・規模・課題に合致するものを探すには膨大な時間がかかります。このサービスは、その課題を的確に解決してくれます。まずは無料診断で、御社に該当する補助金があるか確認されることをお勧めします。</p>
+                </div>
+            </div>
+            <div class="text-center mt-32">
+                <!-- ザイオンス効果: CTA 5 -->
+                <a href="<?php echo esc_url(home_url('/matching/')); ?>" class="btn btn-primary btn-large">
+                    専門家も推薦する無料診断を試す
+                </a>
             </div>
         </div>
     </section>
@@ -188,6 +312,23 @@ get_header();
                     <p class="mechanism-highlight">半額の負担でシステム開発が可能に</p>
                 </div>
             </div>
+            <div class="text-center mt-32">
+                <!-- ザイオンス効果: CTA 6 -->
+                <a href="<?php echo esc_url(home_url('/matching/')); ?>" class="btn btn-primary btn-large">
+                    あなたの補助金額を無料で調べる
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- スノッブ効果: 限定感 -->
+    <section class="section section-limited">
+        <div class="container text-center">
+            <div class="limited-box">
+                <p class="limited-label">無料相談について</p>
+                <p class="limited-text">無料相談は<strong>月30社限定</strong>で承っております</p>
+                <p class="limited-sub">お早めにお申し込みください。定員に達し次第、翌月のご案内となります。</p>
+            </div>
         </div>
     </section>
 
@@ -245,11 +386,12 @@ get_header();
         </div>
     </section>
 
-    <!-- CTA -->
+    <!-- CTA（フッター前） -->
     <section class="section">
         <div class="container text-center">
             <h2 class="section-title">まずは無料診断をお試しください</h2>
             <p class="text-muted mb-24">約2分の簡単な質問で、貴社に該当する補助金・助成金がわかります。</p>
+            <!-- ザイオンス効果: CTA 7 -->
             <a href="<?php echo esc_url(home_url('/matching/')); ?>" class="btn btn-primary btn-large">
                 補助金診断を始める
             </a>
@@ -327,6 +469,63 @@ get_header();
     margin-bottom: 0;
 }
 
+/* 吊橋効果: 緊急性バー */
+.urgency-bar {
+    background-color: #FFF3E0;
+    border-bottom: 1px solid #FFE0B2;
+    padding: 10px 0;
+}
+
+.urgency-bar-text {
+    font-size: 13px;
+    color: #E65100;
+    text-align: center;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.urgency-bar-text strong {
+    font-weight: 700;
+}
+
+/* ハロー効果: 信頼バッジ */
+.section-trust-badges {
+    background-color: #F0F4F8;
+    padding: 20px 0;
+    border-bottom: 1px solid #D0DAE5;
+}
+
+.trust-badges-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.trust-badge-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a3353;
+    background: #FFFFFF;
+    border: 1px solid #D0DAE5;
+    border-radius: 2px;
+    padding: 6px 14px;
+}
+
+.trust-badge-icon {
+    font-size: 14px;
+    line-height: 1;
+}
+
+.trust-badge-text strong {
+    color: #003366;
+    font-weight: 700;
+}
+
 /* Stats */
 .section-stats {
     background-color: #1a3353;
@@ -362,6 +561,25 @@ get_header();
     margin-top: 8px;
     margin-bottom: 0;
     opacity: 0.8;
+}
+
+/* バンドワゴン効果 */
+.section-bandwagon {
+    padding: 24px 0;
+    background: #FFFFFF;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+.bandwagon-text {
+    font-size: 15px;
+    color: #555555;
+    margin: 0;
+}
+
+.bandwagon-count {
+    font-size: 28px;
+    font-weight: 700;
+    color: #003366;
 }
 
 /* Worries */
@@ -474,6 +692,162 @@ get_header();
     font-size: 14px;
     color: #666666;
     margin-bottom: 0;
+}
+
+/* ウィンザー効果: お客様の声 */
+.section-testimonials {
+    padding: 80px 0;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.testimonial-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonial-bubble {
+    background: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    padding: 24px;
+    position: relative;
+    margin-bottom: 16px;
+    flex: 1;
+}
+
+.testimonial-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 32px;
+    width: 16px;
+    height: 16px;
+    background: #FFFFFF;
+    border-right: 1px solid #E0E0E0;
+    border-bottom: 1px solid #E0E0E0;
+    transform: rotate(45deg);
+}
+
+.testimonial-bubble p {
+    font-size: 14px;
+    color: #333333;
+    line-height: 1.8;
+    margin: 0;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-left: 8px;
+}
+
+.testimonial-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: #003366;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.testimonial-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonial-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #333333;
+}
+
+.testimonial-detail {
+    font-size: 12px;
+    color: #888888;
+}
+
+.testimonials-note {
+    text-align: center;
+    font-size: 11px;
+    color: #999999;
+    margin-top: 20px;
+    margin-bottom: 0;
+}
+
+/* ウィンザー効果: 専門家推薦 */
+.section-expert {
+    padding: 60px 0;
+}
+
+.expert-card {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    border: 1px solid #D0DAE5;
+    border-left: 4px solid #003366;
+    border-radius: 4px;
+    padding: 32px;
+}
+
+.expert-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.expert-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: #1a3353;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.expert-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.expert-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #003366;
+}
+
+.expert-title {
+    font-size: 13px;
+    color: #666666;
+}
+
+.expert-bubble p {
+    font-size: 15px;
+    color: #333333;
+    line-height: 1.8;
+    margin: 0;
+    padding: 20px;
+    background: #F8F9FA;
+    border-radius: 4px;
+    border-left: 3px solid #B0BEC5;
 }
 
 /* Cases */
@@ -647,6 +1021,46 @@ get_header();
     border-radius: 4px;
 }
 
+/* スノッブ効果: 限定ボックス */
+.section-limited {
+    padding: 40px 0;
+    background: #FFFFFF;
+}
+
+.limited-box {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 28px 32px;
+    border: 2px solid #D0DAE5;
+    border-radius: 4px;
+    background: #FAFBFC;
+}
+
+.limited-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #666666;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+}
+
+.limited-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: #003366;
+    margin-bottom: 8px;
+}
+
+.limited-text strong {
+    color: #C62828;
+}
+
+.limited-sub {
+    font-size: 13px;
+    color: #888888;
+    margin: 0;
+}
+
 /* FAQ */
 .section-faq {
     padding: 80px 0;
@@ -767,6 +1181,15 @@ get_header();
         display: none;
     }
 
+    .trust-badges-grid {
+        gap: 8px;
+    }
+
+    .trust-badge-item {
+        font-size: 11px;
+        padding: 4px 10px;
+    }
+
     .stats-grid {
         flex-direction: column;
         gap: 32px;
@@ -788,7 +1211,8 @@ get_header();
     .section-worries,
     .section-cases,
     .section-mechanism,
-    .section-faq {
+    .section-faq,
+    .section-testimonials {
         padding: 56px 0;
     }
 
@@ -806,6 +1230,10 @@ get_header();
     }
 
     .features {
+        grid-template-columns: 1fr;
+    }
+
+    .testimonials-grid {
         grid-template-columns: 1fr;
     }
 
@@ -830,7 +1258,61 @@ get_header();
     .company-table th {
         width: 100px;
     }
+
+    .expert-card {
+        padding: 24px 16px;
+    }
+
+    .expert-bubble p {
+        padding: 16px;
+        font-size: 14px;
+    }
 }
 </style>
+
+<script>
+// カウントアップアニメーション
+(function() {
+    function animateCounters() {
+        var counters = document.querySelectorAll('.counter-up, .stat-number[data-target]');
+        counters.forEach(function(el) {
+            var target = parseInt(el.getAttribute('data-target'));
+            if (!target || el.dataset.animated) return;
+
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting && !el.dataset.animated) {
+                        el.dataset.animated = '1';
+                        var start = 0;
+                        var duration = 1500;
+                        var startTime = null;
+
+                        function step(timestamp) {
+                            if (!startTime) startTime = timestamp;
+                            var progress = Math.min((timestamp - startTime) / duration, 1);
+                            var eased = 1 - Math.pow(1 - progress, 3);
+                            var current = Math.floor(eased * target);
+                            el.textContent = current.toLocaleString();
+                            if (progress < 1) {
+                                requestAnimationFrame(step);
+                            } else {
+                                el.textContent = target.toLocaleString();
+                            }
+                        }
+                        requestAnimationFrame(step);
+                    }
+                });
+            }, { threshold: 0.3 });
+            observer.observe(el);
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', animateCounters);
+    } else {
+        animateCounters();
+    }
+})();
+</script>
 
 <?php get_footer(); ?>

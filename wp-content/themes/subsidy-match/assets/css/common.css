@@ -67,9 +67,20 @@ p {
 
 /* Header */
 .site-header {
-    background-color: #003366;
+    background-color: #1a3353;
     color: #FFFFFF;
-    border-bottom: 3px solid #002244;
+    border-bottom: 3px solid #0f1f33;
+    position: relative;
+}
+
+.site-header::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #F9A825;
 }
 
 .header-inner {
@@ -188,6 +199,21 @@ p {
     color: #003366;
 }
 
+.footer-disclaimer {
+    background-color: #FFFDE7;
+    border: 1px solid #F0E4B0;
+    border-radius: 2px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+}
+
+.footer-disclaimer p {
+    font-size: 12px;
+    color: #666666;
+    margin: 0;
+    line-height: 1.6;
+}
+
 .footer-bottom {
     border-top: 1px solid #CCCCCC;
     padding-top: 16px;
@@ -209,7 +235,7 @@ p {
     text-align: center;
     text-decoration: none;
     border: none;
-    border-radius: 4px;
+    border-radius: 2px;
     cursor: pointer;
     transition: background-color 0.2s, opacity 0.2s;
     line-height: 1.5;
@@ -376,7 +402,7 @@ textarea.form-control {
         top: 56px;
         left: 0;
         right: 0;
-        background-color: #003366;
+        background-color: #1a3353;
         flex-direction: column;
         padding: 16px 20px;
         gap: 0;

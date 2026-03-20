@@ -26,6 +26,9 @@
                 </ul>
             </div>
         </div>
+        <div class="footer-disclaimer">
+            <p>※本サイトの情報は各省庁・自治体の公開情報に基づいています。補助金の詳細・最新情報は必ず各実施機関の公式サイトをご確認ください。</p>
+        </div>
         <div class="footer-bottom">
             <p>&copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?>. All rights reserved.</p>
         </div>
