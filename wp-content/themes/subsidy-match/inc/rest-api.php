@@ -37,6 +37,13 @@ function subsidy_match_register_routes() {
         'permission_callback' => '__return_true',
     ));
 
+    // 今月申請期限の補助金件数
+    register_rest_route('subsidy/v1', '/deadline-count', array(
+        'methods'             => 'GET',
+        'callback'            => 'subsidy_match_handle_deadline_count',
+        'permission_callback' => '__return_true',
+    ));
+
     // 統計情報
     register_rest_route('subsidy/v1', '/stats', array(
         'methods'             => 'GET',
@@ -458,6 +465,49 @@ function subsidy_match_handle_stats($request) {
         'by_source'   => $sources ?: array(),
         'by_region'   => $regions ?: array(),
         'last_import' => get_option('subsidy_last_import_at', ''),
+    ), 200);
+}
+
+/**
+ * 今月申請期限の補助金件数
+ */
+function subsidy_match_handle_deadline_count($request) {
+    $now = current_time('Y-m');
+    $first_day = $now . '-01';
+    $last_day  = date('Y-m-t', strtotime($first_day));
+
+    $subsidies = get_posts(array(
+        'post_type'      => 'subsidy',
+        'posts_per_page' => -1,
+        'post_status'    => 'publish',
+        'meta_query'     => array(
+            array(
+                'key'     => '_subsidy_deadline',
+                'compare' => 'EXISTS',
+            ),
+        ),
+    ));
+
+    $count = 0;
+    foreach ($subsidies as $post) {
+        $deadline = get_post_meta($post->ID, '_subsidy_deadline', true);
+        if (empty($deadline)) continue;
+
+        // 日本語の日付（例: "2026年3月31日"）をパース
+        $deadline_normalized = str_replace(array('年', '月', '日'), array('-', '-', ''), $deadline);
+        $deadline_ts = strtotime($deadline_normalized);
+        if (!$deadline_ts) continue;
+
+        $deadline_date = date('Y-m-d', $deadline_ts);
+        if ($deadline_date >= $first_day && $deadline_date <= $last_day) {
+            $count++;
+        }
+    }
+
+    return new WP_REST_Response(array(
+        'success' => true,
+        'count'   => $count,
+        'month'   => $now,
     ), 200);
 }
 

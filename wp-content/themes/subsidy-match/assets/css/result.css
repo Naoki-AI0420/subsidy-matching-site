@@ -792,6 +792,87 @@
     font-weight: 700;
 }
 
+/* ========== 結果ページ: 専門家相談セクション ========== */
+.proposal-contact-section {
+    background: #FAFBFC;
+    border: 2px solid #003366;
+    border-radius: 4px;
+    padding: 32px 28px;
+    margin-bottom: 32px;
+}
+
+.proposal-contact-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #003366;
+    margin: 0 0 20px;
+    text-align: center;
+}
+
+.proposal-contact-methods {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.proposal-contact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px;
+    background: #FFFFFF;
+    border: 1px solid #D0D0D0;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.proposal-contact-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #888888;
+    letter-spacing: 0.05em;
+}
+
+.proposal-contact-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #003366;
+}
+
+.proposal-contact-note {
+    font-size: 12px;
+    color: #999999;
+}
+
+.proposal-contact-actions {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.proposal-email-btn {
+    font-size: 14px;
+    padding: 12px 32px;
+}
+
+@media (max-width: 768px) {
+    .proposal-contact-section {
+        padding: 24px 16px;
+    }
+    .proposal-contact-methods {
+        grid-template-columns: 1fr;
+    }
+    .proposal-contact-value {
+        font-size: 16px;
+    }
+    .proposal-email-btn {
+        width: 100%;
+    }
+}
+
 /* ========== ローディング ========== */
 .result-loading {
     text-align: center;

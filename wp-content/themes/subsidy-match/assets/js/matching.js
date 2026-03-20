@@ -27,37 +27,16 @@
         other:                 { amount: '200万円', subsidy: '持続化補助金' }
     };
 
-    // 従業員規模→該当件数の目安
     var employeeMatchCount = {
         '1-5': 8, '6-20': 12, '21-50': 15, '51-100': 18, '101+': 22
     };
 
-    // 課題→関連補助金件数
     var challengeSubsidyCount = {
         equipment: 25, it_dx: 30, hiring: 15, overseas: 10, rnd: 20, succession: 8
     };
 
-    // 売上→年間補助金活用見込み
     var revenueEstimate = {
         under_10m: '100', '10m_50m': '300', '50m_100m': '500', '100m_500m': '800', over_500m: '1,500'
-    };
-
-    // バンドワゴン: 業種別該当率
-    var industryMatchRate = {
-        manufacturing: 92, construction: 88, information_technology: 95,
-        wholesale_retail: 82, food_service: 85, accommodation: 80,
-        medical_welfare: 78, education: 75, professional_services: 88,
-        transportation: 76, real_estate: 72, agriculture: 70, other: 68
-    };
-
-    // ディドロ効果: 補助金→導入システム例マッピング
-    var diderotSystemMap = {
-        'IT導入補助金': ['予約管理システム', '会計システム', 'ECサイト'],
-        'ものづくり補助金': ['生産管理システム', '在庫管理システム', 'CAD/CAMシステム'],
-        'ものづくり・商業・サービス生産性向上促進補助金': ['生産管理システム', '在庫管理システム', 'CAD/CAMシステム'],
-        '持続化補助金': ['ホームページ制作', 'SNSマーケティングツール', 'POSレジ'],
-        '小規模事業者持続化補助金': ['ホームページ制作', 'SNSマーケティングツール', 'POSレジ'],
-        '事業再構築補助金': ['基幹システム刷新', '新規事業用設備', 'オンラインサービス基盤']
     };
 
     // DOM要素
@@ -71,37 +50,24 @@
     var questionNav = document.querySelector('.question-nav');
     var resultContainer = document.querySelector('.result-container');
     var progressContainer = document.querySelector('.progress-container');
+    var progressMessageEl = document.getElementById('progress-message');
 
     function init() {
         updateProgress();
         updateNavButtons();
         bindEvents();
-        setupBeforeUnload();
     }
 
     function bindEvents() {
         btnNext.addEventListener('click', handleNext);
         btnBack.addEventListener('click', handleBack);
 
-        // ラジオボタンで選択時に自動で次へ
         document.querySelectorAll('.option-card input[type="radio"]').forEach(function (input) {
             input.addEventListener('change', function () {
                 setTimeout(function () {
                     handleNext();
                 }, 250);
             });
-        });
-    }
-
-    /**
-     * サンクコスト強化: beforeunload
-     */
-    function setupBeforeUnload() {
-        window.addEventListener('beforeunload', function (e) {
-            if (currentStep > 1 && !resultContainer.style.display.match(/block/)) {
-                e.preventDefault();
-                e.returnValue = '';
-            }
         });
     }
 
@@ -120,51 +86,35 @@
             updateProgress();
             updateNavButtons();
             updateTeaserMessage(currentStep);
-            updateSunkCostMessage(currentStep);
-            updateBandwagonMessage(currentStep);
+            updateProgressMessage(currentStep);
         } else {
             submitMatching();
         }
     }
 
     /**
-     * バンドワゴン効果: 業種選択後メッセージ
+     * 進捗メッセージ表示（Feature 8）
      */
-    function updateBandwagonMessage(step) {
-        if (step === 3 && answers.industry) {
-            var rate = industryMatchRate[answers.industry] || 75;
-            var industryLabel = document.querySelector('#q-industry option[value="' + answers.industry + '"]');
-            var label = industryLabel ? industryLabel.textContent : '御社の業種';
+    function updateProgressMessage(step) {
+        if (!progressMessageEl) return;
 
-            var teaserEl = document.getElementById('amount-teaser');
-            if (teaserEl) {
-                teaserEl.innerHTML = label + 'の企業の<strong>' + rate + '%</strong>がいずれかの補助金に該当しています';
-                teaserEl.style.display = 'block';
-                teaserEl.style.animation = 'none';
-                void teaserEl.offsetHeight;
-                teaserEl.style.animation = 'fadeIn 0.5s ease';
-            }
+        var msg = '';
+        if (step === 14) {
+            msg = '最後の質問です！';
+        } else if (step >= 11) {
+            msg = 'ほぼ完了です！結果をお楽しみに';
+        } else if (step >= 6) {
+            msg = 'あと少しです！';
         }
-    }
 
-    /**
-     * サンクコスト強化: 暫定候補数メッセージ
-     */
-    function updateSunkCostMessage(step) {
-        var msgEl = document.getElementById('sunk-cost-msg');
-        if (!msgEl) return;
-
-        if (step >= 3) {
-            var baseCount = employeeMatchCount[answers.employee_size] || 10;
-            var answeredCount = Object.keys(answers).length;
-            var adjustedCount = Math.max(3, baseCount + Math.floor(answeredCount * 1.2));
-            msgEl.innerHTML = 'ここまでの回答を元に、暫定 <strong>' + adjustedCount + '件</strong> の候補が見つかっています';
-            msgEl.style.display = 'block';
-            msgEl.style.animation = 'none';
-            void msgEl.offsetHeight;
-            msgEl.style.animation = 'fadeIn 0.5s ease';
+        if (msg) {
+            progressMessageEl.textContent = msg;
+            progressMessageEl.style.display = 'block';
+            progressMessageEl.style.animation = 'none';
+            void progressMessageEl.offsetHeight;
+            progressMessageEl.style.animation = 'fadeIn 0.4s ease';
         } else {
-            msgEl.style.display = 'none';
+            progressMessageEl.style.display = 'none';
         }
     }
 
@@ -219,6 +169,7 @@
             showStep(currentStep);
             updateProgress();
             updateNavButtons();
+            updateProgressMessage(currentStep);
         }
     }
 
@@ -243,6 +194,15 @@
         progressBar.style.width = percent + '%';
         progressPercent.textContent = percent + '%';
         currentStepEl.textContent = currentStep;
+
+        // 終盤でプログレスバーの色を緑に変化（Feature 8）
+        if (currentStep >= 12) {
+            progressBar.style.background = 'linear-gradient(90deg, #2E7D32, #43A047)';
+        } else if (currentStep >= 8) {
+            progressBar.style.background = 'linear-gradient(90deg, #003366, #1565C0)';
+        } else {
+            progressBar.style.background = 'linear-gradient(90deg, #003366, #0056b3)';
+        }
     }
 
     function updateNavButtons() {
@@ -321,7 +281,6 @@
         slide.style.animation = 'shake 0.4s ease';
     }
 
-    // シェイクアニメーション追加
     var style = document.createElement('style');
     style.textContent = '@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }';
     document.head.appendChild(style);
@@ -394,12 +353,10 @@
         questionContainer.style.display = 'none';
         questionNav.style.display = 'none';
         progressContainer.style.display = 'none';
-        resultContainer.style.display = 'block';
-
-        var sunkEl = document.getElementById('sunk-cost-msg');
-        if (sunkEl) sunkEl.style.display = 'none';
+        if (progressMessageEl) progressMessageEl.style.display = 'none';
         var teaserEl = document.getElementById('amount-teaser');
         if (teaserEl) teaserEl.style.display = 'none';
+        resultContainer.style.display = 'block';
 
         resultContainer.innerHTML =
             '<div class="result-loading">' +
@@ -435,29 +392,11 @@
     }
 
     /**
-     * 吊橋効果: 期限カウントダウン計算
-     */
-    function calcDaysRemaining(deadlineStr) {
-        if (!deadlineStr) return null;
-        var match = deadlineStr.match(/(\d{4})[年\-\/](\d{1,2})[月\-\/](\d{1,2})/);
-        if (!match) return null;
-        var deadline = new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]));
-        var today = new Date();
-        today.setHours(0, 0, 0, 0);
-        return Math.ceil((deadline - today) / (1000 * 60 * 60 * 24));
-    }
-
-    /**
      * 営業提案書レベルの結果描画
      */
     function renderProposalResults(results, serverDxAnalysis) {
         var dx = analyzeDxChallenges();
         var html = '';
-
-        // スノッブ効果: 専用レポートメッセージ
-        html += '<div class="result-exclusive-badge">';
-        html += '  <span>このレポートは御社専用に生成されました</span>';
-        html += '</div>';
 
         // ヘッダー
         html += '<div class="proposal-header">';
@@ -466,95 +405,30 @@
         html += '  <p>ご回答内容をもとに、活用可能な補助金と最適なDX施策をご提案いたします</p>';
         html += '</div>';
 
-        // アンカリング効果: 最大交付額
-        html += '<div class="anchoring-banner">';
-        html += '  <p class="anchoring-label">補助金制度全体の最大交付額</p>';
-        html += '  <p class="anchoring-amount">1億5,000<span class="anchoring-unit">万円</span></p>';
-        html += '  <p class="anchoring-sub">以下は御社に該当する補助金です</p>';
-        html += '</div>';
-
-        // 吊橋効果: 期限迫り警告バナー
-        var hasUrgent = false;
-        results.forEach(function (item) {
-            var days = calcDaysRemaining(item.deadline);
-            if (days !== null && days <= 30 && days >= 0) hasUrgent = true;
-        });
-        if (hasUrgent) {
-            html += '<div class="deadline-warning-banner">';
-            html += '  <span class="deadline-warning-icon">&#9888;</span>';
-            html += '  <span>申請期限が迫っている補助金があります。お早めにご確認ください。</span>';
-            html += '</div>';
-        }
-
         // 補助金セクション
         html += '<section class="proposal-section">';
-        html += '  <div class="proposal-section-header">';
-        html += '    <h3>該当する補助金・助成金</h3>';
-        html += '    <span class="proposal-section-count">' + results.length + '件</span>';
-        html += '  </div>';
+        html += '  <div class="proposal-section-header"><h3>該当する補助金・助成金</h3><span class="proposal-section-count">' + results.length + '件</span></div>';
 
         results.forEach(function (item) {
             var matchClass = item.match_level || 'medium';
             var badgeLabel = matchClass === 'high' ? '適合度：高' : matchClass === 'medium' ? '適合度：中' : '適合度：低';
             var badgeClass = matchClass === 'high' ? 'badge-high' : matchClass === 'medium' ? 'badge-medium' : 'badge-low';
-            var applyCount = 30 + (item.title.length % 20);
-            var daysRemaining = calcDaysRemaining(item.deadline);
-
-            // アンカリング: 実質負担額計算
-            var maxAmount = item.max_amount || 0;
-            var rateText = item.rate || '';
-            var subsidyRatio = 0.5;
-            if (rateText.indexOf('3/4') !== -1) subsidyRatio = 0.75;
-            else if (rateText.indexOf('2/3') !== -1) subsidyRatio = 0.667;
-            var estimatedCost = maxAmount > 0 ? Math.round(maxAmount / subsidyRatio) : 0;
-            var actualBurden = estimatedCost > 0 ? estimatedCost - maxAmount : 0;
 
             html += '<div class="subsidy-card" data-match="' + matchClass + '">';
-            html += '  <div class="subsidy-card-header">';
-            html += '    <h3 class="subsidy-card-title">' + escapeHtml(item.title) + '</h3>';
-            html += '    <span class="subsidy-card-badge badge ' + badgeClass + '">' + badgeLabel + '</span>';
-            html += '  </div>';
-
-            if (daysRemaining !== null && daysRemaining <= 30 && daysRemaining >= 0) {
-                html += '  <div class="subsidy-countdown"><span class="countdown-days">あと' + daysRemaining + '日</span>で申請期限</div>';
-            }
-
+            html += '  <div class="subsidy-card-header"><h3 class="subsidy-card-title">' + escapeHtml(item.title) + '</h3><span class="subsidy-card-badge badge ' + badgeClass + '">' + badgeLabel + '</span></div>';
             html += '  <div class="subsidy-card-details">';
-            html += '    <div class="subsidy-detail-item">';
-            html += '      <span class="subsidy-detail-label">補助上限額</span>';
-            html += '      <span class="subsidy-detail-value">' + formatAmount(item.max_amount) + '</span>';
-            html += '    </div>';
-            html += '    <div class="subsidy-detail-item">';
-            html += '      <span class="subsidy-detail-label">補助率</span>';
-            html += '      <span class="subsidy-detail-value">' + escapeHtml(item.rate || '-') + '</span>';
-            html += '    </div>';
+            html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">補助上限額</span><span class="subsidy-detail-value">' + formatAmount(item.max_amount) + '</span></div>';
+            html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">補助率</span><span class="subsidy-detail-value">' + escapeHtml(item.rate || '-') + '</span></div>';
             if (item.adoption_rate) {
-                html += '    <div class="subsidy-detail-item">';
-                html += '      <span class="subsidy-detail-label">採択率</span>';
-                html += '      <span class="subsidy-detail-value">' + Math.round(item.adoption_rate * 100) + '%</span>';
-                html += '    </div>';
+                html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">採択率</span><span class="subsidy-detail-value">' + Math.round(item.adoption_rate * 100) + '%</span></div>';
             }
             html += '  </div>';
-
-            // アンカリング: 3段階コスト表示
-            if (estimatedCost > 0) {
-                html += '  <div class="subsidy-cost-breakdown">';
-                html += '    <span class="cost-item">開発費 ' + formatAmount(estimatedCost) + '</span>';
-                html += '    <span class="cost-arrow">&rarr;</span>';
-                html += '    <span class="cost-item cost-subsidy">補助金 ' + formatAmount(maxAmount) + '</span>';
-                html += '    <span class="cost-arrow">=</span>';
-                html += '    <span class="cost-item cost-actual">実質負担 ' + formatAmount(actualBurden) + '</span>';
-                html += '  </div>';
-            }
-
             html += '  <p class="subsidy-card-summary">' + escapeHtml(item.summary || '') + '</p>';
-            html += '  <p class="subsidy-apply-count">この補助金は今月 <strong>' + applyCount + '社</strong> が申請しています</p>';
-
             if (item.deadline) {
                 html += '  <div class="subsidy-card-meta"><span class="subsidy-card-deadline">申請期限: ' + escapeHtml(item.deadline) + '</span></div>';
             }
             if (item.official_url) {
-                html += '  <a href="' + escapeHtml(item.official_url) + '" target="_blank" rel="noopener" class="subsidy-card-link">公募要領を確認する &rarr;</a>';
+                html += '  <a href="' + escapeHtml(item.official_url) + '" target="_blank" rel="noopener" class="subsidy-card-link">公募要領を確認する →</a>';
             }
             html += '</div>';
         });
@@ -564,88 +438,61 @@
         if (dx.issues.length > 0) {
             html += '<section class="proposal-section proposal-dx-section">';
             html += '  <div class="proposal-section-header"><h3>貴社のDX課題</h3></div>';
-
             var levelLabel = dx.dxLevel === 'beginner' ? 'デジタル化初期段階' : dx.dxLevel === 'developing' ? 'デジタル化移行段階' : 'デジタル活用段階';
-            var levelDesc = dx.dxLevel === 'beginner' ? '多くの業務がアナログ中心です。補助金を活用したデジタル化により、大幅な業務効率改善が見込めます。' :
-                            dx.dxLevel === 'developing' ? '一部デジタル化が進んでいますが、さらなる効率化の余地があります。' :
-                            'デジタル化は進んでいます。さらなる高度化・連携で競争力を強化できます。';
-
-            html += '  <div class="dx-level-card">';
-            html += '    <div class="dx-level-badge dx-level-' + dx.dxLevel + '">' + levelLabel + '</div>';
-            html += '    <p>' + levelDesc + '</p>';
-            html += '  </div>';
+            var levelDesc = dx.dxLevel === 'beginner' ? '多くの業務がアナログ中心です。補助金を活用したデジタル化により、大幅な業務効率改善が見込めます。' : dx.dxLevel === 'developing' ? '一部デジタル化が進んでいますが、さらなる効率化の余地があります。' : 'デジタル化は進んでいます。さらなる高度化・連携で競争力を強化できます。';
+            html += '  <div class="dx-level-card"><div class="dx-level-badge dx-level-' + dx.dxLevel + '">' + levelLabel + '</div><p>' + levelDesc + '</p></div>';
             html += '  <ul class="dx-issues-list">';
             dx.issues.forEach(function (issue) { html += '<li>' + escapeHtml(issue) + '</li>'; });
             html += '  </ul>';
-
             if (dx.painPoints.length > 0) {
                 var painLabels = { labor_shortage: '人手不足', sales_decline: '売上低下', cost_reduction: 'コスト削減', efficiency: '業務効率化', new_business: '新規事業' };
-                html += '<div class="dx-pain-tags">';
+                html += '  <div class="dx-pain-tags">';
                 dx.painPoints.forEach(function (p) { html += '<span class="dx-pain-tag">' + escapeHtml(painLabels[p] || p) + '</span>'; });
-                html += '</div>';
+                html += '  </div>';
             }
             html += '</section>';
         }
 
-        // おすすめシステム導入セクション
+        // おすすめシステム導入
         if (dx.recommendations.length > 0) {
             html += '<section class="proposal-section proposal-recommend-section">';
             html += '  <div class="proposal-section-header"><h3>おすすめシステム導入プラン</h3></div>';
             html += '  <p class="proposal-recommend-lead">DX課題の分析結果をもとに、補助金を活用した最適なシステム導入プランをご提案いたします。</p>';
-
             dx.recommendations.forEach(function (rec) {
                 var subsidizedAmount = Math.round(rec.estimate * 0.25);
-                html += '<div class="recommend-card">';
-                html += '  <div class="recommend-card-header"><h4>' + escapeHtml(rec.category) + '</h4></div>';
-                html += '  <p class="recommend-card-desc">' + escapeHtml(rec.description) + '</p>';
-                html += '  <div class="recommend-card-cost">';
-                html += '    <div class="recommend-cost-item"><span class="recommend-cost-label">想定導入費用</span><span class="recommend-cost-value">約' + rec.estimate + '万円</span></div>';
-                html += '    <div class="recommend-cost-arrow">&rarr;</div>';
-                html += '    <div class="recommend-cost-item recommend-cost-actual"><span class="recommend-cost-label">補助金活用後（' + escapeHtml(rec.subsidyRate) + '）</span><span class="recommend-cost-value recommend-cost-highlight">実質 約' + subsidizedAmount + '万円</span></div>';
-                html += '  </div>';
-                html += '</div>';
+                html += '<div class="recommend-card"><div class="recommend-card-header"><h4>' + escapeHtml(rec.category) + '</h4></div>';
+                html += '<p class="recommend-card-desc">' + escapeHtml(rec.description) + '</p>';
+                html += '<div class="recommend-card-cost"><div class="recommend-cost-item"><span class="recommend-cost-label">想定導入費用</span><span class="recommend-cost-value">約' + rec.estimate + '万円</span></div>';
+                html += '<div class="recommend-cost-arrow">→</div>';
+                html += '<div class="recommend-cost-item recommend-cost-actual"><span class="recommend-cost-label">補助金活用後（' + escapeHtml(rec.subsidyRate) + '）</span><span class="recommend-cost-value recommend-cost-highlight">実質 約' + subsidizedAmount + '万円</span></div></div></div>';
             });
             html += '</section>';
         }
 
-        // ディドロ効果: 補助金で導入できるシステム例
-        var diderotItems = [];
-        results.forEach(function (item) {
-            var title = item.title || '';
-            Object.keys(diderotSystemMap).forEach(function (key) {
-                if (title.indexOf(key) !== -1 || key.indexOf(title) !== -1) {
-                    diderotSystemMap[key].forEach(function (sys) {
-                        if (diderotItems.indexOf(sys) === -1) diderotItems.push(sys);
-                    });
-                }
-            });
-            if (title.indexOf('IT') !== -1 || title.indexOf('デジタル') !== -1) {
-                ['予約管理システム', '会計システム', 'ECサイト'].forEach(function (sys) { if (diderotItems.indexOf(sys) === -1) diderotItems.push(sys); });
-            }
-            if (title.indexOf('ものづくり') !== -1) {
-                ['生産管理システム', '在庫管理システム'].forEach(function (sys) { if (diderotItems.indexOf(sys) === -1) diderotItems.push(sys); });
-            }
-            if (title.indexOf('持続化') !== -1) {
-                ['ホームページ制作', 'SNSマーケティングツール'].forEach(function (sys) { if (diderotItems.indexOf(sys) === -1) diderotItems.push(sys); });
-            }
-        });
-
-        if (diderotItems.length > 0) {
-            html += '<section class="proposal-section proposal-diderot-section">';
-            html += '  <div class="proposal-section-header"><h3>この補助金で導入できるシステム例</h3></div>';
-            html += '  <div class="diderot-grid">';
-            diderotItems.forEach(function (sys) {
-                html += '<div class="diderot-item"><span class="diderot-icon">&#9654;</span><span>' + escapeHtml(sys) + '</span></div>';
-            });
-            html += '  </div>';
-            html += '  <p class="diderot-note">無料相談では、補助金申請から導入まで一貫してサポートいたします</p>';
-            html += '</section>';
+        // 次のアクション強化（Feature 7）
+        html += '<section class="proposal-section proposal-contact-section">';
+        html += '  <div class="proposal-contact-header">';
+        html += '    <h3>この結果を元に、専門家が無料でご相談に応じます</h3>';
+        html += '  </div>';
+        html += '  <div class="proposal-contact-methods">';
+        html += '    <div class="proposal-contact-item">';
+        html += '      <span class="proposal-contact-label">お電話でのご相談</span>';
+        html += '      <span class="proposal-contact-value">03-XXXX-XXXX</span>';
+        html += '      <span class="proposal-contact-note">平日 9:00〜18:00</span>';
+        html += '    </div>';
+        html += '    <div class="proposal-contact-item">';
+        html += '      <span class="proposal-contact-label">メールでのご相談</span>';
+        html += '      <span class="proposal-contact-value">info@yumeno-marketing.jp</span>';
+        html += '      <span class="proposal-contact-note">24時間受付</span>';
+        html += '    </div>';
+        html += '  </div>';
+        html += '  <div class="proposal-contact-actions">';
+        html += '    <a href="' + getContactUrl() + '" class="btn btn-primary btn-large proposal-cta-btn">無料相談を予約する</a>';
+        if (answers.email) {
+            html += '    <button class="btn btn-secondary proposal-email-btn" id="send-result-email">この診断結果をメールで受け取る</button>';
         }
-
-        // スノッブ効果: 限定PDF
-        html += '<div class="result-pdf-teaser">';
-        html += '  <p class="pdf-teaser-text">詳細分析レポート（PDF）は<strong>無料相談</strong>でのみご提供しております</p>';
-        html += '</div>';
+        html += '  </div>';
+        html += '</section>';
 
         // 次のステップ CTA
         html += '<section class="proposal-section proposal-cta-section">';
@@ -660,6 +507,16 @@
         html += '</section>';
 
         resultContainer.innerHTML = html;
+
+        // メール送信ボタンのイベント
+        var emailBtn = document.getElementById('send-result-email');
+        if (emailBtn) {
+            emailBtn.addEventListener('click', function () {
+                emailBtn.textContent = '送信しました';
+                emailBtn.disabled = true;
+                emailBtn.style.opacity = '0.6';
+            });
+        }
     }
 
     /**
@@ -678,7 +535,7 @@
     function formatAmount(amount) {
         if (!amount) return '-';
         if (amount >= 100000000) return (amount / 100000000) + '億円';
-        if (amount >= 10000) return (amount / 10000).toLocaleString() + '万円';
+        else if (amount >= 10000) return (amount / 10000).toLocaleString() + '万円';
         return amount.toLocaleString() + '円';
     }
 
@@ -690,7 +547,9 @@
     }
 
     function getContactUrl() {
-        return (typeof subsidyMatchApi !== 'undefined') ? window.location.origin + '/contact/' : '/contact/';
+        return (typeof subsidyMatchApi !== 'undefined')
+            ? window.location.origin + '/contact/'
+            : '/contact/';
     }
 
     if (document.readyState === 'loading') {

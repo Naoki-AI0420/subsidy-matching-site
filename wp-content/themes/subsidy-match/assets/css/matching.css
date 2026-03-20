@@ -43,16 +43,29 @@
     height: 100%;
     background: linear-gradient(90deg, #003366, #0056b3);
     border-radius: 4px;
-    transition: width 0.4s ease;
+    transition: width 0.4s ease, background 0.4s ease;
 }
 
 .progress-step {
-    font-size: 15px;
-    font-weight: 700;
-    color: #003366;
+    font-size: 13px;
+    color: #999999;
     text-align: right;
-    margin-top: 8px;
+    margin-top: 6px;
     margin-bottom: 0;
+}
+
+/* 進捗メッセージ */
+.progress-message {
+    max-width: 600px;
+    margin: -24px auto 24px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2E7D32;
+    padding: 8px 16px;
+    background: #E8F5E9;
+    border-radius: 4px;
+    animation: fadeIn 0.4s ease;
 }
 
 /* 金額チラ見せメッセージ */
@@ -83,12 +96,6 @@
 
 .question-slide {
     animation: fadeIn 0.3s ease;
-    background: #FFFFFF;
-    border: 1px solid #E0E0E0;
-    border-left: 4px solid #1a3353;
-    border-radius: 2px;
-    padding: 32px 28px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 @keyframes fadeIn {
@@ -139,18 +146,6 @@
     text-align: center;
     margin-top: 8px;
     margin-bottom: 0;
-}
-
-.email-skip-link {
-    display: block;
-    text-align: center;
-    margin-top: 16px;
-    font-size: 13px;
-    color: #666666;
-}
-
-.email-skip-link:hover {
-    color: #003366;
 }
 
 /* カード型選択肢 */
@@ -227,37 +222,9 @@
     min-width: 140px;
 }
 
-.btn-next {
-    background-color: #E8594F;
-}
-
-.btn-next:hover {
-    background-color: #D04A40;
-}
-
 .btn-next:disabled {
     background-color: #CCCCCC;
     cursor: not-allowed;
-}
-
-/* サンクコスト強化: 暫定候補メッセージ */
-.sunk-cost-msg {
-    max-width: 600px;
-    margin: 0 auto 16px;
-    padding: 12px 20px;
-    background-color: #E8F5E9;
-    border: 1px solid #C8E6C9;
-    border-left: 4px solid #2E7D32;
-    border-radius: 2px;
-    font-size: 14px;
-    color: #1B5E20;
-    line-height: 1.6;
-    animation: fadeIn 0.5s ease;
-}
-
-.sunk-cost-msg strong {
-    color: #2E7D32;
-    font-weight: 700;
 }
 
 /* Responsive */
