@@ -188,6 +188,117 @@ $contact_url  = esc_url(home_url('/contact/'));
         </div>
     </section>
 
+    <!-- 業種別 補助金活用事例 -->
+    <section class="section section-gray section-industry-stories">
+        <div class="container">
+            <h2 class="section-title">業種別 補助金活用事例</h2>
+            <p class="industry-stories-lead">あなたの業種をクリックして、補助金の活用イメージをご確認ください。</p>
+            <div class="industry-tabs">
+                <button class="industry-tab is-active" data-tab="manufacturing" type="button">製造業</button>
+                <button class="industry-tab" data-tab="restaurant" type="button">飲食業</button>
+                <button class="industry-tab" data-tab="retail" type="button">小売業</button>
+                <button class="industry-tab" data-tab="construction" type="button">建設業</button>
+                <button class="industry-tab" data-tab="medical" type="button">医療・介護</button>
+            </div>
+            <div class="industry-panels">
+                <div class="industry-panel is-active" id="panel-manufacturing">
+                    <div class="industry-flow">
+                        <div class="industry-flow-step"><span class="industry-flow-label">課題</span><p>生産管理が手作業、在庫の無駄が多い</p></div>
+                        <div class="industry-flow-arrow"></div>
+                        <div class="industry-flow-step"><span class="industry-flow-label">活用した補助金</span><p>ものづくり補助金（最大1,250万円）</p></div>
+                        <div class="industry-flow-arrow"></div>
+                        <div class="industry-flow-step"><span class="industry-flow-label">導入システム</span><p>生産管理＋在庫管理システム</p></div>
+                        <div class="industry-flow-arrow"></div>
+                        <div class="industry-flow-step"><span class="industry-flow-label">結果</span><p>生産効率<strong>30%向上</strong>、在庫コスト年間<strong>200万円削減</strong></p></div>
+                    </div>
+                    <div class="industry-cost">
+                        <div class="industry-cost-row"><span class="industry-cost-label">開発費</span><span class="industry-cost-value">800万円</span></div>
+                        <div class="industry-cost-arrow">→</div>
+                        <div class="industry-cost-row industry-cost-subsidy"><span class="industry-cost-label">補助金</span><span class="industry-cost-value">533万円</span></div>
+                        <div class="industry-cost-arrow">→</div>
+                        <div class="industry-cost-row industry-cost-burden"><span class="industry-cost-label">実質負担</span><span class="industry-cost-value industry-cost-highlight">267万円</span></div>
+                    </div>
+                </div>
+                <div class="industry-panel" id="panel-restaurant">
+                    <div class="industry-flow">
+                        <div class="industry-flow-step"><span class="industry-flow-label">課題</span><p>電話予約の取りこぼし、紙の顧客台帳</p></div>
+                        <div class="industry-flow-arrow"></div>
+                        <div class="industry-flow-step"><span class="industry-flow-label">活用した補助金</span><p>IT導入補助金（最大450万円）</p></div>
+                        <div class="industry-flow-arrow"></div>
+                        <div class="industry-flow-step"><span class="industry-flow-label">導入システム</span><p>予約管理＋POS＋顧客管理</p></div>
+                        <div class="industry-flow-arrow"></div>
+                        <div class="industry-flow-step"><span class="industry-flow-label">結果</span><p>予約取りこぼし<strong>ゼロ</strong>、リピート率<strong>25%向上</strong></p></div>
+                    </div>
+                    <div class="industry-cost">
+                        <div class="industry-cost-row"><span class="industry-cost-label">導入費</span><span class="industry-cost-value">200万円</span></div>
+                        <div class="industry-cost-arrow">→</div>
+                        <div class="industry-cost-row industry-cost-subsidy"><span class="industry-cost-label">補助金</span><span class="industry-cost-value">150万円</span></div>
+                        <div class="industry-cost-arrow">→</div>
+                        <div class="industry-cost-row industry-cost-burden"><span class="industry-cost-label">実質負担</span><span class="industry-cost-value industry-cost-highlight">50万円</span></div>
+                    </div>
+                </div>
+                <div class="industry-panel" id="panel-retail">
+                    <div class="industry-flow">
+                        <div class="industry-flow-step"><span class="industry-flow-label">課題</span><p>実店舗のみで売上が頭打ち</p></div>
+                        <div class="industry-flow-arrow"></div>
+                        <div class="industry-flow-step"><span class="industry-flow-label">活用した補助金</span><p>小規模事業者持続化補助金（最大200万円）</p></div>
+                        <div class="industry-flow-arrow"></div>
+                        <div class="industry-flow-step"><span class="industry-flow-label">導入システム</span><p>ECサイト＋決済システム</p></div>
+                        <div class="industry-flow-arrow"></div>
+                        <div class="industry-flow-step"><span class="industry-flow-label">結果</span><p>オンライン売上が月商の<strong>35%</strong>に成長</p></div>
+                    </div>
+                    <div class="industry-cost">
+                        <div class="industry-cost-row"><span class="industry-cost-label">制作費</span><span class="industry-cost-value">150万円</span></div>
+                        <div class="industry-cost-arrow">→</div>
+                        <div class="industry-cost-row industry-cost-subsidy"><span class="industry-cost-label">補助金</span><span class="industry-cost-value">100万円</span></div>
+                        <div class="industry-cost-arrow">→</div>
+                        <div class="industry-cost-row industry-cost-burden"><span class="industry-cost-label">実質負担</span><span class="industry-cost-value industry-cost-highlight">50万円</span></div>
+                    </div>
+                </div>
+                <div class="industry-panel" id="panel-construction">
+                    <div class="industry-flow">
+                        <div class="industry-flow-step"><span class="industry-flow-label">課題</span><p>現場写真の管理が煩雑、日報が手書き</p></div>
+                        <div class="industry-flow-arrow"></div>
+                        <div class="industry-flow-step"><span class="industry-flow-label">活用した補助金</span><p>IT導入補助金（最大450万円）</p></div>
+                        <div class="industry-flow-arrow"></div>
+                        <div class="industry-flow-step"><span class="industry-flow-label">導入システム</span><p>施工管理＋日報＋写真管理アプリ</p></div>
+                        <div class="industry-flow-arrow"></div>
+                        <div class="industry-flow-step"><span class="industry-flow-label">結果</span><p>事務作業時間<strong>60%削減</strong>、書類作成の残業<strong>ゼロ</strong>に</p></div>
+                    </div>
+                    <div class="industry-cost">
+                        <div class="industry-cost-row"><span class="industry-cost-label">導入費</span><span class="industry-cost-value">300万円</span></div>
+                        <div class="industry-cost-arrow">→</div>
+                        <div class="industry-cost-row industry-cost-subsidy"><span class="industry-cost-label">補助金</span><span class="industry-cost-value">225万円</span></div>
+                        <div class="industry-cost-arrow">→</div>
+                        <div class="industry-cost-row industry-cost-burden"><span class="industry-cost-label">実質負担</span><span class="industry-cost-value industry-cost-highlight">75万円</span></div>
+                    </div>
+                </div>
+                <div class="industry-panel" id="panel-medical">
+                    <div class="industry-flow">
+                        <div class="industry-flow-step"><span class="industry-flow-label">課題</span><p>カルテが紙、予約が電話のみ</p></div>
+                        <div class="industry-flow-arrow"></div>
+                        <div class="industry-flow-step"><span class="industry-flow-label">活用した補助金</span><p>IT導入補助金（最大450万円）</p></div>
+                        <div class="industry-flow-arrow"></div>
+                        <div class="industry-flow-step"><span class="industry-flow-label">導入システム</span><p>電子カルテ＋Web予約＋レセプト連携</p></div>
+                        <div class="industry-flow-arrow"></div>
+                        <div class="industry-flow-step"><span class="industry-flow-label">結果</span><p>1日あたり診察可能患者数<strong>20%増加</strong></p></div>
+                    </div>
+                    <div class="industry-cost">
+                        <div class="industry-cost-row"><span class="industry-cost-label">導入費</span><span class="industry-cost-value">400万円</span></div>
+                        <div class="industry-cost-arrow">→</div>
+                        <div class="industry-cost-row industry-cost-subsidy"><span class="industry-cost-label">補助金</span><span class="industry-cost-value">300万円</span></div>
+                        <div class="industry-cost-arrow">→</div>
+                        <div class="industry-cost-row industry-cost-burden"><span class="industry-cost-label">実質負担</span><span class="industry-cost-value industry-cost-highlight">100万円</span></div>
+                    </div>
+                </div>
+            </div>
+            <p class="industry-stories-note">※ 上記は補助金活用のイメージです</p>
+            <div class="text-center mt-32">
+                <a href="<?php echo $matching_url; ?>" class="btn btn-primary btn-large">あなたの業種でも診断してみませんか？</a>
+            </div>
+        </div>
+    </section>
+
     <!-- FAQ -->
     <section class="section section-gray">
         <div class="container">
@@ -206,6 +317,24 @@ $contact_url  = esc_url(home_url('/contact/'));
             <h2 class="section-title">まずは無料診断をお試しください</h2>
             <p class="text-muted mb-24">約2分の簡単な質問で、貴社に該当する補助金・助成金がわかります。</p>
             <a href="<?php echo $matching_url; ?>" class="btn btn-primary btn-large">補助金診断を始める</a>
+        </div>
+    </section>
+
+    <!-- データの信頼性について -->
+    <section class="section-data-sources">
+        <div class="container">
+            <div class="data-sources-box">
+                <h3 class="data-sources-title">データの信頼性について</h3>
+                <p class="data-sources-lead">本サービスで提供する補助金情報は、以下の公的機関の公開情報に基づいています。</p>
+                <ul class="data-sources-list">
+                    <li>経済産業省（meti.go.jp）</li>
+                    <li>中小企業庁（chusho.meti.go.jp）</li>
+                    <li>各都道府県・市区町村の公式ウェブサイト</li>
+                    <li>独立行政法人 中小企業基盤整備機構</li>
+                    <li>各種財団法人・公益法人</li>
+                </ul>
+                <p class="data-sources-note">※ 補助金の内容は変更される場合があります。最新情報は各公募要領をご確認ください。</p>
+            </div>
         </div>
     </section>
 </main>
@@ -287,6 +416,54 @@ $contact_url  = esc_url(home_url('/contact/'));
 .exit-modal-desc{font-size:15px;color:#555;line-height:1.7;margin-bottom:24px}
 .exit-modal-btn{display:inline-block;font-size:16px;font-weight:700;padding:16px 40px}
 .exit-modal-note{font-size:12px;color:#999;margin-top:12px;margin-bottom:0}
+/* Facts section */
+.section-facts{padding:80px 0;background:#fff}
+.fact-card{display:flex;align-items:flex-start;gap:28px;background:#fff;border:1px solid #E0E0E0;border-left:4px solid #003366;border-radius:4px;padding:32px;margin-bottom:24px;max-width:860px;margin-left:auto;margin-right:auto}
+.fact-card:last-of-type{margin-bottom:0}
+.fact-number{font-size:64px;font-weight:700;color:#003366;line-height:1;flex-shrink:0;min-width:120px;text-align:center}
+.fact-text h3{font-size:18px;color:#003366;margin-bottom:8px}
+.fact-text p{font-size:15px;color:#555;line-height:1.8;margin-bottom:0}
+/* Steps detail 5-step */
+.section-steps-detail{padding:80px 0}
+.steps-detail{display:flex;align-items:flex-start;justify-content:center;gap:0;max-width:1000px;margin:0 auto}
+.step-detail{text-align:center;flex:1;max-width:180px;padding:0 8px}
+.step-detail-number{width:48px;height:48px;border-radius:50%;background-color:#003366;color:#fff;font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.step-detail-active .step-detail-number{background-color:#E8594F;box-shadow:0 0 0 4px rgba(232,89,79,.2)}
+.step-detail-title{font-size:15px;color:#003366;margin-bottom:8px}
+.step-detail-desc{font-size:13px;color:#666;line-height:1.7;margin-bottom:0}
+.step-detail-line{width:32px;height:2px;background-color:#B0BEC5;flex-shrink:0;margin-top:24px}
+/* Industry stories */
+.section-industry-stories{padding:80px 0}
+.industry-stories-lead{text-align:center;font-size:15px;color:#666;margin-bottom:32px}
+.industry-tabs{display:flex;justify-content:center;gap:8px;margin-bottom:32px;flex-wrap:wrap}
+.industry-tab{padding:10px 24px;font-size:14px;font-weight:700;font-family:inherit;color:#003366;background:#fff;border:2px solid #003366;border-radius:4px;cursor:pointer;transition:all .2s}
+.industry-tab:hover{background-color:#E8F0F8}
+.industry-tab.is-active{background-color:#003366;color:#fff}
+.industry-panel{display:none;max-width:860px;margin:0 auto}
+.industry-panel.is-active{display:block}
+.industry-flow{display:flex;align-items:flex-start;gap:0;margin-bottom:28px}
+.industry-flow-step{flex:1;background:#fff;border:1px solid #E0E0E0;border-radius:4px;padding:20px 16px;text-align:center}
+.industry-flow-label{display:inline-block;font-size:11px;font-weight:700;color:#fff;background-color:#003366;padding:2px 10px;border-radius:2px;margin-bottom:8px}
+.industry-flow-step p{font-size:14px;color:#333;margin-bottom:0;line-height:1.6}
+.industry-flow-arrow{width:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:36px}
+.industry-flow-arrow::after{content:'▶';color:#B0BEC5;font-size:14px}
+.industry-cost{display:flex;align-items:center;justify-content:center;gap:12px;background:#F0F4F8;border:1px solid #D0DAE5;border-radius:4px;padding:24px}
+.industry-cost-row{text-align:center}
+.industry-cost-label{display:block;font-size:12px;color:#666;margin-bottom:4px}
+.industry-cost-value{font-size:20px;font-weight:700;color:#333}
+.industry-cost-subsidy .industry-cost-value{color:#2E7D32}
+.industry-cost-highlight{font-size:28px;color:#C62828!important}
+.industry-cost-arrow{font-size:20px;color:#B0BEC5;flex-shrink:0}
+.industry-stories-note{text-align:center;font-size:12px;color:#999;margin-top:20px;margin-bottom:0}
+/* Data sources */
+.section-data-sources{padding:40px 0;background-color:#F5F5F5}
+.data-sources-box{max-width:760px;margin:0 auto;padding:28px 32px;background-color:#FAFAFA;border:1px solid #E0E0E0;border-radius:4px}
+.data-sources-title{font-size:14px;font-weight:700;color:#666;margin-bottom:8px}
+.data-sources-lead{font-size:13px;color:#666;margin-bottom:12px}
+.data-sources-list{list-style:none;padding:0;margin:0 0 12px}
+.data-sources-list li{font-size:13px;color:#666;padding:2px 0 2px 16px;position:relative}
+.data-sources-list li::before{content:'・';position:absolute;left:0}
+.data-sources-note{font-size:12px;color:#999;margin-bottom:0}
 @media(max-width:768px){
 .hero{padding:48px 0 40px}.hero-title{font-size:24px}.hero-title br,.hero-description br{display:none}
 .steps{flex-direction:column}.step{max-width:100%;width:100%}.step-arrow{transform:rotate(90deg)}
@@ -296,6 +473,11 @@ $contact_url  = esc_url(home_url('/contact/'));
 .sticky-cta-btn{width:100%;text-align:center;padding:14px 20px;font-size:15px}
 .mid-cta-text{font-size:16px}
 .exit-modal{padding:36px 24px 32px}.exit-modal-title{font-size:19px}.exit-modal-desc br{display:none}
+.fact-card{flex-direction:column;gap:12px;padding:24px}.fact-number{font-size:48px;min-width:auto}
+.steps-detail{flex-direction:column;align-items:center}.step-detail{max-width:100%;width:100%}.step-detail-line{width:2px;height:24px;margin:8px auto}
+.industry-tabs{gap:6px}.industry-tab{padding:8px 14px;font-size:13px}
+.industry-flow{flex-direction:column}.industry-flow-arrow{margin-top:0;height:24px;width:100%}.industry-flow-arrow::after{content:'▼'}
+.industry-cost{flex-direction:column;gap:8px;padding:20px 16px}.industry-cost-arrow{transform:rotate(90deg)}
 }
 @media(min-width:769px){.sticky-cta{top:0;bottom:auto}}
 </style>
@@ -309,6 +491,8 @@ $contact_url  = esc_url(home_url('/contact/'));
 (function(){var bn=document.getElementById('urgency-banner'),ct=document.getElementById('deadline-count');if(!bn||!ct)return;fetch('<?php echo esc_url_raw(rest_url("subsidy/v1/deadline-count")); ?>').then(function(r){return r.json()}).then(function(d){if(d.success&&d.count>0){ct.textContent=d.count;bn.style.display='block'}}).catch(function(){ct.textContent=3+(new Date().getMonth()%5);bn.style.display='block'})})();
 // Sticky CTA
 (function(){var sc=document.getElementById('sticky-cta'),hr=document.querySelector('.hero');if(!sc||!hr)return;var hb=hr.offsetTop+hr.offsetHeight,sh=false;function ck(){var sy=window.pageYOffset||document.documentElement.scrollTop;if(sy>hb&&!sh){sc.style.display='block';sh=true}else if(sy<=hb&&sh){sc.style.display='none';sh=false}}window.addEventListener('scroll',ck,{passive:true});ck()})();
+// Industry tabs
+(function(){var tabs=document.querySelectorAll('.industry-tab');if(!tabs.length)return;tabs.forEach(function(tab){tab.addEventListener('click',function(){tabs.forEach(function(t){t.classList.remove('is-active')});tab.classList.add('is-active');var panels=document.querySelectorAll('.industry-panel');panels.forEach(function(p){p.classList.remove('is-active')});var target=document.getElementById('panel-'+tab.getAttribute('data-tab'));if(target)target.classList.add('is-active')})})})();
 // Exit popup
 (function(){var m=document.getElementById('exit-modal'),c=document.getElementById('exit-modal-close');if(!m)return;var CN='exit_popup_shown',t=false;if(document.cookie.indexOf(CN+'=1')!==-1)return;function show(){if(t)return;t=true;m.style.display='flex';var d=new Date();d.setTime(d.getTime()+864e5);document.cookie=CN+'=1;expires='+d.toUTCString()+';path=/'}function hide(){m.style.display='none'}document.addEventListener('mouseleave',function(e){if(e.clientY<10)show()});if(c)c.addEventListener('click',hide);m.addEventListener('click',function(e){if(e.target===m)hide()});document.addEventListener('keydown',function(e){if(e.key==='Escape')hide()})})();
 })();
