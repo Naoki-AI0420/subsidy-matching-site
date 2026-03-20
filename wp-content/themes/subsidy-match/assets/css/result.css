@@ -594,6 +594,204 @@
     color: #555555;
 }
 
+/* ========== スノッブ効果: 専用レポートバッジ ========== */
+.result-exclusive-badge {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.result-exclusive-badge span {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: #003366;
+    background: #E8EEF5;
+    border: 1px solid #BDD0E7;
+    border-radius: 2px;
+    padding: 6px 20px;
+}
+
+/* ========== アンカリング効果: 最大交付額バナー ========== */
+.anchoring-banner {
+    text-align: center;
+    padding: 24px;
+    margin-bottom: 24px;
+    background: #FAFBFC;
+    border: 1px solid #D0DAE5;
+    border-radius: 4px;
+}
+
+.anchoring-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #888888;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+}
+
+.anchoring-amount {
+    font-size: 40px;
+    font-weight: 700;
+    color: #003366;
+    margin-bottom: 4px;
+    line-height: 1.2;
+}
+
+.anchoring-unit {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.anchoring-sub {
+    font-size: 13px;
+    color: #888888;
+    margin: 0;
+}
+
+/* ========== 吊橋効果: 期限警告バナー ========== */
+.deadline-warning-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    margin-bottom: 24px;
+    background: #FFF3E0;
+    border: 1px solid #FFE0B2;
+    border-left: 4px solid #E65100;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #E65100;
+}
+
+.deadline-warning-icon {
+    font-size: 16px;
+}
+
+/* ========== 吊橋効果: カウントダウン ========== */
+.subsidy-countdown {
+    margin-bottom: 12px;
+}
+
+.countdown-days {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #FFFFFF;
+    background: #C62828;
+    padding: 3px 12px;
+    border-radius: 2px;
+}
+
+/* ========== アンカリング: 3段階コスト表示 ========== */
+.subsidy-cost-breakdown {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    margin-bottom: 12px;
+    background: #F0F4F8;
+    border-radius: 2px;
+    flex-wrap: wrap;
+}
+
+.cost-item {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.cost-subsidy {
+    color: #2E7D32;
+}
+
+.cost-actual {
+    color: #C62828;
+    font-weight: 700;
+}
+
+.cost-arrow {
+    font-size: 13px;
+    color: #888888;
+}
+
+/* ========== バンドワゴン: 申請数 ========== */
+.subsidy-apply-count {
+    font-size: 12px;
+    color: #888888;
+    margin-bottom: 8px;
+}
+
+.subsidy-apply-count strong {
+    color: #003366;
+    font-weight: 700;
+}
+
+/* ========== ディドロ効果: システム例 ========== */
+.proposal-diderot-section {
+    background: #FAFBFC;
+    border: 1px solid #D0D0D0;
+    border-radius: 4px;
+    padding: 28px 24px;
+}
+
+.diderot-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.diderot-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.diderot-icon {
+    color: #003366;
+    font-size: 10px;
+}
+
+.diderot-note {
+    font-size: 13px;
+    color: #555555;
+    text-align: center;
+    margin: 0;
+    padding-top: 8px;
+    border-top: 1px solid #E0E0E0;
+}
+
+/* ========== スノッブ効果: PDF限定 ========== */
+.result-pdf-teaser {
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 24px;
+    background: #F5F5F5;
+    border: 1px dashed #CCCCCC;
+    border-radius: 4px;
+}
+
+.pdf-teaser-text {
+    font-size: 14px;
+    color: #555555;
+    margin: 0;
+}
+
+.pdf-teaser-text strong {
+    color: #003366;
+    font-weight: 700;
+}
+
 /* ========== ローディング ========== */
 .result-loading {
     text-align: center;
@@ -683,5 +881,23 @@
 
     .email-gate-form button {
         width: 100%;
+    }
+
+    .anchoring-amount {
+        font-size: 32px;
+    }
+
+    .subsidy-cost-breakdown {
+        flex-direction: column;
+        gap: 4px;
+        text-align: center;
+    }
+
+    .diderot-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .proposal-diderot-section {
+        padding: 20px 16px;
     }
 }
