@@ -448,8 +448,8 @@
 
 .proposal-cta-btn {
     display: inline-block;
-    background: #FFFFFF;
-    color: #003366;
+    background: #E8594F;
+    color: #FFFFFF;
     font-size: 16px;
     font-weight: 700;
     padding: 16px 48px;
@@ -457,11 +457,12 @@
     text-decoration: none;
     border: none;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: background-color 0.2s;
 }
 
 .proposal-cta-btn:hover {
-    opacity: 0.9;
+    background: #D04A40;
+    color: #FFFFFF;
 }
 
 .proposal-cta-note {
@@ -533,7 +534,7 @@
 
 .email-gate-form button {
     padding: 12px 24px;
-    background: #003366;
+    background: #E8594F;
     color: #FFFFFF;
     border: none;
     border-radius: 4px;
@@ -544,7 +545,7 @@
 }
 
 .email-gate-form button:hover {
-    background: #004d99;
+    background: #D04A40;
 }
 
 .email-gate-form button:disabled {

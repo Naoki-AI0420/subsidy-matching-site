@@ -227,6 +227,14 @@
     min-width: 140px;
 }
 
+.btn-next {
+    background-color: #E8594F;
+}
+
+.btn-next:hover {
+    background-color: #D04A40;
+}
+
 .btn-next:disabled {
     background-color: #CCCCCC;
     cursor: not-allowed;

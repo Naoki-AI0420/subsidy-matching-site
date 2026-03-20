@@ -1274,6 +1274,18 @@ get_header();
         grid-template-columns: 1fr;
     }
 
+    .staff-avatar-row {
+        flex-direction: column;
+    }
+
+    .staff-speech-bubble::before {
+        display: none;
+    }
+
+    .staff-message br {
+        display: none;
+    }
+
     .cases-grid {
         grid-template-columns: 1fr;
     }
