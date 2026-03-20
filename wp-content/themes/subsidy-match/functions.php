@@ -124,3 +124,9 @@ require_once get_template_directory() . '/inc/lead-manager.php';
 
 // 管理画面
 require_once get_template_directory() . '/inc/admin-menu.php';
+
+// SEO: サイトマップ有効化（WordPress 5.5+ 標準機能）
+add_filter('wp_sitemaps_enabled', '__return_true');
+
+// SEO: title タグ
+add_theme_support('title-tag');

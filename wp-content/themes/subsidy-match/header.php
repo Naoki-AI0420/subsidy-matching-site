@@ -4,6 +4,16 @@
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="中小企業・小規模事業者向け補助金・助成金マッチングサービス。簡単な質問に答えるだけで、活用可能な補助金をご案内します。">
+    <meta property="og:title" content="<?php wp_title('|', true, 'right'); bloginfo('name'); ?>">
+    <meta property="og:description" content="簡単な質問に答えるだけで、貴社に該当する補助金・助成金をご案内。約2分で診断完了、登録不要。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?php echo esc_url(get_permalink()); ?>">
+    <meta property="og:site_name" content="補助金マッチングサイト">
+    <meta property="og:locale" content="ja_JP">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="補助金マッチングサイト — あなたの会社で活用できる補助金を探しましょう">
+    <meta name="twitter:description" content="簡単な質問に答えるだけで、貴社に該当する補助金・助成金をご案内。約2分で診断完了。">
     <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
