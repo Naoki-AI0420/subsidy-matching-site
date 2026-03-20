@@ -593,7 +593,7 @@ body.lp-sns .lp-listing-only { display: none !important; }
 body.lp-sns .lp-sns-only { display: block; }
 
 /* Hero */
-.hero { background-color: #003366; color: #FFFFFF; padding: 80px 0; text-align: center; }
+.hero { background: linear-gradient(rgba(0,51,102,0.88), rgba(0,51,102,0.92)), url('<?php echo get_template_directory_uri(); ?>/assets/images/jp-business-meeting.jpg') center/cover no-repeat; color: #FFFFFF; padding: 80px 0; text-align: center; }
 .hero-label { font-size: 14px; font-weight: 500; letter-spacing: 2px; margin-bottom: 16px; opacity: 0.9; }
 .hero-title { font-size: 32px; font-weight: 700; color: #FFFFFF; margin-bottom: 20px; line-height: 1.5; }
 .hero-description { font-size: 16px; margin-bottom: 32px; opacity: 0.9; line-height: 1.8; }
