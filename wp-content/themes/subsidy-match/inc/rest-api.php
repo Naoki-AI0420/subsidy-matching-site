@@ -81,6 +81,14 @@ function subsidy_match_handle_match($request) {
     );
     $prefecture_name = isset($pref_map[$prefecture]) ? $pref_map[$prefecture] : $prefecture;
 
+    // 都道府県バリデーション — 未選択 or 不正値はエラー
+    if (empty($prefecture) || !isset($pref_map[$prefecture])) {
+        return new WP_REST_Response(array(
+            'success' => false,
+            'message' => '都道府県を選択してください。',
+        ), 400);
+    }
+
     // 全補助金取得
     $subsidies = get_posts(array(
         'post_type'      => 'subsidy',
