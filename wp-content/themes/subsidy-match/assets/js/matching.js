@@ -187,7 +187,14 @@
 
     function updateNavButtons() {
         btnBack.style.visibility = currentStep > 1 ? 'visible' : 'hidden';
-        btnNext.textContent = currentStep === TOTAL_STEPS ? '診断結果を見る' : '次へ';
+        if (currentStep === TOTAL_STEPS) {
+            btnNext.textContent = '診断結果を見る';
+        } else if (TOTAL_STEPS - currentStep <= 2) {
+            btnNext.textContent = 'まもなく結果がわかります';
+        } else {
+            var remaining = TOTAL_STEPS - currentStep;
+            btnNext.textContent = 'あと' + remaining + '問で完了です';
+        }
     }
 
     function getStepValue(step) {
@@ -614,8 +621,8 @@
         html += '      </div>';
         html += '    </div>';
         html += '  </div>';
-        html += '  <a href="' + getContactUrl() + '" class="btn btn-primary btn-large proposal-cta-btn">このプランで無料相談する</a>';
-        html += '  <p class="proposal-cta-note">※ 相談は完全無料です。お気軽にお問い合わせください。</p>';
+        html += '  <a href="' + getContactUrl() + '" class="btn btn-primary btn-large proposal-cta-btn">この結果について、専門スタッフが無料でご説明いたします</a>';
+        html += '  <p class="proposal-cta-note">※ 強引な営業は一切いたしません。お気軽にお問い合わせください。</p>';
         html += '</section>';
 
         resultContainer.innerHTML = html;

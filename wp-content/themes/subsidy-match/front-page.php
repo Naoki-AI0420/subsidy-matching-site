@@ -213,6 +213,18 @@ get_header();
                         </div>
                     </div>
                 </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-bubble">
+                        <p>事務員2名の小さなサロンですが、IT導入補助金で150万円をいただき、予約システムを導入できました。お客様の予約がスムーズになり、リピート率が20%上がりました。</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar testimonial-avatar-female">D</div>
+                        <div class="testimonial-info">
+                            <span class="testimonial-name">美容サロン経営 D様</span>
+                            <span class="testimonial-detail">サービス業・埼玉県・従業員2名</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <p class="testimonials-note">※ 個人の感想です。効果には個人差があります。</p>
         </div>
@@ -395,6 +407,31 @@ get_header();
             <a href="<?php echo esc_url(home_url('/matching/')); ?>" class="btn btn-primary btn-large">
                 補助金診断を始める
             </a>
+        </div>
+    </section>
+
+    <!-- スタッフ案内セクション -->
+    <section class="section-staff">
+        <div class="container">
+            <div class="staff-inner">
+                <div class="staff-avatar-row">
+                    <div class="staff-avatar">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+                    </div>
+                    <div class="staff-speech-bubble">
+                        お気軽にご相談ください。補助金の選び方から申請手続きまで、丁寧にサポートいたします。
+                    </div>
+                </div>
+                <p class="staff-message">
+                    ご不明な点がございましたら、お気軽にお問い合わせください。<br>
+                    専門のスタッフが補助金の選び方から申請手続きまで、<br>
+                    丁寧にサポートいたします。
+                </p>
+                <a href="<?php echo esc_url(home_url('/contact/')); ?>" class="btn btn-primary btn-large">
+                    お問い合わせはこちら
+                </a>
+                <p class="staff-hours">営業時間: 平日 9:00〜18:00</p>
+            </div>
         </div>
     </section>
 
@@ -701,7 +738,7 @@ get_header();
 
 .testimonials-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 24px;
     max-width: 960px;
     margin: 0 auto;
