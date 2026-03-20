@@ -74,6 +74,17 @@ function subsidy_match_enqueue_scripts() {
         ));
     }
 
+    // フロントページ
+    if (is_front_page()) {
+        wp_enqueue_script(
+            'subsidy-match-front-page',
+            get_template_directory_uri() . '/assets/js/front-page.js',
+            array(),
+            SUBSIDY_MATCH_VERSION,
+            true
+        );
+    }
+
     // お問い合わせページ
     if (is_page_template('page-contact.php') || is_page('contact')) {
         wp_enqueue_script(
