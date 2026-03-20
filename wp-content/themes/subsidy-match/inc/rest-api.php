@@ -30,6 +30,13 @@ function subsidy_match_register_routes() {
         'permission_callback' => '__return_true',
     ));
 
+    // リード保存（メールゲート用）
+    register_rest_route('subsidy/v1', '/lead', array(
+        'methods'             => 'POST',
+        'callback'            => 'subsidy_match_handle_lead',
+        'permission_callback' => '__return_true',
+    ));
+
     // 統計情報
     register_rest_route('subsidy/v1', '/stats', array(
         'methods'             => 'GET',
@@ -127,25 +134,31 @@ function subsidy_match_handle_match($request) {
             $score += 20;
         }
 
-        // 業種マッチ（25点）
+        // 業種マッチ（25点 — タグなしは15点に減点して全マッチ防止）
         $target_industries = get_post_meta($post->ID, '_subsidy_target_industries', true);
         $target_industries = is_array($target_industries) ? $target_industries : array();
-        if (empty($target_industries) || in_array($industry, $target_industries)) {
+        if (!empty($target_industries) && in_array($industry, $target_industries)) {
             $score += 25;
+        } elseif (empty($target_industries)) {
+            $score += 15; // データに業種タグがない場合は減点
         }
 
-        // 従業員規模マッチ（15点）
+        // 従業員規模マッチ（15点 — タグなしは10点に減点）
         $target_emp = get_post_meta($post->ID, '_subsidy_target_employee_size', true);
         $target_emp = is_array($target_emp) ? $target_emp : array();
-        if (empty($target_emp) || in_array($employee_size, $target_emp)) {
+        if (!empty($target_emp) && in_array($employee_size, $target_emp)) {
             $score += 15;
+        } elseif (empty($target_emp)) {
+            $score += 10; // データにタグがない場合は減点
         }
 
-        // 資本金マッチ（15点）
+        // 資本金マッチ（15点 — タグなしは10点に減点）
         $target_cap = get_post_meta($post->ID, '_subsidy_target_capital', true);
         $target_cap = is_array($target_cap) ? $target_cap : array();
-        if (empty($target_cap) || in_array($capital, $target_cap)) {
+        if (!empty($target_cap) && in_array($capital, $target_cap)) {
             $score += 15;
+        } elseif (empty($target_cap)) {
+            $score += 10; // データにタグがない場合は減点
         }
 
         // 課題マッチ（20点）
@@ -200,10 +213,10 @@ function subsidy_match_handle_match($request) {
             }
         }
 
-        // 適合度
-        if ($score >= 70) {
+        // 適合度（閾値調整: high=80+, medium=55-79, low=30-54）
+        if ($score >= 80) {
             $match_level = 'high';
-        } elseif ($score >= 40) {
+        } elseif ($score >= 55) {
             $match_level = 'medium';
         } else {
             $match_level = 'low';
@@ -503,6 +516,42 @@ function subsidy_match_analyze_dx($schedule, $invoice, $crm, $ec, $communication
         'issues'      => $issues,
         'pain_points' => $pain,
     );
+}
+
+/**
+ * メールゲートからのリード保存
+ */
+function subsidy_match_handle_lead($request) {
+    $params = $request->get_json_params();
+
+    $email = sanitize_email($params['email'] ?? '');
+    if (empty($email)) {
+        return new WP_REST_Response(array(
+            'success' => false,
+            'message' => 'メールアドレスを入力してください。',
+        ), 400);
+    }
+
+    $lead_id = subsidy_match_save_lead(array(
+        'email'          => $email,
+        'prefecture'     => sanitize_text_field($params['prefecture'] ?? ''),
+        'industry'       => sanitize_text_field($params['industry'] ?? ''),
+        'employee_size'  => sanitize_text_field($params['employee_size'] ?? ''),
+        'capital'        => sanitize_text_field($params['capital'] ?? ''),
+        'challenges'     => wp_json_encode(
+            isset($params['challenges']) && is_array($params['challenges'])
+                ? array_map('sanitize_text_field', $params['challenges'])
+                : array()
+        ),
+        'annual_revenue' => sanitize_text_field($params['annual_revenue'] ?? ''),
+        'has_experience' => isset($params['has_experience']) ? (int) $params['has_experience'] : 0,
+        'matched_ids'    => '',
+    ));
+
+    return new WP_REST_Response(array(
+        'success' => true,
+        'lead_id' => $lead_id,
+    ), 200);
 }
 
 /**

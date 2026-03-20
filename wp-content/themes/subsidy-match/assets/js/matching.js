@@ -10,6 +10,38 @@
     var currentStep = 1;
     var answers = {};
 
+    // 業種→最大金額マッピング（チラ見せ用）
+    var industryAmountMap = {
+        information_technology: { amount: '450万円', subsidy: 'IT導入補助金' },
+        manufacturing:         { amount: '1,250万円', subsidy: 'ものづくり補助金' },
+        food_service:          { amount: '200万円', subsidy: '小規模事業者持続化補助金' },
+        accommodation:         { amount: '200万円', subsidy: '小規模事業者持続化補助金' },
+        wholesale_retail:      { amount: '200万円', subsidy: '持続化補助金' },
+        construction:          { amount: '1,000万円', subsidy: '事業再構築補助金' },
+        medical_welfare:       { amount: '450万円', subsidy: 'IT導入補助金' },
+        education:             { amount: '200万円', subsidy: '持続化補助金' },
+        professional_services: { amount: '450万円', subsidy: 'IT導入補助金' },
+        transportation:        { amount: '200万円', subsidy: '持続化補助金' },
+        real_estate:           { amount: '200万円', subsidy: '持続化補助金' },
+        agriculture:           { amount: '200万円', subsidy: '持続化補助金' },
+        other:                 { amount: '200万円', subsidy: '持続化補助金' }
+    };
+
+    // 従業員規模→該当件数の目安
+    var employeeMatchCount = {
+        '1-5': 8, '6-20': 12, '21-50': 15, '51-100': 18, '101+': 22
+    };
+
+    // 課題→関連補助金件数
+    var challengeSubsidyCount = {
+        equipment: 25, it_dx: 30, hiring: 15, overseas: 10, rnd: 20, succession: 8
+    };
+
+    // 売上→年間補助金活用見込み
+    var revenueEstimate = {
+        under_10m: '100', '10m_50m': '300', '50m_100m': '500', '100m_500m': '800', over_500m: '1,500'
+    };
+
     // DOM要素
     var progressBar = document.querySelector('.progress-bar');
     var progressPercent = document.querySelector('.progress-percent');
@@ -40,6 +72,16 @@
                 }, 250);
             });
         });
+
+        // メールスキップリンク
+        var skipLink = document.getElementById('email-skip');
+        if (skipLink) {
+            skipLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                answers.email = '';
+                submitMatching();
+            });
+        }
     }
 
     function handleNext() {
@@ -56,8 +98,58 @@
             showStep(currentStep);
             updateProgress();
             updateNavButtons();
+            updateTeaserMessage(currentStep);
         } else {
             submitMatching();
+        }
+    }
+
+    /**
+     * 金額チラ見せメッセージ表示
+     */
+    function updateTeaserMessage(step) {
+        var teaserEl = document.getElementById('amount-teaser');
+        if (!teaserEl) return;
+
+        var msg = '';
+
+        // Step 3: 業種選択後 → 業種別最大金額
+        if (step >= 3 && answers.industry) {
+            var info = industryAmountMap[answers.industry];
+            if (info) {
+                msg = '\ud83d\udcb0 あなたと同業種の企業では、最大 <strong>' + info.amount + '</strong> の補助金を受給した実績があります（' + info.subsidy + '）';
+            }
+        }
+
+        // Step 4: 従業員数選択後 → 該当件数
+        if (step >= 4 && answers.employee_size) {
+            var count = employeeMatchCount[answers.employee_size] || 10;
+            msg = '\ud83d\udcb0 従業員' + answers.employee_size.replace('+', '名以上').replace('-', '〜') + '規模の企業では、平均 <strong>' + count + '件</strong> の補助金に該当しています';
+        }
+
+        // Step 6: 課題選択後 → 課題別件数
+        if (step >= 6 && answers.challenges && answers.challenges.length > 0) {
+            var totalCount = 0;
+            answers.challenges.forEach(function (c) {
+                totalCount += challengeSubsidyCount[c] || 5;
+            });
+            var challengeLabel = answers.challenges.indexOf('it_dx') !== -1 ? 'DX推進' :
+                                 answers.challenges.indexOf('equipment') !== -1 ? '設備投資' : '経営課題';
+            msg = '\ud83d\udcb0 ' + challengeLabel + 'に関する補助金だけでも <strong>' + totalCount + '件以上</strong> あります';
+        }
+
+        // Step 13: 売上選択後 → 年間活用見込み
+        if (step >= 13 && answers.annual_revenue) {
+            var est = revenueEstimate[answers.annual_revenue] || '200';
+            msg = '\ud83d\udcb0 御社の規模感では、年間 <strong>' + est + '万円</strong> の補助金活用が見込めます';
+        }
+
+        if (msg) {
+            teaserEl.innerHTML = msg;
+            teaserEl.style.display = 'block';
+            teaserEl.style.animation = 'none';
+            void teaserEl.offsetHeight;
+            teaserEl.style.animation = 'fadeIn 0.5s ease';
         }
     }
 
@@ -364,12 +456,18 @@
         html += '    <span class="proposal-section-count">' + results.length + '件</span>';
         html += '  </div>';
 
-        results.forEach(function (item) {
+        var hasEmail = !!(answers.email);
+        var blurredCount = 0;
+
+        results.forEach(function (item, index) {
             var matchClass = item.match_level || 'medium';
             var badgeLabel = matchClass === 'high' ? '適合度：高' : matchClass === 'medium' ? '適合度：中' : '適合度：低';
             var badgeClass = matchClass === 'high' ? 'badge-high' : matchClass === 'medium' ? 'badge-medium' : 'badge-low';
 
-            html += '<div class="subsidy-card" data-match="' + matchClass + '">';
+            var isBlurred = !hasEmail && index >= 3;
+            if (isBlurred) blurredCount++;
+
+            html += '<div class="subsidy-card' + (isBlurred ? ' subsidy-card-blurred' : '') + '" data-match="' + matchClass + '">';
             html += '  <div class="subsidy-card-header">';
             html += '    <h3 class="subsidy-card-title">' + escapeHtml(item.title) + '</h3>';
             html += '    <span class="subsidy-card-badge badge ' + badgeClass + '">' + badgeLabel + '</span>';
@@ -398,6 +496,19 @@
                 html += '  <a href="' + escapeHtml(item.official_url) + '" target="_blank" rel="noopener" class="subsidy-card-link">公募要領を確認する →</a>';
             }
             html += '</div>';
+
+            // 3件目の直後にオーバーレイを挿入
+            if (!hasEmail && index === 2 && results.length > 3) {
+                var remaining = results.length - 3;
+                html += '<div class="blur-overlay" id="blur-overlay">';
+                html += '  <h3>残り' + remaining + '件の診断結果があります</h3>';
+                html += '  <p class="blur-overlay-desc">メールアドレスをご登録いただくと、全ての診断結果と詳細レポートをご覧いただけます。</p>';
+                html += '  <form class="email-gate-form" id="email-gate-form">';
+                html += '    <input type="email" id="gate-email" placeholder="example@company.co.jp" required>';
+                html += '    <button type="submit">全結果を表示する</button>';
+                html += '  </form>';
+                html += '</div>';
+            }
         });
         html += '</section>';
 
@@ -508,6 +619,60 @@
         html += '</section>';
 
         resultContainer.innerHTML = html;
+
+        // メールゲートのイベントバインド
+        var gateForm = document.getElementById('email-gate-form');
+        if (gateForm) {
+            gateForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var gateEmail = document.getElementById('gate-email').value.trim();
+                if (!gateEmail || !isValidEmail(gateEmail)) return;
+
+                var submitBtn = gateForm.querySelector('button');
+                submitBtn.textContent = '送信中...';
+                submitBtn.disabled = true;
+
+                var leadApiUrl = (typeof subsidyMatchApi !== 'undefined')
+                    ? subsidyMatchApi.root + 'subsidy/v1/lead'
+                    : '/wp-json/subsidy/v1/lead';
+
+                var leadHeaders = { 'Content-Type': 'application/json' };
+                if (typeof subsidyMatchApi !== 'undefined' && subsidyMatchApi.nonce) {
+                    leadHeaders['X-WP-Nonce'] = subsidyMatchApi.nonce;
+                }
+
+                var leadData = Object.assign({}, answers, { email: gateEmail });
+
+                fetch(leadApiUrl, {
+                    method: 'POST',
+                    headers: leadHeaders,
+                    body: JSON.stringify(leadData)
+                })
+                    .then(function (res) { return res.json(); })
+                    .then(function () {
+                        // blur解除
+                        document.querySelectorAll('.subsidy-card-blurred').forEach(function (card) {
+                            card.classList.remove('subsidy-card-blurred');
+                        });
+                        // overlay非表示
+                        var overlay = document.getElementById('blur-overlay');
+                        if (overlay) overlay.style.display = 'none';
+                        // トースト通知
+                        showToast('全ての診断結果を表示しました');
+                        answers.email = gateEmail;
+                    })
+                    .catch(function () {
+                        // エラーでもblur解除（UX優先）
+                        document.querySelectorAll('.subsidy-card-blurred').forEach(function (card) {
+                            card.classList.remove('subsidy-card-blurred');
+                        });
+                        var overlay = document.getElementById('blur-overlay');
+                        if (overlay) overlay.style.display = 'none';
+                        showToast('全ての診断結果を表示しました');
+                        answers.email = gateEmail;
+                    });
+            });
+        }
     }
 
     /**
@@ -581,6 +746,22 @@
         return (typeof subsidyMatchApi !== 'undefined')
             ? window.location.origin + '/contact/'
             : '/contact/';
+    }
+
+    /**
+     * トースト通知
+     */
+    function showToast(message) {
+        var toast = document.createElement('div');
+        toast.className = 'toast-notification';
+        toast.textContent = '\u2705 ' + message;
+        document.body.appendChild(toast);
+        setTimeout(function () {
+            toast.classList.add('toast-fade-out');
+            setTimeout(function () {
+                if (toast.parentNode) toast.parentNode.removeChild(toast);
+            }, 400);
+        }, 3000);
     }
 
     // DOM Ready

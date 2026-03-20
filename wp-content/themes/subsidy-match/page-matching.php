@@ -20,8 +20,11 @@ get_header();
             <div class="progress-track">
                 <div class="progress-bar" style="width: 0%"></div>
             </div>
-            <p class="progress-step">質問 <span class="current-step">1</span> / <span class="total-steps">14</span></p>
+            <p class="progress-step">第<span class="current-step">1</span>問 / 全<span class="total-steps">14</span>問</p>
         </div>
+
+        <!-- 金額チラ見せメッセージ -->
+        <div id="amount-teaser" class="amount-teaser" style="display:none"></div>
 
         <!-- 質問コンテナ -->
         <div class="question-container">
@@ -479,6 +482,7 @@ get_header();
                     <input type="email" class="form-control input-large" id="q-email"
                            placeholder="example@company.co.jp">
                     <p class="input-note">※ 入力いただいた情報は診断結果のご案内のみに使用いたします</p>
+                    <a href="#" class="email-skip-link" id="email-skip">スキップして診断結果を見る</a>
                 </div>
             </div>
         </div>

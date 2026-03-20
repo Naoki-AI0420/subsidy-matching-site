@@ -155,9 +155,14 @@
 }
 
 .subsidy-detail-value {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 700;
     color: #333333;
+}
+
+.subsidy-detail-item:first-child .subsidy-detail-value {
+    color: #C62828;
+    font-size: 22px;
 }
 
 .subsidy-card-summary {
@@ -466,6 +471,128 @@
     margin-bottom: 0;
 }
 
+/* ========== すりガラスぼかし + メールゲート ========== */
+.subsidy-card-blurred {
+    position: relative;
+    filter: blur(6px);
+    -webkit-filter: blur(6px);
+    pointer-events: none;
+    user-select: none;
+    transition: filter 0.4s ease;
+}
+
+.blur-overlay {
+    position: relative;
+    margin-top: -40px;
+    padding: 40px 20px;
+    text-align: center;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.9) 30%,
+        rgba(255, 255, 255, 1) 100%
+    );
+    z-index: 10;
+}
+
+.blur-overlay h3 {
+    color: #003366;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.blur-overlay-desc {
+    color: #555555;
+    font-size: 14px;
+    margin-bottom: 20px;
+    line-height: 1.7;
+}
+
+.email-gate-form {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.email-gate-form input[type="email"] {
+    padding: 12px 16px;
+    border: 2px solid #003366;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 300px;
+    max-width: 100%;
+    outline: none;
+}
+
+.email-gate-form input[type="email"]:focus {
+    border-color: #004d99;
+    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
+}
+
+.email-gate-form button {
+    padding: 12px 24px;
+    background: #003366;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.email-gate-form button:hover {
+    background: #004d99;
+}
+
+.email-gate-form button:disabled {
+    background: #999999;
+    cursor: not-allowed;
+}
+
+/* トースト通知 */
+.toast-notification {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #003366;
+    color: #FFFFFF;
+    padding: 14px 28px;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 600;
+    z-index: 9999;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    animation: toastIn 0.3s ease;
+}
+
+.toast-fade-out {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(16px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* メールスキップリンク */
+.email-skip-link {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 14px;
+    color: #888888;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.email-skip-link:hover {
+    color: #555555;
+}
+
 /* ========== ローディング ========== */
 .result-loading {
     text-align: center;
@@ -542,5 +669,18 @@
         font-size: 15px;
         width: 100%;
         text-align: center;
+    }
+
+    .email-gate-form {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .email-gate-form input[type="email"] {
+        width: 100%;
+    }
+
+    .email-gate-form button {
+        width: 100%;
     }
 }
