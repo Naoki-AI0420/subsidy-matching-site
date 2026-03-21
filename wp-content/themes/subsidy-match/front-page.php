@@ -30,7 +30,8 @@ get_header();
                     簡単な質問に答えるだけで、貴社に該当する可能性のある<br>
                     補助金・助成金を自動マッチングいたします。
                 </p>
-                <a href="<?php echo esc_url(home_url('/matching/')); ?>" class="btn btn-primary btn-large">
+                <p class="hero-limited">月30社限定 ／ 残り<span class="remaining-count">12</span>社</p>
+                <a href="<?php echo esc_url(home_url('/matching/')); ?>" class="btn btn-cta btn-large hero-cta-btn">
                     無料で補助金診断を始める
                 </a>
                 <p class="hero-note">※ 所要時間：約1分 ／ 登録不要でご利用いただけます</p>
@@ -53,7 +54,8 @@ get_header();
                     <span class="hero-badge">5,000社以上の利用実績</span>
                     <span class="hero-badge">47都道府県対応</span>
                 </div>
-                <a href="<?php echo esc_url(home_url('/matching/')); ?>" class="btn btn-primary btn-large">
+                <p class="hero-limited">月30社限定 ／ 残り<span class="remaining-count">12</span>社</p>
+                <a href="<?php echo esc_url(home_url('/matching/')); ?>" class="btn btn-cta btn-large hero-cta-btn">
                     無料で補助金診断を始める
                 </a>
                 <p class="hero-note">※ 所要時間：約1分 ／ 登録不要でご利用いただけます</p>
@@ -105,8 +107,8 @@ get_header();
         </div>
     </section>
 
-    <!-- SNS用: お客様の声（信頼を先に見せる） -->
-    <section class="section section-gray section-testimonials lp-sns-only">
+    <!-- 共通: お客様の声 -->
+    <section class="section section-gray section-testimonials">
         <div class="container">
             <h2 class="section-title">お客様の声</h2>
             <div class="testimonials-grid">
@@ -163,26 +165,6 @@ get_header();
         </div>
     </section>
 
-    <!-- SNS用: 専門家推薦（信頼先行） -->
-    <section class="section section-expert lp-sns-only">
-        <div class="container">
-            <div class="expert-card">
-                <div class="expert-header">
-                    <div class="expert-avatar">
-                        <span>中</span>
-                    </div>
-                    <div class="expert-info">
-                        <span class="expert-name">中村 雅彦 氏</span>
-                        <span class="expert-title">中小企業診断士 / 経営コンサルタント</span>
-                    </div>
-                </div>
-                <div class="expert-bubble">
-                    <p>中小企業の経営者にとって、自社に合った補助金を見つけることは非常に困難です。年間数万件もの補助金制度の中から、自社の業種・規模・課題に合致するものを探すには膨大な時間がかかります。このサービスは、その課題を的確に解決してくれます。まずは無料診断で、御社に該当する補助金があるか確認されることをお勧めします。</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- SNS用: 気づきセクション -->
     <section class="section section-awareness lp-sns-only">
         <div class="container text-center">
@@ -224,17 +206,6 @@ get_header();
             <h2 class="section-title">毎年20,000件以上の補助金情報を<br>全て確認するのは不可能です</h2>
             <p class="affinity-text">国・自治体・各省庁が実施する補助金は年間数万件。<br>自社の業種・規模・課題にマッチする制度を自力で見つけるには、膨大な時間と専門知識が必要です。</p>
             <p class="affinity-highlight">だからこそ、<strong>自動マッチング</strong>が必要です。</p>
-        </div>
-    </section>
-
-    <!-- リスティング用: Solution → CTA（PASONA の S） -->
-    <section class="section section-solution lp-listing-only">
-        <div class="container text-center">
-            <h2 class="section-title">1分の無料診断で自動マッチング</h2>
-            <p class="solution-text">業種・地域・企業規模などの基本情報を入力するだけで、<br>49,000件以上の補助金データから御社に該当する制度を自動的に抽出します。</p>
-            <a href="<?php echo esc_url(home_url('/matching/')); ?>" class="btn btn-primary btn-large">
-                今すぐ無料診断する
-            </a>
         </div>
     </section>
 
@@ -317,66 +288,8 @@ get_header();
         </div>
     </section>
 
-    <!-- リスティング用: お客様の声 -->
-    <section class="section section-testimonials lp-listing-only">
-        <div class="container">
-            <h2 class="section-title">お客様の声</h2>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="testimonial-bubble">
-                        <p>自社に合う補助金が3件も見つかりました。IT導入補助金で会計ソフトを導入し、月20時間の事務作業を削減できました。</p>
-                    </div>
-                    <div class="testimonial-author">
-                        <img class="testimonial-avatar-img" src="<?php echo get_template_directory_uri(); ?>/assets/images/testimonial-man1.jpg" alt="田中様" loading="lazy">
-                        <div class="testimonial-info">
-                            <span class="testimonial-name">田中 裕介 様</span>
-                            <span class="testimonial-detail">飲食業・東京都・従業員8名</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-bubble">
-                        <p>補助金の存在は知っていましたが、種類が多すぎて諦めていました。診断で該当する制度がすぐにわかり、1,000万円の補助を受けられました。</p>
-                    </div>
-                    <div class="testimonial-author">
-                        <img class="testimonial-avatar-img" src="<?php echo get_template_directory_uri(); ?>/assets/images/testimonial-man2.jpg" alt="佐藤様" loading="lazy">
-                        <div class="testimonial-info">
-                            <span class="testimonial-name">佐藤 健一 様</span>
-                            <span class="testimonial-detail">製造業・宮城県・従業員15名</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-bubble">
-                        <p>持続化補助金でECサイトを構築。オンライン売上が月商の40%を占めるまでに成長しました。まずは診断してみることをお勧めします。</p>
-                    </div>
-                    <div class="testimonial-author">
-                        <img class="testimonial-avatar-img" src="<?php echo get_template_directory_uri(); ?>/assets/images/testimonial-man3.jpg" alt="山本様" loading="lazy">
-                        <div class="testimonial-info">
-                            <span class="testimonial-name">山本 誠 様</span>
-                            <span class="testimonial-detail">小売業・大阪府・従業員3名</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-bubble">
-                        <p>事務員2名の小さなサロンですが、IT導入補助金で150万円をいただき、予約システムを導入できました。リピート率が20%上がりました。</p>
-                    </div>
-                    <div class="testimonial-author">
-                        <img class="testimonial-avatar-img" src="<?php echo get_template_directory_uri(); ?>/assets/images/testimonial-woman1.jpg" alt="鈴木様" loading="lazy">
-                        <div class="testimonial-info">
-                            <span class="testimonial-name">鈴木 美咲 様</span>
-                            <span class="testimonial-detail">サービス業・埼玉県・従業員2名</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <p class="testimonials-note">※ 個人の感想です。効果には個人差があります。</p>
-        </div>
-    </section>
-
-    <!-- リスティング用: 専門家推薦 -->
-    <section class="section section-expert lp-listing-only">
+    <!-- 共通: 専門家推薦 -->
+    <section class="section section-expert">
         <div class="container">
             <div class="expert-card">
                 <div class="expert-header">
@@ -578,6 +491,12 @@ body.lp-sns .lp-sns-only { display: block; }
 .hero-description { font-size: 16px; margin-bottom: 32px; opacity: 0.9; line-height: 1.8; }
 .hero .btn-primary { background-color: #FFFFFF; color: #003366; font-weight: 700; font-size: 18px; padding: 16px 48px; }
 .hero .btn-primary:hover { background-color: #F5F5F5; }
+.btn-cta { background-color: #E8594F; color: #FFFFFF; font-weight: 700; font-size: 18px; padding: 16px 48px; border-radius: 4px; text-decoration: none; display: inline-block; }
+.btn-cta:hover { background-color: #D04A40; color: #FFFFFF; text-decoration: none; }
+.hero-cta-btn { animation: pulse 2s ease-in-out infinite; box-shadow: 0 4px 20px rgba(232, 89, 79, 0.4); }
+@keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 4px 20px rgba(232, 89, 79, 0.4); } 50% { transform: scale(1.03); box-shadow: 0 6px 28px rgba(232, 89, 79, 0.6); } }
+.hero-limited { font-size: 14px; font-weight: 700; color: #FFD54F; margin-bottom: 16px; letter-spacing: 0.05em; }
+.remaining-count { font-size: 20px; color: #FFD54F; }
 .hero-note { font-size: 13px; margin-top: 12px; opacity: 0.7; margin-bottom: 0; }
 .hero-badges { display: flex; justify-content: center; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
 .hero-badge { display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; padding: 6px 16px; font-size: 13px; font-weight: 600; color: #FFFFFF; }
@@ -837,6 +756,66 @@ body.lp-sns .lp-sns-only { display: block; }
         animateCounters();
     }
 })();
+// 残り◯社ダイナミックカウンター
+(function() {
+    var counts = document.querySelectorAll('.remaining-count');
+    if (!counts.length) return;
+    // 日付ベースでシード生成（毎日変わる）
+    var today = new Date();
+    var seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+    var remaining = 7 + (seed % 16); // 7〜22の範囲
+    counts.forEach(function(el) { el.textContent = remaining; });
+})();
+</script>
+
+<!-- FAQ 構造化データ（JSON-LD） -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "本当に無料で診断できますか？",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "はい、補助金診断は完全無料でご利用いただけます。会員登録やクレジットカードの登録も一切不要です。お気軽にお試しください。"
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "個人情報は安全ですか？",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "診断にあたって個人情報のご入力は不要です。業種や地域などの基本的な事業情報のみで診断が可能です。お問い合わせ時にご入力いただく情報は、SSL通信により暗号化して送信されます。"
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "診断結果は正確ですか？",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "当サービスは公的機関が公開する最新の補助金情報をもとにマッチングを行っております。ただし、最終的な申請要件の確認は各補助金の公募要領をご参照ください。"
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "申請のサポートもしてもらえますか？",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "はい、補助金申請に精通した専門スタッフが、申請書類の作成から提出までサポートいたします。まずはお気軽にお問い合わせください。"
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "どのくらいの時間がかかりますか？",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "オンライン診断は約1分で完了します。診断後、より詳しいご相談をご希望の場合は、お問い合わせフォームよりご連絡ください。通常1〜2営業日以内にご返信いたします。"
+            }
+        }
+    ]
+}
 </script>
 
 <?php get_footer(); ?>
