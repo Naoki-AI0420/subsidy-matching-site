@@ -417,15 +417,27 @@
             html += '<div class="subsidy-card" data-match="' + matchClass + '">';
             html += '  <div class="subsidy-card-header"><h3 class="subsidy-card-title">' + escapeHtml(item.title) + '</h3><span class="subsidy-card-badge badge ' + badgeClass + '">' + badgeLabel + '</span></div>';
             html += '  <div class="subsidy-card-details">';
-            html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">補助上限額</span><span class="subsidy-detail-value">' + formatAmount(item.max_amount) + '</span></div>';
+            html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">補助上限額</span><span class="subsidy-detail-value">' + (item.amount_text || formatAmount(item.max_amount)) + '</span></div>';
             html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">補助率</span><span class="subsidy-detail-value">' + escapeHtml(item.rate || '-') + '</span></div>';
             if (item.adoption_rate) {
                 html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">採択率</span><span class="subsidy-detail-value">' + Math.round(item.adoption_rate * 100) + '%</span></div>';
             }
+            if (item.eligible_entities) {
+                html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">対象事業者</span><span class="subsidy-detail-value">' + escapeHtml(item.eligible_entities) + '</span></div>';
+            }
+            if (item.purpose) {
+                html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">目的</span><span class="subsidy-detail-value">' + escapeHtml(item.purpose) + '</span></div>';
+            }
+            if (item.eligible_expenses) {
+                html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">対象経費</span><span class="subsidy-detail-value">' + escapeHtml(item.eligible_expenses) + '</span></div>';
+            }
+            if (item.implementing_agency) {
+                html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">実施機関</span><span class="subsidy-detail-value">' + escapeHtml(item.implementing_agency) + '</span></div>';
+            }
             html += '  </div>';
             html += '  <p class="subsidy-card-summary">' + escapeHtml(item.summary || '') + '</p>';
             if (item.deadline) {
-                html += '  <div class="subsidy-card-meta"><span class="subsidy-card-deadline">申請期限: ' + escapeHtml(item.deadline) + '</span></div>';
+                html += '  <div class="subsidy-card-meta"><span class="subsidy-card-deadline">申請期間: ' + escapeHtml(item.deadline) + '</span></div>';
             }
             if (item.official_url) {
                 html += '  <a href="' + escapeHtml(item.official_url) + '" target="_blank" rel="noopener" class="subsidy-card-link">公募要領を確認する →</a>';

@@ -258,13 +258,22 @@ function subsidy_match_handle_match($request) {
             'id'             => $post->ID,
             'title'          => $post->post_title,
             'max_amount'     => $max_amount,
-            'rate'           => get_post_meta($post->ID, '_subsidy_rate', true),
-            'summary'        => get_post_meta($post->ID, '_subsidy_summary', true),
-            'deadline'       => get_post_meta($post->ID, '_subsidy_deadline', true),
-            'official_url'   => get_post_meta($post->ID, '_subsidy_official_url', true),
-            'score'          => $score,
-            'match_level'    => $match_level,
-            'adoption_rate'  => $adoption_rate,
+            'rate'               => get_post_meta($post->ID, '_subsidy_subsidy_rate', true)
+                                    ?: get_post_meta($post->ID, '_subsidy_rate', true),
+            'summary'            => get_post_meta($post->ID, '_subsidy_summary', true)
+                                    ?: wp_strip_all_tags($post->post_content),
+            'deadline'           => get_post_meta($post->ID, '_subsidy_deadline', true)
+                                    ?: get_post_meta($post->ID, '_subsidy_application_period', true),
+            'official_url'       => get_post_meta($post->ID, '_subsidy_official_url', true)
+                                    ?: get_post_meta($post->ID, '_subsidy_detail_url', true),
+            'score'              => $score,
+            'match_level'        => $match_level,
+            'adoption_rate'      => $adoption_rate,
+            'eligible_entities'  => get_post_meta($post->ID, '_subsidy_eligible_entities', true),
+            'purpose'            => get_post_meta($post->ID, '_subsidy_purpose', true),
+            'eligible_expenses'  => get_post_meta($post->ID, '_subsidy_eligible_expenses', true),
+            'implementing_agency'=> get_post_meta($post->ID, '_subsidy_implementing_agency', true),
+            'amount_text'        => get_post_meta($post->ID, '_subsidy_amount_text', true),
         );
     }
 
@@ -412,10 +421,17 @@ function subsidy_match_handle_list($request) {
             'id'           => $post->ID,
             'title'        => $post->post_title,
             'max_amount'   => (int) get_post_meta($post->ID, '_subsidy_max_amount', true),
-            'rate'         => get_post_meta($post->ID, '_subsidy_rate', true),
-            'summary'      => get_post_meta($post->ID, '_subsidy_summary', true),
-            'deadline'     => get_post_meta($post->ID, '_subsidy_deadline', true),
-            'official_url' => get_post_meta($post->ID, '_subsidy_official_url', true),
+            'rate'               => get_post_meta($post->ID, '_subsidy_subsidy_rate', true)
+                                    ?: get_post_meta($post->ID, '_subsidy_rate', true),
+            'summary'            => get_post_meta($post->ID, '_subsidy_summary', true)
+                                    ?: wp_strip_all_tags($post->post_content),
+            'deadline'           => get_post_meta($post->ID, '_subsidy_deadline', true)
+                                    ?: get_post_meta($post->ID, '_subsidy_application_period', true),
+            'official_url'       => get_post_meta($post->ID, '_subsidy_official_url', true)
+                                    ?: get_post_meta($post->ID, '_subsidy_detail_url', true),
+            'eligible_entities'  => get_post_meta($post->ID, '_subsidy_eligible_entities', true),
+            'purpose'            => get_post_meta($post->ID, '_subsidy_purpose', true),
+            'amount_text'        => get_post_meta($post->ID, '_subsidy_amount_text', true),
             'region'       => get_post_meta($post->ID, '_subsidy_target_regions', true),
             'source'       => get_post_meta($post->ID, '_subsidy_data_source', true),
         );
