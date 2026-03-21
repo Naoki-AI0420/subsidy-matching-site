@@ -3,6 +3,13 @@
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-PM59CBKN');</script>
+    <!-- End Google Tag Manager -->
     <meta name="format-detection" content="telephone=no">
     <meta name="description" content="中小企業・小規模事業者向け補助金・助成金マッチングサービス。簡単な質問に答えるだけで、活用可能な補助金をご案内します。">
     <meta property="og:title" content="<?php wp_title('|', true, 'right'); bloginfo('name'); ?>">
@@ -14,9 +21,16 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="補助金マッチングサイト — あなたの会社で活用できる補助金を探しましょう">
     <meta name="twitter:description" content="簡単な質問に答えるだけで、貴社に該当する補助金・助成金をご案内。約2分で診断完了。">
+    <meta property="og:image" content="<?php echo get_template_directory_uri(); ?>/assets/images/ogp.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PM59CBKN"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 <?php wp_body_open(); ?>
 
 <header class="site-header">

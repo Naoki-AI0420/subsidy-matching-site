@@ -53,9 +53,25 @@
     var progressMessageEl = document.getElementById('progress-message');
 
     function init() {
+        injectConsentCheckbox();
         updateProgress();
         updateNavButtons();
         bindEvents();
+    }
+
+    /**
+     * メールフォーム（Q14）に同意チェックボックスを挿入
+     */
+    function injectConsentCheckbox() {
+        var step14 = document.querySelector('[data-step="14"]');
+        if (!step14) return;
+        var inputNote = step14.querySelector('.input-note');
+        if (!inputNote) return;
+        var consentHtml = '<div class="consent-group">' +
+            '<input type="checkbox" id="privacy-consent">' +
+            '<label for="privacy-consent"><a href="/privacy/" target="_blank" rel="noopener">個人情報の取り扱い</a>に同意する</label>' +
+            '</div>';
+        inputNote.insertAdjacentHTML('afterend', consentHtml);
     }
 
     function bindEvents() {
@@ -72,6 +88,20 @@
     }
 
     function handleNext() {
+        // Q14: 同意チェック必須
+        if (currentStep === TOTAL_STEPS) {
+            var consentBox = document.getElementById('privacy-consent');
+            if (consentBox && !consentBox.checked) {
+                var consentGroup = consentBox.closest('.consent-group');
+                if (consentGroup) {
+                    consentGroup.style.color = '#C62828';
+                    consentGroup.style.fontWeight = '700';
+                }
+                shakeCurrentSlide();
+                return;
+            }
+        }
+
         var value = getStepValue(currentStep);
         if (!value && value !== 0) {
             shakeCurrentSlide();
@@ -286,6 +316,22 @@
     document.head.appendChild(style);
 
     /**
+     * dataLayer ヘルパー（GTM/GA4 イベント送信）
+     */
+    function pushDataLayer(event, params) {
+        window.dataLayer = window.dataLayer || [];
+        var obj = { 'event': event };
+        if (params) {
+            for (var key in params) {
+                if (params.hasOwnProperty(key)) {
+                    obj[key] = params[key];
+                }
+            }
+        }
+        window.dataLayer.push(obj);
+    }
+
+    /**
      * DX課題を分析してレコメンドを生成
      */
     function analyzeDxChallenges() {
@@ -350,6 +396,9 @@
      * マッチング送信
      */
     function submitMatching() {
+        // GA4/GTM: フォーム送信イベント
+        pushDataLayer('form_submit', { 'form_name': 'subsidy_matching' });
+
         questionContainer.style.display = 'none';
         questionNav.style.display = 'none';
         progressContainer.style.display = 'none';
@@ -395,6 +444,9 @@
      * 営業提案書レベルの結果描画
      */
     function renderProposalResults(results, serverDxAnalysis) {
+        // GA4/GTM: 診断完了イベント
+        pushDataLayer('matching_complete');
+
         var dx = analyzeDxChallenges();
         var html = '';
 
@@ -403,6 +455,17 @@
         html += '  <div class="proposal-header-badge">診断結果レポート</div>';
         html += '  <h2>貴社の補助金・DX診断結果</h2>';
         html += '  <p>ご回答内容をもとに、活用可能な補助金と最適なDX施策をご提案いたします</p>';
+        html += '</div>';
+
+        // ネクストアクションCTA（補助金リストの上）
+        html += '<div class="result-top-cta">';
+        html += '  <div class="result-top-cta-inner">';
+        html += '    <h3 class="result-top-cta-title">あなたに最適な補助金TOP3を専門家が無料で解説します</h3>';
+        html += '    <div class="result-top-cta-buttons">';
+        html += '      <a href="' + getContactUrl() + '" class="btn btn-primary btn-large">無料相談を予約する</a>';
+        html += '      <a href="' + getContactUrl() + '?ref=pdf" class="btn btn-secondary">診断結果をPDFで受け取る</a>';
+        html += '    </div>';
+        html += '  </div>';
         html += '</div>';
 
         // 補助金セクション

@@ -43,7 +43,7 @@ get_header();
         <div class="container">
             <div class="hero-content">
                 <p class="hero-label">中小企業・小規模事業者向け 補助金・助成金マッチング</p>
-                <h1 class="hero-title">もらえるはずだった補助金、<br>まだ見逃していませんか？</h1>
+                <h2 class="hero-title">もらえるはずだった補助金、<br>まだ見逃していませんか？</h2>
                 <p class="hero-description">
                     全国49,000件以上の補助金データから、<br>
                     御社に合った制度を1分で無料診断。
@@ -197,8 +197,8 @@ get_header();
         </div>
     </section>
 
-    <!-- リスティング用: Problem（PASONA の P） -->
-    <section class="section section-worries lp-listing-only">
+    <!-- 共通: お悩み -->
+    <section class="section section-worries">
         <div class="container">
             <h2 class="section-title">こんなお悩みありませんか？</h2>
             <div class="worries-grid">
@@ -209,7 +209,7 @@ get_header();
                     <p>補助金の種類が多すぎて何が使えるかわからない</p>
                 </div>
                 <div class="worry-item">
-                    <p>申請が面倒で諦めてしまった</p>
+                    <p>申請書類の作成が複雑で諦めた</p>
                 </div>
                 <div class="worry-item">
                     <p>システム導入したいけど予算がない</p>
@@ -238,34 +238,13 @@ get_header();
         </div>
     </section>
 
-    <!-- SNS用: Problem（気づきの後に配置） -->
-    <section class="section section-worries lp-sns-only">
-        <div class="container">
-            <h2 class="section-title">補助金の活用でこんな壁はありませんか？</h2>
-            <div class="worries-grid">
-                <div class="worry-item">
-                    <p>補助金の情報収集に時間がかかる</p>
-                </div>
-                <div class="worry-item">
-                    <p>何が自社で使えるかわからない</p>
-                </div>
-                <div class="worry-item">
-                    <p>申請書類の作成が複雑で諦めた</p>
-                </div>
-                <div class="worry-item">
-                    <p>そもそも補助金の存在を知らなかった</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SNS用: Solution → CTA -->
-    <section class="section section-solution lp-sns-only">
+    <!-- 共通: Solution → CTA -->
+    <section class="section section-solution">
         <div class="container text-center">
-            <h2 class="section-title">1分の無料診断で、あなたの補助金がわかる</h2>
-            <p class="solution-text">業種・地域・企業規模を入力するだけ。<br>49,000件以上のデータから自動マッチングします。</p>
+            <h2 class="section-title">1分の無料診断で自動マッチング</h2>
+            <p class="solution-text">業種・地域・企業規模などの基本情報を入力するだけで、<br>49,000件以上の補助金データから御社に該当する制度を自動的に抽出します。</p>
             <a href="<?php echo esc_url(home_url('/matching/')); ?>" class="btn btn-primary btn-large">
-                無料で補助金診断を始める
+                今すぐ無料診断する
             </a>
         </div>
     </section>

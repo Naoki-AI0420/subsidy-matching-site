@@ -44,6 +44,53 @@
     margin-bottom: 0;
 }
 
+/* ========== 結果ページ上部CTA ========== */
+.result-top-cta {
+    margin-bottom: 32px;
+}
+
+.result-top-cta-inner {
+    background: linear-gradient(135deg, #FFF3E0 0%, #FFF8E1 100%);
+    border: 2px solid #F9A825;
+    border-radius: 4px;
+    padding: 28px 24px;
+    text-align: center;
+}
+
+.result-top-cta-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #003366;
+    margin-bottom: 20px;
+}
+
+.result-top-cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.result-top-cta-buttons .btn {
+    min-width: 200px;
+}
+
+@media (max-width: 768px) {
+    .result-top-cta-inner {
+        padding: 20px 16px;
+    }
+    .result-top-cta-title {
+        font-size: 16px;
+    }
+    .result-top-cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    .result-top-cta-buttons .btn {
+        width: 100%;
+    }
+}
+
 /* ========== セクション共通 ========== */
 .proposal-section {
     margin-bottom: 32px;

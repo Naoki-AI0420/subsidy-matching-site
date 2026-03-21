@@ -5,12 +5,15 @@
 .matching-page {
     padding: 40px 0 80px;
     min-height: 70vh;
+    overflow-x: hidden;
 }
 
 /* 進捗バー */
 .progress-container {
     max-width: 600px;
     margin: 0 auto 48px;
+    padding: 0 16px;
+    box-sizing: border-box;
 }
 
 .progress-info {
@@ -66,6 +69,7 @@
     background: #E8F5E9;
     border-radius: 4px;
     animation: fadeIn 0.4s ease;
+    box-sizing: border-box;
 }
 
 /* 金額チラ見せメッセージ */
@@ -81,6 +85,7 @@
     color: #1a3353;
     line-height: 1.6;
     animation: fadeIn 0.5s ease;
+    box-sizing: border-box;
 }
 
 .amount-teaser strong {
@@ -92,6 +97,8 @@
 .question-container {
     max-width: 600px;
     margin: 0 auto;
+    padding: 0 16px;
+    box-sizing: border-box;
 }
 
 .question-slide {
@@ -129,6 +136,7 @@
     max-width: 400px;
     margin: 0 auto;
     display: block;
+    box-sizing: border-box;
 }
 
 /* テキスト入力（大きめ） */
@@ -138,6 +146,7 @@
     max-width: 400px;
     margin: 0 auto;
     display: block;
+    box-sizing: border-box;
 }
 
 .input-note {
@@ -155,6 +164,7 @@
     gap: 12px;
     max-width: 500px;
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .option-cards-two {
@@ -187,6 +197,7 @@
     border-radius: 4px;
     transition: border-color 0.2s, background-color 0.2s;
     min-height: 64px;
+    box-sizing: border-box;
 }
 
 .option-card input:checked + .option-card-inner {
@@ -210,6 +221,8 @@
     justify-content: space-between;
     max-width: 600px;
     margin: 32px auto 0;
+    padding: 0 16px;
+    box-sizing: border-box;
 }
 
 .btn-back {
@@ -227,21 +240,126 @@
     cursor: not-allowed;
 }
 
+/* 同意チェックボックス */
+.consent-group {
+    max-width: 400px;
+    margin: 16px auto 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: #555555;
+    line-height: 1.6;
+}
+
+.consent-group input[type="checkbox"] {
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+
+.consent-group a {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .matching-page {
-        padding: 24px 0 60px;
+        padding: 24px 16px 60px;
+        overflow-x: hidden;
+    }
+
+    .progress-container,
+    .question-container,
+    .amount-teaser,
+    .progress-message {
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .progress-container {
+        padding: 0;
+    }
+
+    .question-container {
+        padding: 0;
     }
 
     .question-text {
-        font-size: 18px;
+        font-size: 17px;
+    }
+
+    .question-sub {
+        font-size: 13px;
+        margin-bottom: 24px;
     }
 
     .option-cards {
         grid-template-columns: 1fr;
     }
 
+    .option-card-inner {
+        padding: 14px 12px;
+        min-height: 52px;
+    }
+
+    .option-card-text {
+        font-size: 14px;
+    }
+
     .question-nav {
-        padding: 0 16px;
+        padding: 0;
+    }
+
+    .btn-next {
+        padding: 12px 28px;
+        font-size: 15px;
+        min-width: 120px;
+    }
+
+    .btn-back {
+        padding: 12px 20px;
+    }
+
+    .select-large,
+    .input-large {
+        font-size: 16px;
+        padding: 12px 14px;
+        max-width: 100%;
+    }
+
+    .amount-teaser {
+        font-size: 13px;
+        padding: 12px 14px;
+    }
+
+    .progress-message {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 414px) {
+    .matching-page {
+        padding: 20px 12px 56px;
+    }
+
+    .question-text {
+        font-size: 16px;
+    }
+
+    .option-card-inner {
+        padding: 12px 10px;
+        min-height: 48px;
+    }
+
+    .option-card-text {
+        font-size: 13px;
+    }
+
+    .btn-next {
+        min-width: 100px;
     }
 }
