@@ -20,7 +20,7 @@
             <div class="footer-section">
                 <h4>運営情報</h4>
                 <ul>
-                    <li>運営: Growing Up</li>
+                    <li>運営: 株式会社Growing up</li>
                     <li>所在地: 東京都</li>
                     <li>お問い合わせ: <a href="<?php echo esc_url(home_url('/contact/')); ?>">こちら</a></li>
                     <li><a href="<?php echo esc_url(home_url('/privacy/')); ?>">プライバシーポリシー</a></li>

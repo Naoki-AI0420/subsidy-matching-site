@@ -14,7 +14,7 @@ get_header();
 
         <div class="privacy-content">
             <p class="privacy-lead">
-                補助金・助成金マッチングサービス（以下「本サービス」といいます。）を運営する Growing Up AI Inc.（以下「当社」といいます。）は、
+                補助金・助成金マッチングサービス（以下「本サービス」といいます。）を運営する株式会社Growing up（以下「当社」といいます。）は、
                 お客様の個人情報の保護を重要な責務と認識し、以下のとおり個人情報保護方針を定め、適切な管理・保護に努めてまいります。
             </p>
 
@@ -111,9 +111,9 @@ get_header();
                 <p>個人情報の取り扱いに関するお問い合わせは、下記までご連絡ください。</p>
                 <div class="privacy-contact">
                     <p>
-                        <strong>Growing Up AI Inc.</strong><br>
-                        所在地: 東京都<br>
-                        メール: <a href="mailto:info@yumeno-marketing.jp">info@yumeno-marketing.jp</a><br>
+                        <strong>株式会社Growing up</strong><br>
+                        URL: <a href="https://ai-growing-up.co.jp/" target="_blank" rel="noopener">https://ai-growing-up.co.jp/</a><br>
+                        メール: <a href="mailto:info@ai-growing-up.co.jp">info@ai-growing-up.co.jp</a><br>
                         お問い合わせフォーム: <a href="<?php echo esc_url(home_url('/contact/')); ?>">こちら</a>
                     </p>
                 </div>

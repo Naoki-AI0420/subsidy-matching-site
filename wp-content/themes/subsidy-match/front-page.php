@@ -463,11 +463,15 @@ get_header();
                 <tbody>
                     <tr>
                         <th>運営会社</th>
-                        <td>Growing up AI Inc.</td>
+                        <td>株式会社Growing up</td>
+                    </tr>
+                    <tr>
+                        <th>URL</th>
+                        <td><a href="https://ai-growing-up.co.jp/" target="_blank" rel="noopener">https://ai-growing-up.co.jp/</a></td>
                     </tr>
                     <tr>
                         <th>お問い合わせ</th>
-                        <td><a href="mailto:info@yumeno-marketing.jp">info@yumeno-marketing.jp</a></td>
+                        <td><a href="mailto:info@ai-growing-up.co.jp">info@ai-growing-up.co.jp</a></td>
                     </tr>
                 </tbody>
             </table>
