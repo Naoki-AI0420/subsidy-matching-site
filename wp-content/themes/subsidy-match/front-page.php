@@ -24,12 +24,18 @@ get_header();
     <section class="hero lp-listing-only">
         <div class="container">
             <div class="hero-content">
-                <p class="hero-label">中小企業・小規模事業者向け</p>
+                <p class="hero-label">中小企業・小規模事業者向け 補助金・助成金マッチング</p>
                 <h1 class="hero-title">御社に合った補助金・助成金を<br>1分で無料診断</h1>
                 <p class="hero-description">
-                    簡単な質問に答えるだけで、貴社に該当する可能性のある<br>
-                    補助金・助成金を自動マッチングいたします。
+                    全国49,000件以上の補助金データから、<br>
+                    御社が申請可能な制度を自動マッチング。<br>
+                    <strong>補助率1/2〜3/4、最大1.5億円</strong>の補助金が見つかります。
                 </p>
+                <div class="hero-badges">
+                    <span class="hero-badge">49,000件以上の補助金データ</span>
+                    <span class="hero-badge">5,000社以上の利用実績</span>
+                    <span class="hero-badge">47都道府県対応</span>
+                </div>
                 <p class="hero-limited">月30社限定 ／ 残り<span class="remaining-count">12</span>社</p>
                 <a href="<?php echo esc_url(home_url('/matching/')); ?>" class="btn btn-cta btn-large hero-cta-btn">
                     無料で補助金診断を始める
