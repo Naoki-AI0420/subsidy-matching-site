@@ -12,6 +12,9 @@ services:
       WORDPRESS_DB_USER: ${DB_USER:-wordpress}
       WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:-wordpress}
       WORDPRESS_DB_NAME: ${DB_NAME:-wordpress}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      NOTIFICATION_EMAIL: ${NOTIFICATION_EMAIL:-}
+      DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK_URL:-}
     volumes:
       - wordpress_data:/var/www/html
       - ./wp-content/themes/subsidy-match:/var/www/html/wp-content/themes/subsidy-match

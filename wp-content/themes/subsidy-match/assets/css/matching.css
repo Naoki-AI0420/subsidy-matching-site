@@ -760,6 +760,60 @@
     margin: 12px 0 0;
 }
 
+/* サジェスト入力 */
+.chat-suggest-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+.chat-suggest-input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    border: 2px solid #003366;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: #333333;
+    box-sizing: border-box;
+}
+
+.chat-suggest-input:focus {
+    outline: none;
+    border-color: #0056b3;
+}
+
+.chat-suggest-input::placeholder {
+    color: #AAAAAA;
+}
+
+.chat-suggest-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #FFFFFF;
+    border: 1px solid #D0D0D0;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.chat-suggest-item {
+    padding: 10px 16px;
+    font-size: 15px;
+    color: #333333;
+    cursor: pointer;
+    transition: background-color 0.1s;
+}
+
+.chat-suggest-item:hover {
+    background: #EBF0F5;
+    color: #003366;
+}
+
 /* ============================================
    Responsive
    ============================================ */

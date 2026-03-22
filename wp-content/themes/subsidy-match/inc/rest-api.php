@@ -9,10 +9,17 @@
  * API ルート登録
  */
 function subsidy_match_register_routes() {
-    // マッチング実行
+    // マッチング実行（6問版）
     register_rest_route('subsidy/v1', '/match', array(
         'methods'             => 'POST',
         'callback'            => 'subsidy_match_handle_match',
+        'permission_callback' => '__return_true',
+    ));
+
+    // リード登録（結果画面のリードゲート）
+    register_rest_route('subsidy/v1', '/register-lead', array(
+        'methods'             => 'POST',
+        'callback'            => 'subsidy_match_handle_register_lead',
         'permission_callback' => '__return_true',
     ));
 
@@ -27,13 +34,6 @@ function subsidy_match_register_routes() {
     register_rest_route('subsidy/v1', '/subsidies', array(
         'methods'             => 'GET',
         'callback'            => 'subsidy_match_handle_list',
-        'permission_callback' => '__return_true',
-    ));
-
-    // リード保存（メールゲート用）
-    register_rest_route('subsidy/v1', '/lead', array(
-        'methods'             => 'POST',
-        'callback'            => 'subsidy_match_handle_lead',
         'permission_callback' => '__return_true',
     ));
 
@@ -54,52 +54,43 @@ function subsidy_match_register_routes() {
 add_action('rest_api_init', 'subsidy_match_register_routes');
 
 /**
- * マッチング処理
+ * 都道府県名マッピング
+ */
+function subsidy_match_get_pref_map() {
+    return array(
+        '北海道'=>'北海道','青森県'=>'青森県','岩手県'=>'岩手県','宮城県'=>'宮城県','秋田県'=>'秋田県',
+        '山形県'=>'山形県','福島県'=>'福島県','茨城県'=>'茨城県','栃木県'=>'栃木県','群馬県'=>'群馬県',
+        '埼玉県'=>'埼玉県','千葉県'=>'千葉県','東京都'=>'東京都','神奈川県'=>'神奈川県','新潟県'=>'新潟県',
+        '富山県'=>'富山県','石川県'=>'石川県','福井県'=>'福井県','山梨県'=>'山梨県','長野県'=>'長野県',
+        '岐阜県'=>'岐阜県','静岡県'=>'静岡県','愛知県'=>'愛知県','三重県'=>'三重県','滋賀県'=>'滋賀県',
+        '京都府'=>'京都府','大阪府'=>'大阪府','兵庫県'=>'兵庫県','奈良県'=>'奈良県','和歌山県'=>'和歌山県',
+        '鳥取県'=>'鳥取県','島根県'=>'島根県','岡山県'=>'岡山県','広島県'=>'広島県','山口県'=>'山口県',
+        '徳島県'=>'徳島県','香川県'=>'香川県','愛媛県'=>'愛媛県','高知県'=>'高知県','福岡県'=>'福岡県',
+        '佐賀県'=>'佐賀県','長崎県'=>'長崎県','熊本県'=>'熊本県','大分県'=>'大分県','宮崎県'=>'宮崎県',
+        '鹿児島県'=>'鹿児島県','沖縄県'=>'沖縄県',
+    );
+}
+
+/**
+ * マッチング処理（6問版）
  */
 function subsidy_match_handle_match($request) {
     $params = $request->get_json_params();
 
-    $prefecture     = sanitize_text_field($params['prefecture'] ?? '');
-    $industry       = sanitize_text_field($params['industry'] ?? '');
-    $employee_size  = sanitize_text_field($params['employee_size'] ?? '');
-    $capital        = sanitize_text_field($params['capital'] ?? '');
-    $challenges     = isset($params['challenges']) && is_array($params['challenges'])
-                        ? array_map('sanitize_text_field', $params['challenges'])
-                        : array();
-    $annual_revenue = sanitize_text_field($params['annual_revenue'] ?? '');
-    $has_experience    = isset($params['has_experience']) ? (int) $params['has_experience'] : 0;
-    $email             = sanitize_email($params['email'] ?? '');
+    $prefecture          = sanitize_text_field($params['prefecture'] ?? '');
+    $city                = sanitize_text_field($params['city'] ?? '');
+    $industry            = sanitize_text_field($params['industry'] ?? '');
+    $capital             = sanitize_text_field($params['capital'] ?? '');
+    $employee_size       = sanitize_text_field($params['employee_size'] ?? '');
+    $establishment_years = sanitize_text_field($params['establishment_years'] ?? '');
 
-    // DX関連パラメータ
-    $dx_schedule       = sanitize_text_field($params['dx_schedule'] ?? '');
-    $dx_invoice        = sanitize_text_field($params['dx_invoice'] ?? '');
-    $dx_crm            = sanitize_text_field($params['dx_crm'] ?? '');
-    $dx_ec             = sanitize_text_field($params['dx_ec'] ?? '');
-    $dx_communication  = sanitize_text_field($params['dx_communication'] ?? '');
-    $dx_pain           = isset($params['dx_pain']) && is_array($params['dx_pain'])
-                           ? array_map('sanitize_text_field', $params['dx_pain'])
-                           : array();
-
-    // 都道府県コード → 名前マッピング
-    $pref_map = array(
-        '01'=>'北海道','02'=>'青森県','03'=>'岩手県','04'=>'宮城県','05'=>'秋田県',
-        '06'=>'山形県','07'=>'福島県','08'=>'茨城県','09'=>'栃木県','10'=>'群馬県',
-        '11'=>'埼玉県','12'=>'千葉県','13'=>'東京都','14'=>'神奈川県','15'=>'新潟県',
-        '16'=>'富山県','17'=>'石川県','18'=>'福井県','19'=>'山梨県','20'=>'長野県',
-        '21'=>'岐阜県','22'=>'静岡県','23'=>'愛知県','24'=>'三重県','25'=>'滋賀県',
-        '26'=>'京都府','27'=>'大阪府','28'=>'兵庫県','29'=>'奈良県','30'=>'和歌山県',
-        '31'=>'鳥取県','32'=>'島根県','33'=>'岡山県','34'=>'広島県','35'=>'山口県',
-        '36'=>'徳島県','37'=>'香川県','38'=>'愛媛県','39'=>'高知県','40'=>'福岡県',
-        '41'=>'佐賀県','42'=>'長崎県','43'=>'熊本県','44'=>'大分県','45'=>'宮崎県',
-        '46'=>'鹿児島県','47'=>'沖縄県',
-    );
+    $pref_map = subsidy_match_get_pref_map();
     $prefecture_name = isset($pref_map[$prefecture]) ? $pref_map[$prefecture] : $prefecture;
 
-    // 都道府県バリデーション — 未選択 or 不正値はエラー
-    if (empty($prefecture) || !isset($pref_map[$prefecture])) {
+    if (empty($prefecture)) {
         return new WP_REST_Response(array(
             'success' => false,
-            'message' => '都道府県を選択してください。',
+            'message' => '都道府県を入力してください。',
         ), 400);
     }
 
@@ -112,213 +103,276 @@ function subsidy_match_handle_match($request) {
 
     $results = array();
 
-    // 売上規模から資本金推定によるボーナス判定
-    $revenue_scale = subsidy_match_parse_revenue($annual_revenue);
-
     foreach ($subsidies as $post) {
         $score = 0;
 
-        // 地域マッチ（20点）
-        // _subsidy_target_regions（配列）と _subsidy_region（インポート時の単一文字列）の両方をチェック
+        // 地域マッチ（25点）
         $target_regions = get_post_meta($post->ID, '_subsidy_target_regions', true);
         $target_regions = is_array($target_regions) ? $target_regions : array();
         $single_region  = get_post_meta($post->ID, '_subsidy_region', true);
 
+        $region_matched = false;
         if (!empty($target_regions)) {
-            // 配列がある場合：従来のロジック
-            if (in_array('all', $target_regions) || in_array($prefecture, $target_regions) || in_array($prefecture_name, $target_regions)) {
-                $score += 20;
-            }
+            $region_matched = in_array('all', $target_regions) || in_array($prefecture, $target_regions) || in_array($prefecture_name, $target_regions);
+            if ($region_matched) $score += 25;
         } elseif (!empty($single_region)) {
-            // インポートデータ：_subsidy_region（文字列）で地域マッチ
-            // "全国" or ユーザーの都道府県名を含むかチェック
-            if ($single_region === '全国' || $single_region === $prefecture_name || strpos($single_region, $prefecture_name) !== false) {
-                $score += 20;
+            $region_matched = ($single_region === '全国' || $single_region === $prefecture_name || strpos($single_region, $prefecture_name) !== false);
+            if (!$region_matched && mb_strlen($prefecture_name) > 2) {
+                $pref_short = mb_substr($prefecture_name, 0, mb_strlen($prefecture_name) - 1);
+                $region_matched = (strpos($single_region, $pref_short) !== false);
             }
-            // マッチしない場合は0点（地域が違う補助金は除外される方向）
+            if ($region_matched) $score += 25;
         } else {
-            // 地域情報なし → 全国対象とみなす
-            $score += 20;
+            $region_matched = true;
+            $score += 25;
         }
 
-        // 業種マッチ（25点 — タグなしは15点に減点して全マッチ防止）
+        if (!$region_matched) continue;
+
+        // 業種マッチ（25点）
         $target_industries = get_post_meta($post->ID, '_subsidy_target_industries', true);
         $target_industries = is_array($target_industries) ? $target_industries : array();
         if (!empty($target_industries) && in_array($industry, $target_industries)) {
             $score += 25;
         } elseif (empty($target_industries)) {
-            $score += 15; // データに業種タグがない場合は減点
+            $score += 15;
         }
 
-        // 従業員規模マッチ（15点 — タグなしは10点に減点）
+        // 従業員規模マッチ（20点）
         $target_emp = get_post_meta($post->ID, '_subsidy_target_employee_size', true);
         $target_emp = is_array($target_emp) ? $target_emp : array();
         if (!empty($target_emp) && in_array($employee_size, $target_emp)) {
-            $score += 15;
+            $score += 20;
         } elseif (empty($target_emp)) {
-            $score += 10; // データにタグがない場合は減点
+            $score += 12;
         }
 
-        // 資本金マッチ（15点 — タグなしは10点に減点）
+        // 資本金マッチ（15点）
         $target_cap = get_post_meta($post->ID, '_subsidy_target_capital', true);
         $target_cap = is_array($target_cap) ? $target_cap : array();
         if (!empty($target_cap) && in_array($capital, $target_cap)) {
             $score += 15;
         } elseif (empty($target_cap)) {
-            $score += 10; // データにタグがない場合は減点
-        }
-
-        // 課題マッチ（20点）
-        $target_challenges = get_post_meta($post->ID, '_subsidy_target_challenges', true);
-        $target_challenges = is_array($target_challenges) ? $target_challenges : array();
-        if (!empty($challenges) && !empty($target_challenges)) {
-            $intersect = array_intersect($challenges, $target_challenges);
-            if (count($intersect) > 0) {
-                $ratio = count($intersect) / count($target_challenges);
-                $score += (int) round(20 * min($ratio * 1.5, 1.0));
-            }
-        } elseif (empty($target_challenges)) {
-            $score += 20;
-        }
-
-        // DX課題ボーナス（+10点）— IT系補助金との親和性
-        $dx_analog_count = 0;
-        if (in_array($dx_schedule, array('paper', 'none'))) $dx_analog_count++;
-        if ($dx_invoice === 'handwrite') $dx_analog_count++;
-        if (in_array($dx_crm, array('paper', 'none'))) $dx_analog_count++;
-        if ($dx_ec === 'none') $dx_analog_count++;
-        if ($dx_communication === 'verbal') $dx_analog_count++;
-
-        $subsidy_category = get_post_meta($post->ID, '_subsidy_category', true);
-        $is_it_subsidy = in_array($subsidy_category, array('it', 'dx', 'digital'));
-        // IT導入補助金など名称ベースの判定
-        if (!$is_it_subsidy && (
-            strpos($post->post_title, 'IT') !== false ||
-            strpos($post->post_title, 'デジタル') !== false ||
-            strpos($post->post_title, 'DX') !== false
-        )) {
-            $is_it_subsidy = true;
-        }
-
-        if ($dx_analog_count >= 2 && $is_it_subsidy) {
             $score += 10;
-        } elseif ($dx_analog_count >= 1 && $is_it_subsidy) {
-            $score += 5;
         }
 
-        // 補助金経験者ボーナス（+5点）
-        if ($has_experience && $score >= 40) {
-            $score += 5;
+        // 設立年数ボーナス（15点）
+        // 設立が浅い企業は創業系補助金にマッチしやすい
+        $is_startup_subsidy = (
+            strpos($post->post_title, '創業') !== false ||
+            strpos($post->post_title, 'スタートアップ') !== false ||
+            strpos($post->post_title, '起業') !== false
+        );
+        if (in_array($establishment_years, array('under_1y', '1_3y')) && $is_startup_subsidy) {
+            $score += 15;
+        } elseif (!$is_startup_subsidy) {
+            $score += 8; // 一般的な補助金は設立年数問わず
         }
 
-        // 売上規模と補助金上限額の適合性ボーナス（+5点）
-        $max_amount = (int) get_post_meta($post->ID, '_subsidy_max_amount', true);
-        if ($revenue_scale > 0 && $max_amount > 0) {
-            // 売上の10%以内の補助金額なら適合性が高い
-            if ($max_amount <= $revenue_scale * 0.1) {
-                $score += 5;
-            }
-        }
-
-        // 適合度（閾値調整: high=80+, medium=55-79, low=30-54）
-        if ($score >= 80) {
+        // 適合度
+        if ($score >= 75) {
             $match_level = 'high';
-        } elseif ($score >= 55) {
+        } elseif ($score >= 50) {
             $match_level = 'medium';
         } else {
             $match_level = 'low';
         }
 
-        // 地域マッチ必須 — 地域が異なる補助金は表示しない
-        // 地域スコアが0 = 都道府県が違う（「全国」でもない）
-        $region_matched = false;
-        if (!empty($target_regions)) {
-            $region_matched = in_array('all', $target_regions) || in_array($prefecture, $target_regions) || in_array($prefecture_name, $target_regions);
-        } elseif (!empty($single_region)) {
-            $region_matched = ($single_region === '全国' || $single_region === $prefecture_name || strpos($single_region, $prefecture_name) !== false);
-            // 「神奈川」→「神奈川県」の部分一致対応
-            if (!$region_matched && mb_strlen($prefecture_name) > 2) {
-                $pref_short = mb_substr($prefecture_name, 0, mb_strlen($prefecture_name) - 1);
-                $region_matched = (strpos($single_region, $pref_short) !== false);
-            }
-        } else {
-            $region_matched = true; // 地域情報なし = 全国対象
-        }
+        if ($score < 25) continue;
 
-        if (!$region_matched) continue;
-
-        // 低スコアは除外
-        if ($score < 30) continue;
-
-        // 採択率データ取得
         $adoption_rate = get_post_meta($post->ID, '_subsidy_adoption_rate', true);
         $adoption_rate = $adoption_rate ? (float) $adoption_rate : null;
+        $max_amount    = (int) get_post_meta($post->ID, '_subsidy_max_amount', true);
 
         $results[] = array(
-            'id'             => $post->ID,
-            'title'          => $post->post_title,
-            'max_amount'     => $max_amount,
-            'rate'               => get_post_meta($post->ID, '_subsidy_subsidy_rate', true)
-                                    ?: get_post_meta($post->ID, '_subsidy_rate', true),
-            'summary'            => get_post_meta($post->ID, '_subsidy_summary', true)
-                                    ?: wp_strip_all_tags($post->post_content),
-            'deadline'           => get_post_meta($post->ID, '_subsidy_deadline', true)
-                                    ?: get_post_meta($post->ID, '_subsidy_application_period', true),
-            'official_url'       => get_post_meta($post->ID, '_subsidy_official_url', true)
-                                    ?: get_post_meta($post->ID, '_subsidy_detail_url', true),
-            'score'              => $score,
-            'match_level'        => $match_level,
-            'adoption_rate'      => $adoption_rate,
-            'eligible_entities'  => get_post_meta($post->ID, '_subsidy_eligible_entities', true),
-            'purpose'            => get_post_meta($post->ID, '_subsidy_purpose', true),
-            'eligible_expenses'  => get_post_meta($post->ID, '_subsidy_eligible_expenses', true),
-            'implementing_agency'=> get_post_meta($post->ID, '_subsidy_implementing_agency', true),
-            'amount_text'        => get_post_meta($post->ID, '_subsidy_amount_text', true),
+            'id'                  => $post->ID,
+            'title'               => $post->post_title,
+            'max_amount'          => $max_amount,
+            'rate'                => get_post_meta($post->ID, '_subsidy_subsidy_rate', true)
+                                     ?: get_post_meta($post->ID, '_subsidy_rate', true),
+            'summary'             => get_post_meta($post->ID, '_subsidy_summary', true)
+                                     ?: wp_strip_all_tags($post->post_content),
+            'deadline'            => get_post_meta($post->ID, '_subsidy_deadline', true)
+                                     ?: get_post_meta($post->ID, '_subsidy_application_period', true),
+            'official_url'        => get_post_meta($post->ID, '_subsidy_official_url', true)
+                                     ?: get_post_meta($post->ID, '_subsidy_detail_url', true),
+            'score'               => $score,
+            'match_level'         => $match_level,
+            'adoption_rate'       => $adoption_rate,
+            'eligible_entities'   => get_post_meta($post->ID, '_subsidy_eligible_entities', true),
+            'purpose'             => get_post_meta($post->ID, '_subsidy_purpose', true),
+            'eligible_expenses'   => get_post_meta($post->ID, '_subsidy_eligible_expenses', true),
+            'implementing_agency' => get_post_meta($post->ID, '_subsidy_implementing_agency', true),
+            'amount_text'         => get_post_meta($post->ID, '_subsidy_amount_text', true),
         );
     }
 
-    // スコア降順ソート（同スコアの場合は採択率の高い順）
+    // スコア降順ソート
     usort($results, function ($a, $b) {
-        if ($b['score'] !== $a['score']) {
-            return $b['score'] - $a['score'];
-        }
+        if ($b['score'] !== $a['score']) return $b['score'] - $a['score'];
         $rate_a = $a['adoption_rate'] ?? 0;
         $rate_b = $b['adoption_rate'] ?? 0;
         return $rate_b <=> $rate_a;
     });
 
-    // DX分析結果
-    $dx_analysis = subsidy_match_analyze_dx($dx_schedule, $dx_invoice, $dx_crm, $dx_ec, $dx_communication, $dx_pain);
+    return new WP_REST_Response(array(
+        'success' => true,
+        'results' => $results,
+    ), 200);
+}
 
-    // リード保存
-    $lead_id = 0;
-    if ($email) {
-        $lead_id = subsidy_match_save_lead(array(
-            'email'            => $email,
-            'prefecture'       => $prefecture,
-            'industry'         => $industry,
-            'employee_size'    => $employee_size,
-            'capital'          => $capital,
-            'challenges'       => wp_json_encode($challenges),
-            'annual_revenue'   => $annual_revenue,
-            'has_experience'   => $has_experience,
-            'matched_ids'      => wp_json_encode(array_column($results, 'id')),
-            'dx_schedule'      => $dx_schedule,
-            'dx_invoice'       => $dx_invoice,
-            'dx_crm'           => $dx_crm,
-            'dx_ec'            => $dx_ec,
-            'dx_communication' => $dx_communication,
-            'dx_pain'          => wp_json_encode($dx_pain),
-            'dx_level'         => $dx_analysis['dx_level'],
+/**
+ * リード登録（結果画面のリードゲート + 通知）
+ */
+function subsidy_match_handle_register_lead($request) {
+    $params = $request->get_json_params();
+
+    $company_name = sanitize_text_field($params['company_name'] ?? '');
+    $contact_name = sanitize_text_field($params['contact_name'] ?? '');
+    $phone        = sanitize_text_field($params['phone'] ?? '');
+    $email        = sanitize_email($params['email'] ?? '');
+
+    if (empty($company_name) || empty($contact_name) || empty($phone) || empty($email)) {
+        return new WP_REST_Response(array(
+            'success' => false,
+            'message' => '必須項目を入力してください。',
+        ), 400);
+    }
+
+    // 診断データ
+    $prefecture          = sanitize_text_field($params['prefecture'] ?? '');
+    $city                = sanitize_text_field($params['city'] ?? '');
+    $industry            = sanitize_text_field($params['industry'] ?? '');
+    $capital             = sanitize_text_field($params['capital'] ?? '');
+    $employee_size       = sanitize_text_field($params['employee_size'] ?? '');
+    $establishment_years = sanitize_text_field($params['establishment_years'] ?? '');
+    $matched_count       = (int) ($params['matched_count'] ?? 0);
+    $matched_ids         = isset($params['matched_ids']) ? wp_json_encode($params['matched_ids']) : '';
+    $matched_subsidies   = $params['matched_subsidies'] ?? array();
+
+    $lead_id = subsidy_match_save_lead(array(
+        'company_name'        => $company_name,
+        'contact_name'        => $contact_name,
+        'phone'               => $phone,
+        'email'               => $email,
+        'prefecture'          => $prefecture,
+        'city'                => $city,
+        'industry'            => $industry,
+        'capital'             => $capital,
+        'employee_size'       => $employee_size,
+        'establishment_years' => $establishment_years,
+        'matched_count'       => $matched_count,
+        'matched_ids'         => $matched_ids,
+    ));
+
+    // 通知を非同期的に送信（エラーがあってもリードは保存済み）
+    subsidy_match_send_notifications($company_name, $contact_name, $phone, $email, $industry, $matched_count, $matched_subsidies);
+
+    return new WP_REST_Response(array(
+        'success' => true,
+        'lead_id' => $lead_id,
+    ), 200);
+}
+
+/**
+ * 通知送信（メール + Discord + 自動返信）
+ */
+function subsidy_match_send_notifications($company, $name, $phone, $email, $industry, $matched_count, $matched_subsidies) {
+    $industries = subsidy_match_get_industries();
+    $industry_label = $industries[$industry] ?? $industry;
+
+    // 1. 管理者メール通知
+    $notification_email = subsidy_match_get_notification_email();
+    $subject = "【新規リード】{$company} - 補助金マッチング";
+    $body = "新しいリードが登録されました。\n\n"
+          . "会社名: {$company}\n"
+          . "担当者: {$name}\n"
+          . "電話番号: {$phone}\n"
+          . "メール: {$email}\n"
+          . "業種: {$industry_label}\n"
+          . "マッチ件数: {$matched_count}件\n"
+          . "\n---\n"
+          . "補助金マッチングサイト\n";
+
+    wp_mail($notification_email, $subject, $body);
+
+    // 2. Discord Webhook 通知
+    $discord_url = subsidy_match_get_discord_webhook();
+    if ($discord_url) {
+        $discord_body = array(
+            'content' => "**【新規リード】** {$company}\n"
+                       . "担当者: {$name}\n"
+                       . "TEL: {$phone} / Mail: {$email}\n"
+                       . "業種: {$industry_label} / マッチ: {$matched_count}件",
+        );
+        wp_remote_post($discord_url, array(
+            'timeout' => 10,
+            'headers' => array('Content-Type' => 'application/json'),
+            'body'    => wp_json_encode($discord_body),
         ));
     }
 
-    return new WP_REST_Response(array(
-        'success'     => true,
-        'results'     => $results,
-        'lead_id'     => $lead_id,
-        'dx_analysis' => $dx_analysis,
-    ), 200);
+    // 3. 自動返信メール
+    $top_subsidies = '';
+    $subsidy_list = is_array($matched_subsidies) ? array_slice($matched_subsidies, 0, 3) : array();
+    foreach ($subsidy_list as $s) {
+        $s_title  = sanitize_text_field($s['title'] ?? '');
+        $s_amount = sanitize_text_field($s['amount_text'] ?? '');
+        if (!$s_amount && !empty($s['max_amount'])) {
+            $amt = (int) $s['max_amount'];
+            $s_amount = $amt >= 10000 ? number_format($amt / 10000) . '万円' : number_format($amt) . '円';
+        }
+        $top_subsidies .= "  - {$s_title}（最大 {$s_amount}）\n";
+    }
+
+    $reply_subject = "【補助金マッチング】診断結果のご案内 - 株式会社Growing up";
+    $reply_body = "{$name}様\n\n"
+                . "この度は補助金マッチング診断をご利用いただき、誠にありがとうございます。\n\n"
+                . "診断の結果、{$name}様の企業に該当する可能性のある補助金が {$matched_count}件 見つかりました。\n\n";
+
+    if ($top_subsidies) {
+        $reply_body .= "【マッチした補助金（上位3件）】\n{$top_subsidies}\n";
+    }
+
+    $reply_body .= "詳しい活用方法について、無料でご相談を承っております。\n"
+                 . "お気軽にお問い合わせください。\n\n"
+                 . "---\n"
+                 . "株式会社Growing up\n"
+                 . "メール: info@ai-growing-up.co.jp\n"
+                 . "Web: https://ai-growing-up.co.jp/\n";
+
+    $reply_headers = array(
+        'From: 株式会社Growing up <info@ai-growing-up.co.jp>',
+    );
+    wp_mail($email, $reply_subject, $reply_body, $reply_headers);
+}
+
+/**
+ * system_interest を更新
+ */
+function subsidy_match_register_system_interest_route() {
+    register_rest_route('subsidy/v1', '/system-interest', array(
+        'methods'             => 'POST',
+        'callback'            => 'subsidy_match_handle_system_interest',
+        'permission_callback' => '__return_true',
+    ));
+}
+add_action('rest_api_init', 'subsidy_match_register_system_interest_route');
+
+function subsidy_match_handle_system_interest($request) {
+    $params  = $request->get_json_params();
+    $lead_id = (int) ($params['lead_id'] ?? 0);
+    $value   = sanitize_text_field($params['system_interest'] ?? '');
+
+    if (!$lead_id || !in_array($value, array('yes', 'no', 'undecided'))) {
+        return new WP_REST_Response(array('success' => false), 400);
+    }
+
+    global $wpdb;
+    $table = $wpdb->prefix . 'leads';
+    $wpdb->update($table, array('system_interest' => $value), array('id' => $lead_id), array('%s'), array('%d'));
+
+    return new WP_REST_Response(array('success' => true), 200);
 }
 
 /**
@@ -340,7 +394,6 @@ function subsidy_match_handle_contact($request) {
         ), 400);
     }
 
-    // 管理者へメール送信
     $admin_email = get_option('admin_email');
     $subject     = '【補助金マッチングサイト】お問い合わせ: ' . $company;
     $body        = "会社名: {$company}\n"
@@ -350,7 +403,6 @@ function subsidy_match_handle_contact($request) {
                  . "ご相談内容:\n{$message}\n";
 
     $headers = array('Reply-To: ' . $email);
-
     wp_mail($admin_email, $subject, $body, $headers);
 
     return new WP_REST_Response(array(
@@ -366,7 +418,6 @@ function subsidy_match_handle_list($request) {
     $page     = max(1, (int) $request->get_param('page'));
     $per_page = min(100, max(1, (int) ($request->get_param('per_page') ?: 20)));
     $region   = sanitize_text_field($request->get_param('region') ?: '');
-    $status   = sanitize_text_field($request->get_param('status') ?: '');
     $search   = sanitize_text_field($request->get_param('search') ?: '');
     $source   = sanitize_text_field($request->get_param('source') ?: '');
 
@@ -389,24 +440,13 @@ function subsidy_match_handle_list($request) {
     if ($region) {
         $meta_query[] = array(
             'relation' => 'OR',
-            array(
-                'key'     => '_subsidy_target_regions',
-                'value'   => $region,
-                'compare' => 'LIKE',
-            ),
-            array(
-                'key'     => '_subsidy_target_regions',
-                'value'   => 'all',
-                'compare' => 'LIKE',
-            ),
+            array('key' => '_subsidy_target_regions', 'value' => $region, 'compare' => 'LIKE'),
+            array('key' => '_subsidy_target_regions', 'value' => 'all', 'compare' => 'LIKE'),
         );
     }
 
     if ($source) {
-        $meta_query[] = array(
-            'key'   => '_subsidy_data_source',
-            'value' => $source,
-        );
+        $meta_query[] = array('key' => '_subsidy_data_source', 'value' => $source);
     }
 
     if (count($meta_query) > 1) {
@@ -421,29 +461,22 @@ function subsidy_match_handle_list($request) {
             'id'           => $post->ID,
             'title'        => $post->post_title,
             'max_amount'   => (int) get_post_meta($post->ID, '_subsidy_max_amount', true),
-            'rate'               => get_post_meta($post->ID, '_subsidy_subsidy_rate', true)
-                                    ?: get_post_meta($post->ID, '_subsidy_rate', true),
-            'summary'            => get_post_meta($post->ID, '_subsidy_summary', true)
-                                    ?: wp_strip_all_tags($post->post_content),
-            'deadline'           => get_post_meta($post->ID, '_subsidy_deadline', true)
-                                    ?: get_post_meta($post->ID, '_subsidy_application_period', true),
-            'official_url'       => get_post_meta($post->ID, '_subsidy_official_url', true)
-                                    ?: get_post_meta($post->ID, '_subsidy_detail_url', true),
-            'eligible_entities'  => get_post_meta($post->ID, '_subsidy_eligible_entities', true),
-            'purpose'            => get_post_meta($post->ID, '_subsidy_purpose', true),
-            'amount_text'        => get_post_meta($post->ID, '_subsidy_amount_text', true),
+            'rate'         => get_post_meta($post->ID, '_subsidy_subsidy_rate', true) ?: get_post_meta($post->ID, '_subsidy_rate', true),
+            'summary'      => get_post_meta($post->ID, '_subsidy_summary', true) ?: wp_strip_all_tags($post->post_content),
+            'deadline'     => get_post_meta($post->ID, '_subsidy_deadline', true) ?: get_post_meta($post->ID, '_subsidy_application_period', true),
+            'official_url' => get_post_meta($post->ID, '_subsidy_official_url', true) ?: get_post_meta($post->ID, '_subsidy_detail_url', true),
             'region'       => get_post_meta($post->ID, '_subsidy_target_regions', true),
             'source'       => get_post_meta($post->ID, '_subsidy_data_source', true),
         );
     }
 
     return new WP_REST_Response(array(
-        'success'    => true,
-        'items'      => $items,
-        'total'      => (int) $query->found_posts,
-        'pages'      => (int) $query->max_num_pages,
-        'page'       => $page,
-        'per_page'   => $per_page,
+        'success'  => true,
+        'items'    => $items,
+        'total'    => (int) $query->found_posts,
+        'pages'    => (int) $query->max_num_pages,
+        'page'     => $page,
+        'per_page' => $per_page,
     ), 200);
 }
 
@@ -454,24 +487,14 @@ function subsidy_match_handle_stats($request) {
     $total = wp_count_posts('subsidy');
     $published = (int) $total->publish;
 
-    // ソース別集計
     global $wpdb;
     $sources = $wpdb->get_results(
-        "SELECT meta_value AS source, COUNT(*) AS count
-         FROM {$wpdb->postmeta}
-         WHERE meta_key = '_subsidy_data_source'
-         GROUP BY meta_value",
+        "SELECT meta_value AS source, COUNT(*) AS count FROM {$wpdb->postmeta} WHERE meta_key = '_subsidy_data_source' GROUP BY meta_value",
         ARRAY_A
     );
 
-    // 地域別上位
     $regions = $wpdb->get_results(
-        "SELECT meta_value AS region, COUNT(*) AS count
-         FROM {$wpdb->postmeta}
-         WHERE meta_key = '_subsidy_target_regions'
-         GROUP BY meta_value
-         ORDER BY count DESC
-         LIMIT 10",
+        "SELECT meta_value AS region, COUNT(*) AS count FROM {$wpdb->postmeta} WHERE meta_key = '_subsidy_target_regions' GROUP BY meta_value ORDER BY count DESC LIMIT 10",
         ARRAY_A
     );
 
@@ -496,12 +519,7 @@ function subsidy_match_handle_deadline_count($request) {
         'post_type'      => 'subsidy',
         'posts_per_page' => -1,
         'post_status'    => 'publish',
-        'meta_query'     => array(
-            array(
-                'key'     => '_subsidy_deadline',
-                'compare' => 'EXISTS',
-            ),
-        ),
+        'meta_query'     => array(array('key' => '_subsidy_deadline', 'compare' => 'EXISTS')),
     ));
 
     $count = 0;
@@ -509,115 +527,15 @@ function subsidy_match_handle_deadline_count($request) {
         $deadline = get_post_meta($post->ID, '_subsidy_deadline', true);
         if (empty($deadline)) continue;
 
-        // 日本語の日付（例: "2026年3月31日"）をパース
         $deadline_normalized = str_replace(array('年', '月', '日'), array('-', '-', ''), $deadline);
         $deadline_ts = strtotime($deadline_normalized);
         if (!$deadline_ts) continue;
 
         $deadline_date = date('Y-m-d', $deadline_ts);
-        if ($deadline_date >= $first_day && $deadline_date <= $last_day) {
-            $count++;
-        }
+        if ($deadline_date >= $first_day && $deadline_date <= $last_day) $count++;
     }
 
-    return new WP_REST_Response(array(
-        'success' => true,
-        'count'   => $count,
-        'month'   => $now,
-    ), 200);
-}
-
-/**
- * DX課題分析
- */
-function subsidy_match_analyze_dx($schedule, $invoice, $crm, $ec, $communication, $pain) {
-    $issues = array();
-    $analog_count = 0;
-
-    if (in_array($schedule, array('paper', 'none'))) {
-        $issues[] = '予約・スケジュール管理のデジタル化が未対応';
-        $analog_count++;
-    } elseif ($schedule === 'excel') {
-        $issues[] = '予約管理がExcelベースで属人化リスクあり';
-    }
-
-    if ($invoice === 'handwrite') {
-        $issues[] = '請求書・見積書が手書きで非効率';
-        $analog_count++;
-    } elseif ($invoice === 'excel') {
-        $issues[] = '請求業務がExcelベースで転記ミスリスクあり';
-    }
-
-    if (in_array($crm, array('paper', 'none'))) {
-        $issues[] = '顧客情報が一元管理されていない';
-        $analog_count++;
-    } elseif ($crm === 'excel') {
-        $issues[] = '顧客管理がExcelベースで共有・活用が限定的';
-    }
-
-    if ($ec === 'none') {
-        $issues[] = 'オンライン販売チャネルが未整備';
-        $analog_count++;
-    } elseif ($ec === 'considering') {
-        $issues[] = 'EC導入を検討中 — 補助金活用の好機';
-    }
-
-    if ($communication === 'verbal') {
-        $issues[] = '情報共有が口頭中心で記録が残らない';
-        $analog_count++;
-    } elseif ($communication === 'email') {
-        $issues[] = '情報共有がメール中心でリアルタイム性に課題';
-    }
-
-    if ($analog_count >= 4) {
-        $dx_level = 'beginner';
-    } elseif ($analog_count >= 2) {
-        $dx_level = 'developing';
-    } else {
-        $dx_level = 'advanced';
-    }
-
-    return array(
-        'dx_level'    => $dx_level,
-        'issues'      => $issues,
-        'pain_points' => $pain,
-    );
-}
-
-/**
- * メールゲートからのリード保存
- */
-function subsidy_match_handle_lead($request) {
-    $params = $request->get_json_params();
-
-    $email = sanitize_email($params['email'] ?? '');
-    if (empty($email)) {
-        return new WP_REST_Response(array(
-            'success' => false,
-            'message' => 'メールアドレスを入力してください。',
-        ), 400);
-    }
-
-    $lead_id = subsidy_match_save_lead(array(
-        'email'          => $email,
-        'prefecture'     => sanitize_text_field($params['prefecture'] ?? ''),
-        'industry'       => sanitize_text_field($params['industry'] ?? ''),
-        'employee_size'  => sanitize_text_field($params['employee_size'] ?? ''),
-        'capital'        => sanitize_text_field($params['capital'] ?? ''),
-        'challenges'     => wp_json_encode(
-            isset($params['challenges']) && is_array($params['challenges'])
-                ? array_map('sanitize_text_field', $params['challenges'])
-                : array()
-        ),
-        'annual_revenue' => sanitize_text_field($params['annual_revenue'] ?? ''),
-        'has_experience' => isset($params['has_experience']) ? (int) $params['has_experience'] : 0,
-        'matched_ids'    => '',
-    ));
-
-    return new WP_REST_Response(array(
-        'success' => true,
-        'lead_id' => $lead_id,
-    ), 200);
+    return new WP_REST_Response(array('success' => true, 'count' => $count, 'month' => $now), 200);
 }
 
 /**
@@ -625,18 +543,9 @@ function subsidy_match_handle_lead($request) {
  */
 function subsidy_match_parse_revenue($text) {
     if (empty($text)) return 0;
-
     $text = str_replace(array(',', ' ', '　'), '', $text);
-
-    if (preg_match('/(\d+(?:\.\d+)?)\s*億/', $text, $m)) {
-        return (int) ($m[1] * 100000000);
-    }
-    if (preg_match('/(\d+(?:\.\d+)?)\s*万/', $text, $m)) {
-        return (int) ($m[1] * 10000);
-    }
-    if (preg_match('/(\d+)/', $text, $m)) {
-        return (int) $m[1];
-    }
-
+    if (preg_match('/(\d+(?:\.\d+)?)\s*億/', $text, $m)) return (int) ($m[1] * 100000000);
+    if (preg_match('/(\d+(?:\.\d+)?)\s*万/', $text, $m)) return (int) ($m[1] * 10000);
+    if (preg_match('/(\d+)/', $text, $m)) return (int) $m[1];
     return 0;
 }

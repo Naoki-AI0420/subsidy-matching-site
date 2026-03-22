@@ -5,7 +5,7 @@
  * @package SubsidyMatch
  */
 
-define('SUBSIDY_MATCH_VERSION', '1.1.' . filemtime(get_template_directory() . '/assets/css/common.css'));
+define('SUBSIDY_MATCH_VERSION', '2.0.' . filemtime(get_template_directory() . '/assets/css/common.css'));
 
 /**
  * テーマセットアップ
@@ -69,8 +69,9 @@ function subsidy_match_enqueue_scripts() {
             true
         );
         wp_localize_script('subsidy-match-matching', 'subsidyMatchApi', array(
-            'root'  => esc_url_raw(rest_url()),
-            'nonce' => wp_create_nonce('wp_rest'),
+            'root'      => esc_url_raw(rest_url()),
+            'nonce'     => wp_create_nonce('wp_rest'),
+            'themeUrl'  => get_template_directory_uri(),
         ));
     }
 
@@ -136,8 +137,44 @@ require_once get_template_directory() . '/inc/lead-manager.php';
 // 管理画面
 require_once get_template_directory() . '/inc/admin-menu.php';
 
-// SEO: サイトマップ有効化（WordPress 5.5+ 標準機能）
-add_filter('wp_sitemaps_enabled', '__return_true');
+// AI チャット
+require_once get_template_directory() . '/inc/ai-chat.php';
 
-// SEO: title タグ
+/**
+ * 業種マスタ
+ */
+function subsidy_match_get_industries() {
+    return array(
+        'manufacturing'         => '製造業',
+        'construction'          => '建設業',
+        'information_technology'=> '情報通信業',
+        'wholesale_retail'      => '卸売業・小売業',
+        'food_service'          => '飲食サービス業',
+        'accommodation'         => '宿泊業',
+        'medical_welfare'       => '医療・福祉',
+        'education'             => '教育・学習支援業',
+        'professional_services' => '専門・技術サービス業',
+        'transportation'        => '運輸業・郵便業',
+        'real_estate'           => '不動産業',
+        'agriculture'           => '農業・林業・漁業',
+        'other'                 => 'その他',
+    );
+}
+
+/**
+ * 課題マスタ（後方互換）
+ */
+function subsidy_match_get_challenges() {
+    return array(
+        'equipment'   => '設備投資',
+        'it_dx'       => 'IT化・DX',
+        'hiring'      => '人材採用',
+        'overseas'    => '海外展開',
+        'rnd'         => '研究開発',
+        'succession'  => '事業承継',
+    );
+}
+
+// SEO: サイトマップ有効化
+add_filter('wp_sitemaps_enabled', '__return_true');
 add_theme_support('title-tag');
