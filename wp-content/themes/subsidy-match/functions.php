@@ -5,7 +5,7 @@
  * @package SubsidyMatch
  */
 
-define('SUBSIDY_MATCH_VERSION', '1.0.0');
+define('SUBSIDY_MATCH_VERSION', '1.1.' . filemtime(get_template_directory() . '/assets/css/common.css'));
 
 /**
  * テーマセットアップ
