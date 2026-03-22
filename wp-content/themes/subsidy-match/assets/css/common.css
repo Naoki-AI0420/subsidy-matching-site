@@ -538,78 +538,125 @@ textarea.form-control {
 
 /* ========== 採択事例ティッカー（FV直下） ========== */
 .adoption-ticker {
-    background: #F0F4F8;
-    border-bottom: 1px solid #D8E2ED;
-    padding: 12px 0;
+    background: #003366;
+    padding: 14px 0;
     overflow: hidden;
 }
 
 .adoption-ticker-inner {
-    max-width: 900px;
+    max-width: 960px;
     margin: 0 auto;
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 0 20px;
+    gap: 20px;
+    padding: 0 24px;
 }
 
 .adoption-ticker-label {
-    font-size: 12px;
-    color: #666666;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.7);
     white-space: nowrap;
     flex-shrink: 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    padding-right: 20px;
 }
 
 .adoption-ticker-track {
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    gap: 0;
     transition: opacity 0.3s ease;
+    min-height: 28px;
 }
 
 .ticker-industry {
     font-size: 11px;
-    color: #FFFFFF;
-    background: #003366;
-    padding: 2px 8px;
-    border-radius: 2px;
-    font-weight: 600;
+    color: #003366;
+    background: #FFFFFF;
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-weight: 700;
     white-space: nowrap;
+    margin-right: 14px;
 }
 
 .ticker-sub {
     font-size: 13px;
-    color: #003366;
-    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
     white-space: nowrap;
+    margin-right: 6px;
+}
+
+.ticker-sub::after {
+    content: '｜';
+    color: rgba(255, 255, 255, 0.3);
+    margin-left: 6px;
 }
 
 .ticker-amt {
-    font-size: 16px;
-    font-weight: 700;
-    color: #C62828;
+    font-size: 18px;
+    font-weight: 800;
+    color: #FFD54F;
     white-space: nowrap;
+    margin-right: 6px;
+}
+
+.ticker-amt::after {
+    content: '｜';
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 13px;
+    font-weight: 400;
+    margin-left: 6px;
 }
 
 .ticker-use {
-    font-size: 12px;
-    color: #555555;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
 }
 
 @media (max-width: 768px) {
+    .adoption-ticker {
+        padding: 12px 0;
+    }
+
     .adoption-ticker-inner {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px 16px;
         padding: 0 16px;
     }
 
+    .adoption-ticker-label {
+        border-right: none;
+        padding-right: 0;
+        width: auto;
+    }
+
     .adoption-ticker-track {
-        gap: 8px;
+        flex-wrap: wrap;
+        gap: 6px;
+        width: 100%;
+    }
+
+    .ticker-sub::after,
+    .ticker-amt::after {
+        display: none;
     }
 
     .ticker-amt {
-        font-size: 15px;
+        font-size: 16px;
+    }
+
+    .ticker-sub {
+        font-size: 12px;
+    }
+
+    .ticker-use {
+        font-size: 12px;
+        width: 100%;
     }
 }
