@@ -39,6 +39,65 @@ get_header();
         </div>
     </section>
 
+    <!-- 採択事例スライダー（FV直下） -->
+    <section class="adoption-ticker">
+        <div class="adoption-ticker-inner">
+            <span class="adoption-ticker-label">💡 採択事例</span>
+            <div class="adoption-ticker-track" id="adoption-ticker-track"></div>
+        </div>
+    </section>
+    <script>
+    (function() {
+        var cases = [
+            { ind: 'IT・通信業', sub: 'ものづくり補助金', amt: '1,250万円', use: 'SaaS開発・クラウドインフラ構築' },
+            { ind: '建設業', sub: '事業再構築補助金', amt: '3,000万円', use: 'ドローン測量・BIMシステム導入' },
+            { ind: '製造業', sub: 'ものづくり補助金', amt: '1,000万円', use: '生産ライン自動化システム導入' },
+            { ind: '農業', sub: 'ものづくり補助金', amt: '800万円', use: 'スマート農業IoTセンサー導入' },
+            { ind: '医療・福祉', sub: '省力化投資補助金', amt: '600万円', use: '見守りセンサー・記録自動化' },
+            { ind: '運輸・物流業', sub: '省力化投資補助金', amt: '500万円', use: '配送ルート最適化AI導入' },
+            { ind: '宿泊業', sub: '省力化投資補助金', amt: '500万円', use: '清掃ロボット・スマートロック導入' },
+            { ind: 'IT・通信業', sub: 'IT導入補助金', amt: '450万円', use: '社内DXツール統合・RPA導入' },
+            { ind: '建設業', sub: 'IT導入補助金', amt: '450万円', use: '工程管理・原価管理クラウド導入' },
+            { ind: '宿泊業', sub: 'IT導入補助金', amt: '350万円', use: '自動チェックイン・多言語対応' },
+            { ind: '小売業', sub: 'IT導入補助金', amt: '300万円', use: 'POSレジ＋在庫管理クラウド導入' },
+            { ind: '運輸・物流業', sub: 'IT導入補助金', amt: '300万円', use: '配車管理・動態管理システム導入' },
+            { ind: '不動産業', sub: 'IT導入補助金', amt: '250万円', use: '物件管理・内見予約システム導入' },
+            { ind: '医療・福祉', sub: 'IT導入補助金', amt: '200万円', use: '電子カルテ・オンライン予約導入' },
+            { ind: '教育・学習支援', sub: 'IT導入補助金', amt: '200万円', use: 'オンライン授業・学習管理システム導入' },
+            { ind: '美容業', sub: 'IT導入補助金', amt: '150万円', use: '予約管理・顧客管理システム導入' },
+            { ind: '飲食業', sub: 'IT導入補助金', amt: '150万円', use: 'モバイルオーダー・POSシステム導入' },
+            { ind: '士業', sub: 'IT導入補助金', amt: '150万円', use: '案件管理・電子契約システム導入' },
+            { ind: '製造業', sub: '省力化投資補助金', amt: '800万円', use: '検品AI・ロボットアーム導入' },
+            { ind: '農業', sub: '省力化投資補助金', amt: '400万円', use: '自動灌水・ドローン農薬散布' },
+            { ind: '飲食業', sub: '持続化補助金', amt: '50万円', use: 'テイクアウト用ECサイト構築' },
+            { ind: '小売業', sub: '持続化補助金', amt: '50万円', use: 'ECサイト構築・SNS広告' },
+            { ind: 'サービス業', sub: 'IT導入補助金', amt: '200万円', use: '予約・顧客管理クラウド導入' },
+        ];
+        // シャッフル
+        for (var i = cases.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var t = cases[i]; cases[i] = cases[j]; cases[j] = t;
+        }
+        var track = document.getElementById('adoption-ticker-track');
+        if (!track) return;
+        var idx = 0;
+        function render() {
+            var c = cases[idx];
+            track.style.opacity = '0';
+            setTimeout(function() {
+                track.innerHTML = '<span class="ticker-industry">' + c.ind + '</span>' +
+                    '<span class="ticker-sub">' + c.sub + '</span>' +
+                    '<span class="ticker-amt">' + c.amt + '</span>' +
+                    '<span class="ticker-use">' + c.use + '</span>';
+                track.style.opacity = '1';
+            }, 300);
+            idx = (idx + 1) % cases.length;
+        }
+        render();
+        setInterval(render, 3000);
+    })();
+    </script>
+
     <!-- SNS広告用ヒーロー -->
     <section class="hero lp-sns-only">
         <div class="container">

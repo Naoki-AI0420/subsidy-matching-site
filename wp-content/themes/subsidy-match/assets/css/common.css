@@ -535,3 +535,81 @@ textarea.form-control {
         width: 100%;
     }
 }
+
+/* ========== 採択事例ティッカー（FV直下） ========== */
+.adoption-ticker {
+    background: #F0F4F8;
+    border-bottom: 1px solid #D8E2ED;
+    padding: 12px 0;
+    overflow: hidden;
+}
+
+.adoption-ticker-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 20px;
+}
+
+.adoption-ticker-label {
+    font-size: 12px;
+    color: #666666;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.adoption-ticker-track {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    transition: opacity 0.3s ease;
+}
+
+.ticker-industry {
+    font-size: 11px;
+    color: #FFFFFF;
+    background: #003366;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.ticker-sub {
+    font-size: 13px;
+    color: #003366;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.ticker-amt {
+    font-size: 16px;
+    font-weight: 700;
+    color: #C62828;
+    white-space: nowrap;
+}
+
+.ticker-use {
+    font-size: 12px;
+    color: #555555;
+}
+
+@media (max-width: 768px) {
+    .adoption-ticker-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 0 16px;
+    }
+
+    .adoption-ticker-track {
+        gap: 8px;
+    }
+
+    .ticker-amt {
+        font-size: 15px;
+    }
+}
