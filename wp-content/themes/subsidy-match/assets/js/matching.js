@@ -469,29 +469,43 @@
             { industry: '美容業', type: '小規模事業者持続化補助金', amount: '50万円', use: 'Instagram集客・LINE予約連携', result: '新規客60%増' },
         ];
 
-        // ユーザーの業種を最優先で表示 → 他業種をシャッフルして追加
+        // ユーザーの業種を最優先 → 他業種を高額順でランダム混ぜて表示
         var userIndustry = answers.industry || 'other';
-        var orderedCases = [];
 
-        // 自分の業種の事例を先頭に
-        if (allCases[userIndustry]) {
-            orderedCases = orderedCases.concat(allCases[userIndustry]);
-        }
-
-        // 他の業種から1件ずつランダムに追加
-        var otherKeys = Object.keys(allCases).filter(function(k) { return k !== userIndustry; });
-        // シャッフル
-        for (var si = otherKeys.length - 1; si > 0; si--) {
-            var sj = Math.floor(Math.random() * (si + 1));
-            var tmp = otherKeys[si]; otherKeys[si] = otherKeys[sj]; otherKeys[sj] = tmp;
-        }
-        otherKeys.forEach(function(k) {
-            // 各業種からランダムに1件選ぶ
-            var cases = allCases[k];
-            orderedCases.push(cases[Math.floor(Math.random() * cases.length)]);
+        // 全事例をフラットに展開
+        var allFlat = [];
+        Object.keys(allCases).forEach(function(k) {
+            allCases[k].forEach(function(c) {
+                c._isUserIndustry = (k === userIndustry);
+                c._amountNum = parseInt(c.amount.replace(/[^0-9]/g, ''), 10) || 0;
+                allFlat.push(c);
+            });
         });
 
-        var adoptionCases = orderedCases;
+        // ユーザー業種の事例（高額順）
+        var userCases = allFlat.filter(function(c) { return c._isUserIndustry; });
+        userCases.sort(function(a, b) { return b._amountNum - a._amountNum; });
+
+        // 他業種の事例（高額順ベース、ただしランダム性も入れる）
+        var otherCases = allFlat.filter(function(c) { return !c._isUserIndustry; });
+        // 高額順でソート
+        otherCases.sort(function(a, b) { return b._amountNum - a._amountNum; });
+        // 上位1/3はそのまま、残り2/3をシャッフル（高額が先に出つつランダム感も出す）
+        var topThird = Math.ceil(otherCases.length / 3);
+        var topCases = otherCases.slice(0, topThird);
+        var restCases = otherCases.slice(topThird);
+        for (var si = restCases.length - 1; si > 0; si--) {
+            var sj = Math.floor(Math.random() * (si + 1));
+            var tmp = restCases[si]; restCases[si] = restCases[sj]; restCases[sj] = tmp;
+        }
+        // 高額グループもシャッフル（毎回順序が変わるように）
+        for (var ti = topCases.length - 1; ti > 0; ti--) {
+            var tj = Math.floor(Math.random() * (ti + 1));
+            var ttmp = topCases[ti]; topCases[ti] = topCases[tj]; topCases[tj] = ttmp;
+        }
+
+        // 構成: ユーザー業種(高額順) → 高額他業種(シャッフル) → 残り(シャッフル)
+        var adoptionCases = userCases.concat(topCases).concat(restCases);
         var caseIndex = 0;
         resultContainer.innerHTML =
             '<div class="result-loading">' +
