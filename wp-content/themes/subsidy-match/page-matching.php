@@ -20,7 +20,7 @@ get_header();
             <div class="progress-track">
                 <div class="progress-bar" style="width: 0%"></div>
             </div>
-            <p class="progress-step">質問 <span class="current-step">1</span> / <span class="total-steps">14</span></p>
+            <p class="progress-step">質問 <span class="current-step">1</span> / <span class="total-steps">6</span></p>
         </div>
 
         <!-- チャットコンテナ -->
@@ -67,7 +67,7 @@ var modal=document.getElementById('exit-modal-matching'),closeBtn=document.getEl
 if(!modal)return;
 var CN='exit_popup_matching_shown',triggered=false;
 if(document.cookie.indexOf(CN+'=1')!==-1)return;
-function getRemaining(){var c=document.querySelector('.current-step'),t=document.querySelector('.total-steps');if(c&&t)return(parseInt(t.textContent,10)||14)-(parseInt(c.textContent,10)||1);return 10}
+function getRemaining(){var c=document.querySelector('.current-step'),t=document.querySelector('.total-steps');if(c&&t)return(parseInt(t.textContent,10)||6)-(parseInt(c.textContent,10)||1);return 3}
 function show(){if(triggered)return;var r=document.querySelector('.result-container');if(r&&r.style.display!=='none')return;triggered=true;var rem=getRemaining();if(descEl)descEl.innerHTML='あと <strong>'+rem+'問</strong> で結果がわかります！<br>御社に合った補助金情報を見逃さないでください。';modal.style.display='flex';var d=new Date();d.setTime(d.getTime()+864e5);document.cookie=CN+'=1;expires='+d.toUTCString()+';path=/'}
 function hide(){modal.style.display='none'}
 document.addEventListener('mouseleave',function(e){if(e.clientY<10)show()});

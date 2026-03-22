@@ -244,70 +244,7 @@
     border-color: #003366;
 }
 
-/* 複数選択用チェックボックスボタン */
-.chat-option-btn-multi {
-    position: relative;
-    padding-left: 42px;
-}
-
-.chat-option-btn-multi::before {
-    content: '';
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 18px;
-    height: 18px;
-    border: 2px solid #003366;
-    border-radius: 3px;
-    background: #FFFFFF;
-    box-sizing: border-box;
-}
-
-.chat-option-btn-multi.selected::before {
-    background: #FFFFFF;
-    border-color: #FFFFFF;
-}
-
-.chat-option-btn-multi.selected::after {
-    content: '';
-    position: absolute;
-    left: 18px;
-    top: 50%;
-    transform: translateY(-60%) rotate(45deg);
-    width: 6px;
-    height: 10px;
-    border: solid #003366;
-    border-width: 0 2px 2px 0;
-}
-
-/* 複数選択の確定ボタン */
-.chat-confirm-btn {
-    display: block;
-    width: 100%;
-    padding: 14px 16px;
-    background: #003366;
-    border: none;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 700;
-    color: #FFFFFF;
-    cursor: pointer;
-    margin-top: 4px;
-    transition: background-color 0.15s;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.chat-confirm-btn:hover {
-    background: #004080;
-}
-
-.chat-confirm-btn:disabled {
-    background: #CCCCCC;
-    cursor: not-allowed;
-}
-
-/* セレクトボックス（都道府県・業種） */
+/* セレクトボックス */
 .chat-select-wrapper {
     display: flex;
     gap: 8px;
@@ -356,6 +293,60 @@
 .chat-select-btn:disabled {
     background: #CCCCCC;
     cursor: not-allowed;
+}
+
+/* テキスト入力 */
+.chat-text-input {
+    flex: 1;
+    padding: 14px 16px;
+    font-size: 16px;
+    border: 2px solid #003366;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: #333333;
+    box-sizing: border-box;
+}
+
+.chat-text-input:focus {
+    outline: none;
+    border-color: #0056b3;
+}
+
+.chat-text-input::placeholder {
+    color: #AAAAAA;
+}
+
+/* サジェストUI */
+.chat-suggest-wrapper {
+    position: relative;
+}
+
+.suggest-list {
+    position: absolute;
+    background: #FFFFFF;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+
+.suggest-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    border-bottom: 1px solid #F0F0F0;
+}
+
+.suggest-item:last-child {
+    border-bottom: none;
+}
+
+.suggest-item:hover {
+    background: #EBF0F5;
 }
 
 /* メール入力 */
@@ -433,50 +424,208 @@
     cursor: not-allowed;
 }
 
-/* チャット内結果サマリー */
-.chat-result-summary {
+/* ============================================
+   結果表示 — リードゲート
+   ============================================ */
+
+.result-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+/* 結果バナー */
+.result-banner {
+    text-align: center;
+    padding: 32px 20px;
     background: linear-gradient(135deg, #003366, #004d99);
+    border-radius: 16px;
+    margin-bottom: 24px;
     color: #FFFFFF;
-    padding: 20px;
-    border-radius: 12px;
-    margin: 4px 0;
+    animation: chatFadeIn 0.5s ease;
 }
 
-.chat-result-summary h4 {
-    font-size: 16px;
+.result-banner-icon {
+    font-size: 48px;
+    margin-bottom: 8px;
+}
+
+.result-banner-title {
+    font-size: 24px;
     font-weight: 700;
-    margin: 0 0 12px;
+    margin: 0 0 8px;
     color: #FFFFFF;
 }
 
-.chat-result-item {
+.result-banner-title strong {
+    color: #FFD54F;
+    font-size: 32px;
+}
+
+.result-banner-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    margin: 0;
+}
+
+/* 補助金カード */
+.subsidy-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-left: 4px solid #003366;
+}
+
+.subsidy-card[data-match="high"] {
+    border-left-color: #2E7D32;
+}
+
+.subsidy-card[data-match="low"] {
+    border-left-color: #999999;
+}
+
+.subsidy-card-header {
     display: flex;
     justify-content: space-between;
-    padding: 6px 0;
-    font-size: 14px;
-    border-bottom: 1px solid rgba(255,255,255,0.15);
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
 }
 
-.chat-result-item:last-child {
-    border-bottom: none;
-}
-
-.chat-result-value {
+.subsidy-card-title {
+    font-size: 16px;
     font-weight: 700;
-    color: #FFD54F;
+    color: #003366;
+    margin: 0;
+    flex: 1;
 }
 
-/* チャット内CTA */
-.chat-cta-area {
+.subsidy-card-badge {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+
+.badge-high {
+    background: #E8F5E9;
+    color: #2E7D32;
+}
+
+.badge-medium {
+    background: #E3F2FD;
+    color: #1565C0;
+}
+
+.badge-low {
+    background: #F5F5F5;
+    color: #666666;
+}
+
+.subsidy-card-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.subsidy-detail-item {
+    display: flex;
+    flex-direction: column;
+    background: #F8F9FA;
+    padding: 8px 12px;
+    border-radius: 6px;
+    min-width: 100px;
+    flex: 1;
+}
+
+.subsidy-detail-label {
+    font-size: 11px;
+    color: #888888;
+    margin-bottom: 2px;
+}
+
+.subsidy-detail-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: #333333;
+}
+
+.subsidy-card-summary {
+    font-size: 13px;
+    color: #555555;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.subsidy-card-meta {
+    margin-top: 8px;
+}
+
+.subsidy-card-deadline {
+    font-size: 12px;
+    color: #C62828;
+    font-weight: 600;
+}
+
+/* すりガラスモザイク */
+.blurred-results-wrapper {
+    position: relative;
+}
+
+.blurred-results-inner {
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: filter 0.5s ease;
+}
+
+.blurred-results-wrapper.revealed .blurred-results-inner {
+    filter: none;
+    -webkit-filter: none;
+    pointer-events: auto;
+    user-select: auto;
+    -webkit-user-select: auto;
+}
+
+.blurred-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.85) 40%, rgba(255,255,255,0.95) 100%);
+}
+
+.blurred-overlay-content {
     text-align: center;
-    padding: 16px 0 8px;
+    padding: 32px 24px;
 }
 
-.chat-cta-btn {
+.blurred-overlay-text {
+    font-size: 16px;
+    color: #333333;
+    margin: 0 0 20px;
+    line-height: 1.6;
+}
+
+.blurred-overlay-text strong {
+    color: #C62828;
+}
+
+.blurred-overlay-btn {
     display: inline-block;
-    width: 100%;
-    max-width: 400px;
-    padding: 18px 24px;
+    padding: 18px 40px;
     background: linear-gradient(135deg, #C62828, #E53935);
     color: #FFFFFF;
     font-size: 17px;
@@ -484,37 +633,137 @@
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    text-decoration: none;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(198,40,40,0.3);
+    box-shadow: 0 4px 16px rgba(198,40,40,0.3);
     transition: transform 0.15s, box-shadow 0.15s;
     -webkit-tap-highlight-color: transparent;
     animation: ctaPulse 2s infinite;
 }
 
-.chat-cta-btn:hover {
+.blurred-overlay-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(198,40,40,0.4);
+    box-shadow: 0 6px 20px rgba(198,40,40,0.4);
 }
 
 @keyframes ctaPulse {
-    0%, 100% { box-shadow: 0 4px 12px rgba(198,40,40,0.3); }
-    50% { box-shadow: 0 4px 20px rgba(198,40,40,0.5); }
+    0%, 100% { box-shadow: 0 4px 16px rgba(198,40,40,0.3); }
+    50% { box-shadow: 0 4px 24px rgba(198,40,40,0.5); }
 }
 
-.chat-cta-sub {
-    display: block;
-    margin-top: 10px;
+/* ============================================
+   システム興味質問
+   ============================================ */
+
+.system-interest-section {
+    margin-top: 32px;
+    animation: chatFadeIn 0.5s ease;
 }
 
-.chat-cta-sub a {
-    font-size: 14px;
-    color: #0056b3;
-    text-decoration: underline;
+.system-interest-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.system-interest-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #003366;
+    margin: 0 0 16px;
+}
+
+.system-interest-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.system-interest-btn {
+    padding: 12px 24px;
+    background: #FFFFFF;
+    border: 2px solid #003366;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #003366;
     cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* Responsive */
+.system-interest-btn:hover {
+    background: #EBF0F5;
+}
+
+.system-interest-btn.selected {
+    background: #003366;
+    color: #FFFFFF;
+}
+
+/* ============================================
+   最終CTA
+   ============================================ */
+
+.final-cta-section {
+    margin-top: 24px;
+    animation: chatFadeIn 0.5s ease;
+}
+
+.final-cta-card {
+    background: linear-gradient(135deg, #003366, #004d99);
+    border-radius: 12px;
+    padding: 32px 24px;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.final-cta-text {
+    font-size: 15px;
+    line-height: 1.7;
+    margin: 0 0 24px;
+    color: rgba(255,255,255,0.9);
+}
+
+.final-cta-text strong {
+    color: #FFD54F;
+}
+
+.final-cta-btn {
+    display: inline-block;
+    padding: 18px 48px;
+    background: linear-gradient(135deg, #C62828, #E53935);
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(198,40,40,0.3);
+    transition: transform 0.15s, box-shadow 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    animation: ctaPulse 2s infinite;
+}
+
+.final-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(198,40,40,0.4);
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+.final-cta-note {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin: 12px 0 0;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
 @media (max-width: 768px) {
     .matching-page {
         padding: 12px 0 24px;
@@ -568,14 +817,58 @@
         font-size: 14px;
     }
 
-    .chat-option-btn-multi {
-        padding-left: 38px;
-    }
-
     .chat-select,
+    .chat-text-input,
     .chat-email-input {
         font-size: 16px; /* iOS zoom prevention */
         padding: 12px 14px;
+    }
+
+    .result-container {
+        padding: 0 12px;
+    }
+
+    .result-banner {
+        padding: 24px 16px;
+        border-radius: 12px;
+    }
+
+    .result-banner-title {
+        font-size: 20px;
+    }
+
+    .result-banner-title strong {
+        font-size: 28px;
+    }
+
+    .subsidy-card {
+        padding: 16px;
+    }
+
+    .subsidy-card-title {
+        font-size: 15px;
+    }
+
+    .subsidy-detail-item {
+        min-width: 80px;
+    }
+
+    .blurred-overlay-btn {
+        padding: 16px 32px;
+        font-size: 16px;
+    }
+
+    .system-interest-buttons {
+        flex-direction: column;
+    }
+
+    .system-interest-btn {
+        width: 100%;
+    }
+
+    .final-cta-btn {
+        padding: 16px 32px;
+        font-size: 16px;
     }
 }
 
@@ -593,8 +886,50 @@
         font-size: 13px;
     }
 
-    .chat-cta-btn {
+    .result-banner {
+        padding: 20px 12px;
+    }
+
+    .result-banner-title {
+        font-size: 18px;
+    }
+
+    .result-banner-title strong {
+        font-size: 24px;
+    }
+
+    .subsidy-card {
+        padding: 14px;
+    }
+
+    .subsidy-card-header {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .blurred-overlay-content {
+        padding: 24px 16px;
+    }
+
+    .blurred-overlay-text {
+        font-size: 14px;
+    }
+
+    .blurred-overlay-btn {
+        padding: 14px 24px;
         font-size: 15px;
-        padding: 16px 20px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .final-cta-card {
+        padding: 24px 16px;
+    }
+
+    .final-cta-btn {
+        padding: 14px 24px;
+        font-size: 15px;
+        width: 100%;
+        box-sizing: border-box;
     }
 }

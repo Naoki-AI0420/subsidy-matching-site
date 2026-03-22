@@ -6,9 +6,10 @@
 (function () {
     'use strict';
 
-    var TOTAL_STEPS = 14;
+    var TOTAL_STEPS = 6;
     var currentStep = 0;
     var answers = {};
+    var matchResults = null; // API結果を保持
 
     // 業種→最大金額マッピング（チラ見せ用）
     var industryAmountMap = {
@@ -35,16 +36,74 @@
         real_estate: '不動産業', agriculture: '農業・林業・漁業', other: 'その他'
     };
 
-    var employeeMatchCount = {
-        '1-5': 8, '6-20': 12, '21-50': 15, '51-100': 18, '101+': 22
+    var industryMatchCount = {
+        manufacturing: 15, construction: 12, information_technology: 18,
+        wholesale_retail: 10, food_service: 8, accommodation: 9,
+        medical_welfare: 14, education: 7, professional_services: 11,
+        transportation: 8, real_estate: 6, agriculture: 9, other: 8
     };
 
-    var challengeSubsidyCount = {
-        equipment: 25, it_dx: 30, hiring: 15, overseas: 10, rnd: 20, succession: 8
-    };
+    // 47都道府県
+    var prefectures = [
+        '北海道','青森県','岩手県','宮城県','秋田県','山形県','福島県',
+        '茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県',
+        '新潟県','富山県','石川県','福井県','山梨県','長野県',
+        '岐阜県','静岡県','愛知県','三重県',
+        '滋賀県','京都府','大阪府','兵庫県','奈良県','和歌山県',
+        '鳥取県','島根県','岡山県','広島県','山口県',
+        '徳島県','香川県','愛媛県','高知県',
+        '福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県'
+    ];
 
-    var revenueEstimate = {
-        under_10m: '100', '10m_50m': '300', '50m_100m': '500', '100m_500m': '800', over_500m: '1,500'
+    // 主要都市サジェスト
+    var majorCities = {
+        '北海道': ['札幌市','旭川市','函館市','釧路市','帯広市','小樽市','北見市','苫小牧市'],
+        '青森県': ['青森市','八戸市','弘前市'],
+        '岩手県': ['盛岡市','一関市','奥州市'],
+        '宮城県': ['仙台市','石巻市','大崎市'],
+        '秋田県': ['秋田市','横手市','大仙市'],
+        '山形県': ['山形市','鶴岡市','酒田市'],
+        '福島県': ['福島市','郡山市','いわき市'],
+        '茨城県': ['水戸市','つくば市','日立市','土浦市'],
+        '栃木県': ['宇都宮市','小山市','栃木市'],
+        '群馬県': ['前橋市','高崎市','太田市','伊勢崎市'],
+        '埼玉県': ['さいたま市','川口市','川越市','所沢市','越谷市','草加市','春日部市','上尾市','熊谷市'],
+        '千葉県': ['千葉市','船橋市','松戸市','市川市','柏市','市原市','八千代市','流山市'],
+        '東京都': ['千代田区','中央区','港区','新宿区','文京区','台東区','墨田区','江東区','品川区','目黒区','大田区','世田谷区','渋谷区','中野区','杉並区','豊島区','北区','荒川区','板橋区','練馬区','足立区','葛飾区','江戸川区','八王子市','立川市','武蔵野市','三鷹市','府中市','調布市','町田市'],
+        '神奈川県': ['横浜市','川崎市','相模原市','藤沢市','横須賀市','平塚市','茅ヶ崎市','厚木市','大和市'],
+        '新潟県': ['新潟市','長岡市','上越市'],
+        '富山県': ['富山市','高岡市'],
+        '石川県': ['金沢市','白山市','小松市'],
+        '福井県': ['福井市','坂井市'],
+        '山梨県': ['甲府市','甲斐市'],
+        '長野県': ['長野市','松本市','上田市'],
+        '岐阜県': ['岐阜市','大垣市','各務原市'],
+        '静岡県': ['静岡市','浜松市','富士市','沼津市'],
+        '愛知県': ['名古屋市','豊田市','岡崎市','一宮市','豊橋市','春日井市','安城市'],
+        '三重県': ['津市','四日市市','鈴鹿市'],
+        '滋賀県': ['大津市','草津市','長浜市'],
+        '京都府': ['京都市','宇治市','亀岡市'],
+        '大阪府': ['大阪市','堺市','東大阪市','豊中市','枚方市','吹田市','高槻市','茨木市','八尾市'],
+        '兵庫県': ['神戸市','姫路市','西宮市','尼崎市','明石市','加古川市','宝塚市'],
+        '奈良県': ['奈良市','橿原市','生駒市'],
+        '和歌山県': ['和歌山市','田辺市'],
+        '鳥取県': ['鳥取市','米子市'],
+        '島根県': ['松江市','出雲市'],
+        '岡山県': ['岡山市','倉敷市','津山市'],
+        '広島県': ['広島市','福山市','呉市','東広島市'],
+        '山口県': ['下関市','山口市','周南市'],
+        '徳島県': ['徳島市','阿南市'],
+        '香川県': ['高松市','丸亀市'],
+        '愛媛県': ['松山市','今治市','新居浜市'],
+        '高知県': ['高知市','南国市'],
+        '福岡県': ['福岡市','北九州市','久留米市','飯塚市','春日市','大野城市'],
+        '佐賀県': ['佐賀市','唐津市'],
+        '長崎県': ['長崎市','佐世保市'],
+        '熊本県': ['熊本市','八代市'],
+        '大分県': ['大分市','別府市'],
+        '宮崎県': ['宮崎市','都城市','延岡市'],
+        '鹿児島県': ['鹿児島市','霧島市'],
+        '沖縄県': ['那覇市','沖縄市','うるま市','浦添市','宜野湾市']
     };
 
     // SVGアイコン（官公庁風）
@@ -58,34 +117,29 @@
     var progressBar = document.querySelector('.progress-bar');
     var progressPercent = document.querySelector('.progress-percent');
     var currentStepEl = document.querySelector('.current-step');
+    var totalStepsEl = document.querySelector('.total-steps');
     var chatMessages = document.getElementById('chat-messages');
     var chatInputArea = document.getElementById('chat-input-area');
     var resultContainer = document.querySelector('.result-container');
     var progressContainer = document.querySelector('.progress-container');
 
-    // 質問定義
+    // 質問定義（6問）
     var questions = [
         {}, // index 0 unused
         {
-            type: 'select',
+            type: 'suggest',
             key: 'prefecture',
-            question: '会社の所在地を教えてください',
-            sub: '都道府県をお選びください',
-            placeholder: '選択してください',
-            options: [
-                {v:'01',l:'北海道'},{v:'02',l:'青森県'},{v:'03',l:'岩手県'},{v:'04',l:'宮城県'},
-                {v:'05',l:'秋田県'},{v:'06',l:'山形県'},{v:'07',l:'福島県'},{v:'08',l:'茨城県'},
-                {v:'09',l:'栃木県'},{v:'10',l:'群馬県'},{v:'11',l:'埼玉県'},{v:'12',l:'千葉県'},
-                {v:'13',l:'東京都'},{v:'14',l:'神奈川県'},{v:'15',l:'新潟県'},{v:'16',l:'富山県'},
-                {v:'17',l:'石川県'},{v:'18',l:'福井県'},{v:'19',l:'山梨県'},{v:'20',l:'長野県'},
-                {v:'21',l:'岐阜県'},{v:'22',l:'静岡県'},{v:'23',l:'愛知県'},{v:'24',l:'三重県'},
-                {v:'25',l:'滋賀県'},{v:'26',l:'京都府'},{v:'27',l:'大阪府'},{v:'28',l:'兵庫県'},
-                {v:'29',l:'奈良県'},{v:'30',l:'和歌山県'},{v:'31',l:'鳥取県'},{v:'32',l:'島根県'},
-                {v:'33',l:'岡山県'},{v:'34',l:'広島県'},{v:'35',l:'山口県'},{v:'36',l:'徳島県'},
-                {v:'37',l:'香川県'},{v:'38',l:'愛媛県'},{v:'39',l:'高知県'},{v:'40',l:'福岡県'},
-                {v:'41',l:'佐賀県'},{v:'42',l:'長崎県'},{v:'43',l:'熊本県'},{v:'44',l:'大分県'},
-                {v:'45',l:'宮崎県'},{v:'46',l:'鹿児島県'},{v:'47',l:'沖縄県'}
-            ]
+            question: '会社の所在地（都道府県）を教えてください',
+            sub: '都道府県名を入力してください',
+            placeholder: '例：東京都',
+            candidates: prefectures
+        },
+        {
+            type: 'text',
+            key: 'city',
+            question: '市区町村を教えてください',
+            sub: '市区町村名を入力してください',
+            placeholder: '例：渋谷区'
         },
         {
             type: 'select',
@@ -105,6 +159,17 @@
         },
         {
             type: 'radio',
+            key: 'capital',
+            question: '資本金を教えてください',
+            sub: '該当する範囲をお選びください',
+            options: [
+                {v:'under_3m',l:'300万円未満'},{v:'3m_10m',l:'300万〜1,000万円'},
+                {v:'10m_50m',l:'1,000万〜5,000万円'},{v:'50m_100m',l:'5,000万〜1億円'},
+                {v:'over_100m',l:'1億円以上'}
+            ]
+        },
+        {
+            type: 'radio',
             key: 'employee_size',
             question: '従業員数を教えてください',
             sub: 'パート・アルバイトを含む人数をお選びください',
@@ -115,112 +180,14 @@
         },
         {
             type: 'radio',
-            key: 'capital',
-            question: '資本金を教えてください',
+            key: 'establishment_years',
+            question: '設立からの年数を教えてください',
             sub: '該当する範囲をお選びください',
             options: [
-                {v:'under_3m',l:'300万円未満'},{v:'3m_10m',l:'300万〜1,000万円'},
-                {v:'10m_30m',l:'1,000万〜3,000万円'},{v:'30m_100m',l:'3,000万〜1億円'},
-                {v:'over_100m',l:'1億円以上'}
+                {v:'under_1',l:'1年未満'},{v:'1_3',l:'1〜3年'},
+                {v:'3_5',l:'3〜5年'},{v:'5_10',l:'5〜10年'},
+                {v:'over_10',l:'10年以上'}
             ]
-        },
-        {
-            type: 'multi',
-            key: 'challenges',
-            question: '現在の経営課題を教えてください',
-            sub: '該当するものを全てお選びください（複数選択可）',
-            options: [
-                {v:'equipment',l:'設備投資がしたい'},{v:'it_dx',l:'IT化・DXを進めたい'},
-                {v:'hiring',l:'人材を採用したい'},{v:'overseas',l:'海外展開を考えている'},
-                {v:'rnd',l:'研究開発をしたい'},{v:'succession',l:'事業承継を考えている'}
-            ]
-        },
-        {
-            type: 'radio',
-            key: 'dx_schedule',
-            question: '予約やスケジュール管理はどのようにされていますか？',
-            sub: '現在のご状況に最も近いものをお選びください',
-            options: [
-                {v:'paper',l:'紙の台帳・ノート'},{v:'excel',l:'Excel・スプレッドシート'},
-                {v:'system',l:'専用システム・アプリ'},{v:'none',l:'特に管理していない'}
-            ]
-        },
-        {
-            type: 'radio',
-            key: 'dx_invoice',
-            question: '請求書・見積書の作成方法を教えてください',
-            sub: '現在のご状況に最も近いものをお選びください',
-            options: [
-                {v:'handwrite',l:'手書き・紙ベース'},{v:'excel',l:'Excel・Word'},
-                {v:'cloud',l:'クラウド会計・請求ソフト'}
-            ]
-        },
-        {
-            type: 'radio',
-            key: 'dx_crm',
-            question: '顧客情報の管理方法を教えてください',
-            sub: '現在のご状況に最も近いものをお選びください',
-            options: [
-                {v:'paper',l:'紙・名刺ファイル'},{v:'excel',l:'Excel・スプレッドシート'},
-                {v:'crm',l:'CRM・顧客管理システム'},{v:'none',l:'特に管理していない'}
-            ]
-        },
-        {
-            type: 'radio',
-            key: 'dx_ec',
-            question: 'ECサイトやオンライン販売は行っていますか？',
-            sub: '現在のご状況に最も近いものをお選びください',
-            options: [
-                {v:'active',l:'運用している'},{v:'considering',l:'検討中・準備中'},
-                {v:'none',l:'行っていない'}
-            ]
-        },
-        {
-            type: 'radio',
-            key: 'dx_communication',
-            question: '社内の情報共有はどのようにされていますか？',
-            sub: '主な連絡・共有手段をお選びください',
-            options: [
-                {v:'verbal',l:'口頭・電話中心'},{v:'email',l:'メール中心'},
-                {v:'chat',l:'チャットツール（Slack等）'},{v:'groupware',l:'グループウェア導入済'}
-            ]
-        },
-        {
-            type: 'multi',
-            key: 'dx_pain',
-            question: '現在、特に困っていることはありますか？',
-            sub: '該当するものを全てお選びください（複数選択可）',
-            options: [
-                {v:'labor_shortage',l:'人手不足'},{v:'sales_decline',l:'売上低下'},
-                {v:'cost_reduction',l:'コスト削減'},{v:'efficiency',l:'業務効率化'},
-                {v:'new_business',l:'新規事業の立ち上げ'}
-            ]
-        },
-        {
-            type: 'radio',
-            key: 'annual_revenue',
-            question: '年間売上規模を教えてください',
-            sub: '直近の事業年度の売上高をお選びください',
-            options: [
-                {v:'under_10m',l:'1,000万円未満'},{v:'10m_50m',l:'1,000万〜5,000万円'},
-                {v:'50m_100m',l:'5,000万〜1億円'},{v:'100m_500m',l:'1億〜5億円'},
-                {v:'over_500m',l:'5億円以上'}
-            ]
-        },
-        {
-            type: 'radio',
-            key: 'has_experience',
-            question: 'これまでに補助金を申請されたことはありますか？',
-            sub: '過去の申請経験の有無をお選びください',
-            options: [
-                {v:'1',l:'はい、申請したことがある'},{v:'0',l:'いいえ、初めて'}
-            ]
-        },
-        {
-            type: 'email',
-            key: 'email',
-            question: 'メールアドレスを入力してください',
-            sub: '診断結果をお送りいたします'
         }
     ];
 
@@ -228,75 +195,30 @@
     function getReaction(step) {
         switch (step) {
             case 1:
-                return 'ありがとうございます！';
+                var pref = answers.prefecture || '';
+                return pref + 'ですね！地域の補助金もチェックしますね。';
             case 2:
-                var label = industryLabelMap[answers.industry] || '';
-                var info = industryAmountMap[answers.industry];
-                if (info) {
-                    return label + 'ですね！' + label + 'の企業では平均<strong>' + (employeeMatchCount['6-20'] || 12) + '件</strong>の補助金に該当していますよ。';
-                }
                 return 'ありがとうございます！';
             case 3:
-                var count = employeeMatchCount[answers.employee_size] || 10;
-                var info3 = industryAmountMap[answers.industry];
-                var maxAmt = info3 ? info3.amount : '200万円';
-                return 'その規模の企業では、最大<strong>' + maxAmt + '</strong>の補助金が活用できる可能性があります！';
+                var label = industryLabelMap[answers.industry] || '';
+                var matchCount = industryMatchCount[answers.industry] || 8;
+                return label + 'ですね！' + label + 'の企業では平均<strong>' + matchCount + '件</strong>の補助金に該当していますよ。';
             case 4:
                 return 'ありがとうございます！続けてお聞きしますね。';
             case 5:
-                var challengeLabels = {
-                    equipment: '設備投資', it_dx: 'IT化・DX', hiring: '人材採用',
-                    overseas: '海外展開', rnd: '研究開発', succession: '事業承継'
-                };
-                var selected = answers.challenges || [];
-                var firstLabel = challengeLabels[selected[0]] || '経営課題';
-                var totalCount = 0;
-                selected.forEach(function(c) { totalCount += challengeSubsidyCount[c] || 5; });
-                return 'なるほど、<strong>' + firstLabel + '</strong>に取り組まれているんですね。関連する補助金だけでも<strong>' + totalCount + '件以上</strong>ありそうです！';
-            case 6:
-                if (answers.dx_schedule === 'paper' || answers.dx_schedule === 'none') {
-                    return 'まだ紙やアナログで管理されているんですね。補助金を使えば<strong>実質半額</strong>でシステム導入できますよ！';
-                }
-                return 'ありがとうございます！次の質問です。';
-            case 7:
-                if (answers.dx_invoice === 'handwrite') {
-                    return '手書きは大変ですよね。クラウド会計ソフトなら補助金で<strong>実質1/4の費用</strong>で導入できます！';
-                }
-                return '承知しました！続けてお伺いします。';
-            case 8:
-                return 'ありがとうございます！あともう少しです。';
-            case 9:
-                return '承知しました！';
-            case 10:
-                return 'ありがとうございます！残りわずかです。';
-            case 11:
-                var painLabels = {
-                    labor_shortage: '人手不足', sales_decline: '売上低下',
-                    cost_reduction: 'コスト削減', efficiency: '業務効率化',
-                    new_business: '新規事業'
-                };
-                var pains = answers.dx_pain || [];
-                var painLabel = painLabels[pains[0]] || 'お悩み';
-                return '<strong>' + painLabel + '</strong>は多くの企業が直面している課題です。補助金を活用した解決策をご提案できます！';
-            case 12:
-                var est = revenueEstimate[answers.annual_revenue] || '200';
-                return '御社の規模感では、年間<strong>' + est + '万円</strong>の補助金活用が見込めます！';
-            case 13:
-                if (answers.has_experience === '0') {
-                    return '初めてでもご安心ください。専門家がしっかりサポートいたします！';
-                }
-                return '申請経験がおありなんですね。さらにぴったりな補助金を見つけましょう！';
+                return 'もう少しで完了です！あと<strong>1問</strong>です。';
             default:
                 return 'ありがとうございます！';
         }
     }
 
     function init() {
+        if (totalStepsEl) totalStepsEl.textContent = TOTAL_STEPS;
         startConversation();
     }
 
     function startConversation() {
-        addAiMessage('こんにちは！補助金・助成金の<strong>無料診断</strong>を始めます。いくつか質問させてください。', function() {
+        addAiMessage('こんにちは！補助金・助成金の<strong>無料診断</strong>を始めます。<strong>6つ</strong>の質問に答えるだけで、あなたに合った補助金がわかります！', function() {
             currentStep = 1;
             updateProgress();
             askQuestion(1);
@@ -305,13 +227,11 @@
 
     // AIメッセージ追加（タイピングインジケーター付き）
     function addAiMessage(html, callback) {
-        // 名前ラベル
         var nameDiv = document.createElement('div');
         nameDiv.className = 'chat-ai-name';
-        nameDiv.textContent = '補助金アドバイザー';
+        nameDiv.textContent = 'あかり｜補助金アドバイザー';
         chatMessages.appendChild(nameDiv);
 
-        // タイピングインジケーター
         var typingRow = document.createElement('div');
         typingRow.className = 'chat-typing';
         typingRow.innerHTML = '<div class="chat-avatar">' + avatarSvg + '</div>' +
@@ -368,17 +288,197 @@
     function renderInput(step, q) {
         chatInputArea.innerHTML = '';
 
-        if (q.type === 'select') {
+        if (q.type === 'suggest') {
+            renderSuggest(step, q);
+        } else if (q.type === 'text') {
+            renderTextInput(step, q);
+        } else if (q.type === 'select') {
             renderSelect(step, q);
         } else if (q.type === 'radio') {
             renderRadio(step, q);
-        } else if (q.type === 'multi') {
-            renderMulti(step, q);
-        } else if (q.type === 'email') {
-            renderEmail(step, q);
         }
 
         scrollToBottom();
+    }
+
+    // サジェスト付きテキスト入力（都道府県用）
+    function renderSuggest(step, q) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'chat-suggest-wrapper';
+
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'chat-text-input';
+        input.placeholder = q.placeholder || '';
+        input.setAttribute('autocomplete', 'off');
+
+        var suggestList = document.createElement('div');
+        suggestList.className = 'suggest-list';
+        suggestList.style.display = 'none';
+
+        var btn = document.createElement('button');
+        btn.className = 'chat-select-btn';
+        btn.textContent = '決定';
+        btn.disabled = true;
+
+        var inputRow = document.createElement('div');
+        inputRow.className = 'chat-select-wrapper';
+        inputRow.appendChild(input);
+        inputRow.appendChild(btn);
+
+        wrapper.appendChild(inputRow);
+        wrapper.appendChild(suggestList);
+
+        input.addEventListener('input', function() {
+            var val = input.value.trim();
+            suggestList.innerHTML = '';
+            if (!val) {
+                suggestList.style.display = 'none';
+                btn.disabled = true;
+                return;
+            }
+
+            var matches = q.candidates.filter(function(c) {
+                return c.indexOf(val) === 0;
+            });
+
+            if (matches.length > 0) {
+                matches.forEach(function(m) {
+                    var item = document.createElement('div');
+                    item.className = 'suggest-item';
+                    item.textContent = m;
+                    item.addEventListener('click', function() {
+                        input.value = m;
+                        suggestList.style.display = 'none';
+                        btn.disabled = false;
+                    });
+                    suggestList.appendChild(item);
+                });
+                suggestList.style.display = 'block';
+            } else {
+                suggestList.style.display = 'none';
+            }
+
+            // 完全一致チェック
+            btn.disabled = q.candidates.indexOf(val) === -1;
+        });
+
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !btn.disabled) {
+                e.preventDefault();
+                btn.click();
+            }
+        });
+
+        // 外側クリックでサジェスト閉じる
+        document.addEventListener('click', function closeSuggest(e) {
+            if (!wrapper.contains(e.target)) {
+                suggestList.style.display = 'none';
+                document.removeEventListener('click', closeSuggest);
+            }
+        });
+
+        btn.addEventListener('click', function() {
+            var val = input.value.trim();
+            if (q.candidates.indexOf(val) === -1) return;
+            answers[q.key] = val;
+            chatInputArea.innerHTML = '';
+            addUserMessage(val);
+            advanceStep(step);
+        });
+
+        chatInputArea.appendChild(wrapper);
+        input.focus();
+    }
+
+    // テキスト入力（市区町村用、サジェスト付き）
+    function renderTextInput(step, q) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'chat-suggest-wrapper';
+
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'chat-text-input';
+        input.placeholder = q.placeholder || '';
+        input.setAttribute('autocomplete', 'off');
+
+        var suggestList = document.createElement('div');
+        suggestList.className = 'suggest-list';
+        suggestList.style.display = 'none';
+
+        var btn = document.createElement('button');
+        btn.className = 'chat-select-btn';
+        btn.textContent = '決定';
+        btn.disabled = true;
+
+        var inputRow = document.createElement('div');
+        inputRow.className = 'chat-select-wrapper';
+        inputRow.appendChild(input);
+        inputRow.appendChild(btn);
+
+        wrapper.appendChild(inputRow);
+        wrapper.appendChild(suggestList);
+
+        // 選択された都道府県に基づくサジェスト
+        var cities = majorCities[answers.prefecture] || [];
+
+        input.addEventListener('input', function() {
+            var val = input.value.trim();
+            suggestList.innerHTML = '';
+            btn.disabled = !val;
+
+            if (!val || cities.length === 0) {
+                suggestList.style.display = 'none';
+                return;
+            }
+
+            var matches = cities.filter(function(c) {
+                return c.indexOf(val) === 0;
+            });
+
+            if (matches.length > 0) {
+                matches.forEach(function(m) {
+                    var item = document.createElement('div');
+                    item.className = 'suggest-item';
+                    item.textContent = m;
+                    item.addEventListener('click', function() {
+                        input.value = m;
+                        suggestList.style.display = 'none';
+                        btn.disabled = false;
+                    });
+                    suggestList.appendChild(item);
+                });
+                suggestList.style.display = 'block';
+            } else {
+                suggestList.style.display = 'none';
+            }
+        });
+
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !btn.disabled) {
+                e.preventDefault();
+                btn.click();
+            }
+        });
+
+        document.addEventListener('click', function closeSuggest(e) {
+            if (!wrapper.contains(e.target)) {
+                suggestList.style.display = 'none';
+                document.removeEventListener('click', closeSuggest);
+            }
+        });
+
+        btn.addEventListener('click', function() {
+            var val = input.value.trim();
+            if (!val) return;
+            answers[q.key] = val;
+            chatInputArea.innerHTML = '';
+            addUserMessage(val);
+            advanceStep(step);
+        });
+
+        chatInputArea.appendChild(wrapper);
+        input.focus();
     }
 
     // セレクトボックス型
@@ -446,96 +546,6 @@
         chatInputArea.appendChild(container);
     }
 
-    // 複数選択型
-    function renderMulti(step, q) {
-        var container = document.createElement('div');
-        container.className = 'chat-options';
-        var selected = [];
-
-        q.options.forEach(function(opt) {
-            var btn = document.createElement('button');
-            btn.className = 'chat-option-btn chat-option-btn-multi';
-            btn.textContent = opt.l;
-            btn.addEventListener('click', function() {
-                var idx = selected.indexOf(opt.v);
-                if (idx === -1) {
-                    selected.push(opt.v);
-                    btn.classList.add('selected');
-                } else {
-                    selected.splice(idx, 1);
-                    btn.classList.remove('selected');
-                }
-                confirmBtn.disabled = selected.length === 0;
-            });
-            container.appendChild(btn);
-        });
-
-        var confirmBtn = document.createElement('button');
-        confirmBtn.className = 'chat-confirm-btn';
-        confirmBtn.textContent = '決定する';
-        confirmBtn.disabled = true;
-        confirmBtn.addEventListener('click', function() {
-            if (selected.length === 0) return;
-            answers[q.key] = selected;
-            var labels = selected.map(function(v) {
-                var found = q.options.filter(function(o) { return o.v === v; });
-                return found.length ? found[0].l : v;
-            });
-            chatInputArea.innerHTML = '';
-            addUserMessage(labels.join('、'));
-            advanceStep(step);
-        });
-        container.appendChild(confirmBtn);
-
-        chatInputArea.appendChild(container);
-    }
-
-    // メール入力
-    function renderEmail(step, q) {
-        var wrapper = document.createElement('div');
-        wrapper.className = 'chat-email-wrapper';
-
-        var input = document.createElement('input');
-        input.type = 'email';
-        input.className = 'chat-email-input';
-        input.placeholder = 'example@company.co.jp';
-
-        var consentDiv = document.createElement('div');
-        consentDiv.className = 'chat-consent-group';
-        consentDiv.innerHTML = '<input type="checkbox" id="privacy-consent">' +
-            '<label for="privacy-consent"><a href="/privacy/" target="_blank" rel="noopener">個人情報の取り扱い</a>に同意する</label>';
-
-        var btn = document.createElement('button');
-        btn.className = 'chat-email-submit';
-        btn.textContent = '診断結果を見る';
-
-        btn.addEventListener('click', function() {
-            var email = input.value.trim();
-            var consentBox = document.getElementById('privacy-consent');
-
-            if (!consentBox.checked) {
-                consentDiv.classList.add('consent-error');
-                return;
-            }
-            consentDiv.classList.remove('consent-error');
-
-            if (!email || !isValidEmail(email)) {
-                input.style.borderColor = '#C62828';
-                return;
-            }
-
-            answers[q.key] = email;
-            chatInputArea.innerHTML = '';
-            addUserMessage(email);
-            advanceStep(step);
-        });
-
-        wrapper.appendChild(input);
-        wrapper.appendChild(consentDiv);
-        wrapper.appendChild(btn);
-        chatInputArea.appendChild(wrapper);
-    }
-
     // ステップ進行
     function advanceStep(completedStep) {
         if (completedStep < TOTAL_STEPS) {
@@ -560,9 +570,9 @@
         progressPercent.textContent = percent + '%';
         currentStepEl.textContent = currentStep;
 
-        if (currentStep >= 12) {
+        if (currentStep >= 5) {
             progressBar.style.background = 'linear-gradient(90deg, #2E7D32, #43A047)';
-        } else if (currentStep >= 8) {
+        } else if (currentStep >= 3) {
             progressBar.style.background = 'linear-gradient(90deg, #003366, #1565C0)';
         } else {
             progressBar.style.background = 'linear-gradient(90deg, #003366, #0056b3)';
@@ -597,74 +607,11 @@
     }
 
     /**
-     * DX課題を分析してレコメンドを生成
-     */
-    function analyzeDxChallenges() {
-        var issues = [];
-        var recommendations = [];
-
-        if (answers.dx_schedule === 'paper' || answers.dx_schedule === 'none') {
-            issues.push('予約・スケジュール管理がデジタル化されていません');
-            recommendations.push({ category: '予約管理システム導入', description: 'オンライン予約・スケジュール管理システムを導入することで、予約の取りこぼし防止と業務効率化を実現できます。', estimate: 50, subsidyRate: '最大3/4' });
-        } else if (answers.dx_schedule === 'excel') {
-            issues.push('予約・スケジュール管理がExcelベースで属人化のリスクがあります');
-            recommendations.push({ category: '予約管理システム導入', description: 'クラウド型予約管理システムへの移行で、リアルタイム共有と自動リマインドが可能になります。', estimate: 30, subsidyRate: '最大3/4' });
-        }
-
-        if (answers.dx_invoice === 'handwrite') {
-            issues.push('請求書・見積書が手書きで、作成に時間がかかっています');
-            recommendations.push({ category: 'クラウド会計・請求システム導入', description: 'クラウド会計ソフトの導入で、請求書の自動作成・送付、入金管理の効率化が実現できます。インボイス制度にも対応。', estimate: 35, subsidyRate: '最大3/4' });
-        } else if (answers.dx_invoice === 'excel') {
-            issues.push('請求業務がExcelベースで、転記ミスや管理負担が発生しています');
-            recommendations.push({ category: 'クラウド会計・請求システム導入', description: 'クラウド型請求・会計ソフトへの移行で、自動仕訳・電子帳簿保存法対応が可能になります。', estimate: 25, subsidyRate: '最大3/4' });
-        }
-
-        if (answers.dx_crm === 'paper' || answers.dx_crm === 'none') {
-            issues.push('顧客情報が一元管理されておらず、営業機会の損失リスクがあります');
-            recommendations.push({ category: 'CRM（顧客管理）システム導入', description: '顧客情報のデジタル一元管理により、適切なフォローアップと売上向上が期待できます。', estimate: 40, subsidyRate: '最大3/4' });
-        } else if (answers.dx_crm === 'excel') {
-            issues.push('顧客管理がExcelベースで、情報の共有・活用が限定的です');
-            recommendations.push({ category: 'CRM（顧客管理）システム導入', description: 'CRMシステムへの移行で、顧客対応履歴の共有と営業活動の可視化が実現できます。', estimate: 30, subsidyRate: '最大3/4' });
-        }
-
-        if (answers.dx_ec === 'none') {
-            issues.push('オンライン販売チャネルが未整備で、販路拡大の余地があります');
-            recommendations.push({ category: 'ECサイト構築', description: 'ECサイトの構築により、新たな販売チャネルを確保。24時間受注と全国への販路拡大が可能になります。', estimate: 100, subsidyRate: '最大2/3' });
-        } else if (answers.dx_ec === 'considering') {
-            issues.push('ECサイト導入を検討中 — 補助金活用で初期費用を大幅に抑えられます');
-            recommendations.push({ category: 'ECサイト構築', description: '補助金を活用したECサイト構築で、初期投資を抑えながらオンライン販売を開始できます。', estimate: 80, subsidyRate: '最大2/3' });
-        }
-
-        if (answers.dx_communication === 'verbal') {
-            issues.push('社内の情報共有が口頭中心で、伝達漏れや記録が残らないリスクがあります');
-            recommendations.push({ category: 'グループウェア・社内DX導入', description: 'ビジネスチャットやグループウェアの導入で、情報共有の迅速化と記録の蓄積が可能になります。', estimate: 20, subsidyRate: '最大3/4' });
-        } else if (answers.dx_communication === 'email') {
-            issues.push('情報共有がメール中心で、リアルタイム性と検索性に課題があります');
-            recommendations.push({ category: 'グループウェア・社内DX導入', description: 'グループウェアやプロジェクト管理ツールの導入で、業務の可視化と効率化が実現できます。', estimate: 15, subsidyRate: '最大3/4' });
-        }
-
-        var dxLevel = 'advanced';
-        var analogCount = 0;
-        if (answers.dx_schedule === 'paper' || answers.dx_schedule === 'none') analogCount++;
-        if (answers.dx_invoice === 'handwrite') analogCount++;
-        if (answers.dx_crm === 'paper' || answers.dx_crm === 'none') analogCount++;
-        if (answers.dx_ec === 'none') analogCount++;
-        if (answers.dx_communication === 'verbal') analogCount++;
-
-        if (analogCount >= 4) dxLevel = 'beginner';
-        else if (analogCount >= 2) dxLevel = 'developing';
-
-        return { issues: issues, recommendations: recommendations, dxLevel: dxLevel, painPoints: answers.dx_pain || [] };
-    }
-
-    /**
      * マッチング送信
      */
     function submitMatching() {
-        // GA4/GTM: フォーム送信イベント
         pushDataLayer('form_submit', { 'form_name': 'subsidy_matching' });
 
-        // チャットコンテナ内にローディング表示
         var chatContainer = document.getElementById('chat-container');
 
         // 採択事例カルーセル（ローディング中）
@@ -812,7 +759,8 @@
             .then(function (data) {
                 clearInterval(caseInterval);
                 if (data.success && data.results) {
-                    renderProposalResults(data.results, data.dx_analysis || null);
+                    matchResults = data.results;
+                    renderLeadGateResults(data.results);
                 } else {
                     renderFallbackResults();
                 }
@@ -824,157 +772,362 @@
     }
 
     /**
-     * 営業提案書レベルの結果描画
+     * リードゲート付き結果描画
+     * 1件目のみ表示、2件目以降はすりガラス
      */
-    function renderProposalResults(results, serverDxAnalysis) {
-        // GA4/GTM: 診断完了イベント
+    function renderLeadGateResults(results) {
         pushDataLayer('matching_complete');
 
-        var dx = analyzeDxChallenges();
+        matchResults = results;
         var html = '';
 
-        // ヘッダー
-        html += '<div class="proposal-header">';
-        html += '  <div class="proposal-header-badge">診断結果レポート</div>';
-        html += '  <h2>貴社の補助金・DX診断結果</h2>';
-        html += '  <p>ご回答内容をもとに、活用可能な補助金と最適なDX施策をご提案いたします</p>';
+        // バナー
+        html += '<div class="result-banner">';
+        html += '  <div class="result-banner-icon">\ud83c\udf89</div>';
+        html += '  <h2 class="result-banner-title"><strong>' + results.length + '件</strong>の補助金が見つかりました！</h2>';
+        html += '  <p class="result-banner-sub">あなたの条件に合った補助金・助成金です</p>';
         html += '</div>';
 
-        // ネクストアクションCTA（補助金リストの上）
-        html += '<div class="result-top-cta">';
-        html += '  <div class="result-top-cta-inner">';
-        html += '    <h3 class="result-top-cta-title">あなたに最適な補助金TOP3を専門家が無料で解説します</h3>';
-        html += '    <div class="result-top-cta-buttons">';
-        html += '      <a href="' + getContactUrl() + '" class="btn btn-primary btn-large">無料相談を予約する</a>';
-        html += '      <a href="' + getContactUrl() + '?ref=pdf" class="btn btn-secondary">診断結果をPDFで受け取る</a>';
-        html += '    </div>';
-        html += '  </div>';
-        html += '</div>';
+        // 1件目（完全表示）
+        if (results.length > 0) {
+            html += renderSubsidyCard(results[0], 0);
+        }
 
-        // 補助金セクション
-        html += '<section class="proposal-section">';
-        html += '  <div class="proposal-section-header"><h3>該当する補助金・助成金</h3><span class="proposal-section-count">' + results.length + '件</span></div>';
-
-        results.forEach(function (item) {
-            var matchClass = item.match_level || 'medium';
-            var badgeLabel = matchClass === 'high' ? '適合度：高' : matchClass === 'medium' ? '適合度：中' : '適合度：低';
-            var badgeClass = matchClass === 'high' ? 'badge-high' : matchClass === 'medium' ? 'badge-medium' : 'badge-low';
-
-            html += '<div class="subsidy-card" data-match="' + matchClass + '">';
-            html += '  <div class="subsidy-card-header"><h3 class="subsidy-card-title">' + escapeHtml(item.title) + '</h3><span class="subsidy-card-badge badge ' + badgeClass + '">' + badgeLabel + '</span></div>';
-            html += '  <div class="subsidy-card-details">';
-            html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">補助上限額</span><span class="subsidy-detail-value">' + (item.amount_text || formatAmount(item.max_amount)) + '</span></div>';
-            html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">補助率</span><span class="subsidy-detail-value">' + escapeHtml(item.rate || '-') + '</span></div>';
-            if (item.adoption_rate) {
-                html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">採択率</span><span class="subsidy-detail-value">' + Math.round(item.adoption_rate * 100) + '%</span></div>';
-            }
-            if (item.eligible_entities) {
-                html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">対象事業者</span><span class="subsidy-detail-value">' + escapeHtml(item.eligible_entities) + '</span></div>';
-            }
-            if (item.purpose) {
-                html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">目的</span><span class="subsidy-detail-value">' + escapeHtml(item.purpose) + '</span></div>';
-            }
-            if (item.eligible_expenses) {
-                html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">対象経費</span><span class="subsidy-detail-value">' + escapeHtml(item.eligible_expenses) + '</span></div>';
-            }
-            if (item.implementing_agency) {
-                html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">実施機関</span><span class="subsidy-detail-value">' + escapeHtml(item.implementing_agency) + '</span></div>';
+        // 2件目以降（すりガラス）
+        if (results.length > 1) {
+            html += '<div class="blurred-results-wrapper" id="blurred-results">';
+            html += '  <div class="blurred-results-inner">';
+            for (var i = 1; i < results.length; i++) {
+                html += renderSubsidyCard(results[i], i);
             }
             html += '  </div>';
-            html += '  <p class="subsidy-card-summary">' + escapeHtml(item.summary || '') + '</p>';
-            if (item.deadline) {
-                html += '  <div class="subsidy-card-meta"><span class="subsidy-card-deadline">申請期間: ' + escapeHtml(item.deadline) + '</span></div>';
-            }
-            if (item.official_url) {
-                html += '  <a href="' + escapeHtml(item.official_url) + '" target="_blank" rel="noopener" class="subsidy-card-link">公募要領を確認する \u2192</a>';
-            }
+            html += '  <div class="blurred-overlay" id="blurred-overlay">';
+            html += '    <div class="blurred-overlay-content">';
+            html += '      <p class="blurred-overlay-text">他にも<strong>' + (results.length - 1) + '件</strong>の補助金が該当しています</p>';
+            html += '      <button class="blurred-overlay-btn" id="show-all-btn">該当するすべての補助金情報を見る</button>';
+            html += '    </div>';
+            html += '  </div>';
             html += '</div>';
-        });
-        html += '</section>';
-
-        // DX課題セクション
-        if (dx.issues.length > 0) {
-            html += '<section class="proposal-section proposal-dx-section">';
-            html += '  <div class="proposal-section-header"><h3>貴社のDX課題</h3></div>';
-            var levelLabel = dx.dxLevel === 'beginner' ? 'デジタル化初期段階' : dx.dxLevel === 'developing' ? 'デジタル化移行段階' : 'デジタル活用段階';
-            var levelDesc = dx.dxLevel === 'beginner' ? '多くの業務がアナログ中心です。補助金を活用したデジタル化により、大幅な業務効率改善が見込めます。' : dx.dxLevel === 'developing' ? '一部デジタル化が進んでいますが、さらなる効率化の余地があります。' : 'デジタル化は進んでいます。さらなる高度化・連携で競争力を強化できます。';
-            html += '  <div class="dx-level-card"><div class="dx-level-badge dx-level-' + dx.dxLevel + '">' + levelLabel + '</div><p>' + levelDesc + '</p></div>';
-            html += '  <ul class="dx-issues-list">';
-            dx.issues.forEach(function (issue) { html += '<li>' + escapeHtml(issue) + '</li>'; });
-            html += '  </ul>';
-            if (dx.painPoints.length > 0) {
-                var painLabels = { labor_shortage: '人手不足', sales_decline: '売上低下', cost_reduction: 'コスト削減', efficiency: '業務効率化', new_business: '新規事業' };
-                html += '  <div class="dx-pain-tags">';
-                dx.painPoints.forEach(function (p) { html += '<span class="dx-pain-tag">' + escapeHtml(painLabels[p] || p) + '</span>'; });
-                html += '  </div>';
-            }
-            html += '</section>';
         }
-
-        // おすすめシステム導入
-        if (dx.recommendations.length > 0) {
-            html += '<section class="proposal-section proposal-recommend-section">';
-            html += '  <div class="proposal-section-header"><h3>おすすめシステム導入プラン</h3></div>';
-            html += '  <p class="proposal-recommend-lead">DX課題の分析結果をもとに、補助金を活用した最適なシステム導入プランをご提案いたします。</p>';
-            dx.recommendations.forEach(function (rec) {
-                var subsidizedAmount = Math.round(rec.estimate * 0.25);
-                html += '<div class="recommend-card"><div class="recommend-card-header"><h4>' + escapeHtml(rec.category) + '</h4></div>';
-                html += '<p class="recommend-card-desc">' + escapeHtml(rec.description) + '</p>';
-                html += '<div class="recommend-card-cost"><div class="recommend-cost-item"><span class="recommend-cost-label">想定導入費用</span><span class="recommend-cost-value">約' + rec.estimate + '万円</span></div>';
-                html += '<div class="recommend-cost-arrow">\u2192</div>';
-                html += '<div class="recommend-cost-item recommend-cost-actual"><span class="recommend-cost-label">補助金活用後（' + escapeHtml(rec.subsidyRate) + '）</span><span class="recommend-cost-value recommend-cost-highlight">実質 約' + subsidizedAmount + '万円</span></div></div></div>';
-            });
-            html += '</section>';
-        }
-
-        // 次のアクション
-        html += '<section class="proposal-section proposal-contact-section">';
-        html += '  <div class="proposal-contact-header">';
-        html += '    <h3>この結果を元に、専門家が無料でご相談に応じます</h3>';
-        html += '  </div>';
-        html += '  <div class="proposal-contact-methods">';
-        html += '    <div class="proposal-contact-item">';
-        html += '      <span class="proposal-contact-label">お電話でのご相談</span>';
-        html += '      <span class="proposal-contact-value">03-XXXX-XXXX</span>';
-        html += '      <span class="proposal-contact-note">平日 9:00〜18:00</span>';
-        html += '    </div>';
-        html += '    <div class="proposal-contact-item">';
-        html += '      <span class="proposal-contact-label">メールでのご相談</span>';
-        html += '      <span class="proposal-contact-value">info@yumeno-marketing.jp</span>';
-        html += '      <span class="proposal-contact-note">24時間受付</span>';
-        html += '    </div>';
-        html += '  </div>';
-        html += '  <div class="proposal-contact-actions">';
-        html += '    <a href="' + getContactUrl() + '" class="btn btn-primary btn-large proposal-cta-btn">無料相談を予約する</a>';
-        if (answers.email) {
-            html += '    <button class="btn btn-secondary proposal-email-btn" id="send-result-email">この診断結果をメールで受け取る</button>';
-        }
-        html += '  </div>';
-        html += '</section>';
-
-        // 次のステップ CTA
-        html += '<section class="proposal-section proposal-cta-section">';
-        html += '  <h3>次のステップ</h3>';
-        html += '  <div class="proposal-steps">';
-        html += '    <div class="proposal-step-item"><span class="proposal-step-num">1</span><div class="proposal-step-content"><strong>無料相談のお申し込み</strong><p>補助金の申請要件や採択可能性について、専門スタッフが個別にご説明いたします。</p></div></div>';
-        html += '    <div class="proposal-step-item"><span class="proposal-step-num">2</span><div class="proposal-step-content"><strong>導入プランの策定</strong><p>貴社の業務フローに最適なシステム構成と補助金申請計画をご提案いたします。</p></div></div>';
-        html += '    <div class="proposal-step-item"><span class="proposal-step-num">3</span><div class="proposal-step-content"><strong>補助金申請・採択</strong><p>申請書類の作成から提出まで、専門家がトータルでサポートいたします。</p></div></div>';
-        html += '  </div>';
-        html += '  <a href="' + getContactUrl() + '" class="btn btn-primary btn-large proposal-cta-btn">このプランで無料相談する</a>';
-        html += '  <p class="proposal-cta-note">※ 相談は完全無料です。お気軽にお問い合わせください。</p>';
-        html += '</section>';
 
         resultContainer.innerHTML = html;
 
-        // メール送信ボタンのイベント
-        var emailBtn = document.getElementById('send-result-email');
-        if (emailBtn) {
-            emailBtn.addEventListener('click', function () {
-                emailBtn.textContent = '送信しました';
-                emailBtn.disabled = true;
-                emailBtn.style.opacity = '0.6';
+        // CTAボタンのイベント
+        var showAllBtn = document.getElementById('show-all-btn');
+        if (showAllBtn) {
+            showAllBtn.addEventListener('click', function() {
+                startLeadForm();
             });
         }
+    }
+
+    /**
+     * 補助金カード1件分のHTML
+     */
+    function renderSubsidyCard(item, index) {
+        var matchClass = item.match_level || 'medium';
+        var badgeLabel = matchClass === 'high' ? '適合度：高' : matchClass === 'medium' ? '適合度：中' : '適合度：低';
+        var badgeClass = matchClass === 'high' ? 'badge-high' : matchClass === 'medium' ? 'badge-medium' : 'badge-low';
+
+        var html = '<div class="subsidy-card" data-match="' + matchClass + '" data-index="' + index + '">';
+        html += '  <div class="subsidy-card-header"><h3 class="subsidy-card-title">' + escapeHtml(item.title) + '</h3><span class="subsidy-card-badge badge ' + badgeClass + '">' + badgeLabel + '</span></div>';
+        html += '  <div class="subsidy-card-details">';
+        html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">補助上限額</span><span class="subsidy-detail-value">' + (item.amount_text || formatAmount(item.max_amount)) + '</span></div>';
+        html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">補助率</span><span class="subsidy-detail-value">' + escapeHtml(item.rate || '-') + '</span></div>';
+        if (item.adoption_rate) {
+            html += '    <div class="subsidy-detail-item"><span class="subsidy-detail-label">採択率</span><span class="subsidy-detail-value">' + Math.round(item.adoption_rate * 100) + '%</span></div>';
+        }
+        html += '  </div>';
+        html += '  <p class="subsidy-card-summary">' + escapeHtml(item.summary || '') + '</p>';
+        if (item.deadline) {
+            html += '  <div class="subsidy-card-meta"><span class="subsidy-card-deadline">申請期間: ' + escapeHtml(item.deadline) + '</span></div>';
+        }
+        html += '</div>';
+        return html;
+    }
+
+    /**
+     * リード入力フォーム（チャット形式）
+     */
+    function startLeadForm() {
+        // 結果コンテナを非表示に、チャットに戻す
+        resultContainer.style.display = 'none';
+        var chatContainer = document.getElementById('chat-container');
+        chatContainer.style.display = 'flex';
+
+        var leadAnswers = {};
+        var leadFields = [
+            { key: 'company_name', question: 'すべての結果をお見せしますね！まず、会社名を教えてください。', placeholder: '例：株式会社○○' },
+            { key: 'contact_name', question: 'ご担当者様のお名前を教えてください。', placeholder: '例：山田 太郎' },
+            { key: 'phone', question: 'お電話番号を教えてください。', placeholder: '例：03-1234-5678', validation: 'phone' },
+            { key: 'email', question: 'メールアドレスを教えてください。', placeholder: '例：example@company.co.jp', validation: 'email' }
+        ];
+        var leadStep = 0;
+
+        function askLeadQuestion() {
+            if (leadStep >= leadFields.length) {
+                // 同意チェック
+                askConsent();
+                return;
+            }
+
+            var field = leadFields[leadStep];
+            addAiMessage('<strong>' + field.question + '</strong>', function() {
+                renderLeadInput(field);
+            });
+        }
+
+        function renderLeadInput(field) {
+            chatInputArea.innerHTML = '';
+
+            var wrapper = document.createElement('div');
+            wrapper.className = 'chat-select-wrapper';
+
+            var input = document.createElement('input');
+            input.type = field.validation === 'email' ? 'email' : 'text';
+            input.className = 'chat-text-input';
+            input.placeholder = field.placeholder || '';
+
+            var btn = document.createElement('button');
+            btn.className = 'chat-select-btn';
+            btn.textContent = '決定';
+            btn.disabled = true;
+
+            input.addEventListener('input', function() {
+                btn.disabled = !input.value.trim();
+            });
+
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !btn.disabled) {
+                    e.preventDefault();
+                    btn.click();
+                }
+            });
+
+            btn.addEventListener('click', function() {
+                var val = input.value.trim();
+                if (!val) return;
+
+                // バリデーション
+                if (field.validation === 'email' && !isValidEmail(val)) {
+                    input.style.borderColor = '#C62828';
+                    return;
+                }
+                if (field.validation === 'phone' && !/^[\d\-+().\s]{8,}$/.test(val)) {
+                    input.style.borderColor = '#C62828';
+                    return;
+                }
+
+                leadAnswers[field.key] = val;
+                chatInputArea.innerHTML = '';
+                addUserMessage(val);
+                leadStep++;
+
+                setTimeout(function() {
+                    askLeadQuestion();
+                }, 300);
+            });
+
+            wrapper.appendChild(input);
+            wrapper.appendChild(btn);
+            chatInputArea.appendChild(wrapper);
+            input.focus();
+        }
+
+        function askConsent() {
+            addAiMessage('最後に、個人情報の取り扱いについてご確認ください。', function() {
+                chatInputArea.innerHTML = '';
+
+                var wrapper = document.createElement('div');
+                wrapper.className = 'chat-email-wrapper';
+
+                var consentDiv = document.createElement('div');
+                consentDiv.className = 'chat-consent-group';
+                consentDiv.innerHTML = '<input type="checkbox" id="lead-privacy-consent">' +
+                    '<label for="lead-privacy-consent"><a href="/privacy/" target="_blank" rel="noopener">個人情報の取り扱い</a>に同意する</label>';
+
+                var btn = document.createElement('button');
+                btn.className = 'chat-email-submit';
+                btn.textContent = 'すべての結果を見る';
+
+                btn.addEventListener('click', function() {
+                    var consentBox = document.getElementById('lead-privacy-consent');
+                    if (!consentBox.checked) {
+                        consentDiv.classList.add('consent-error');
+                        return;
+                    }
+                    consentDiv.classList.remove('consent-error');
+
+                    chatInputArea.innerHTML = '';
+                    addUserMessage('同意します');
+
+                    // リード保存
+                    submitLead(leadAnswers);
+                });
+
+                wrapper.appendChild(consentDiv);
+                wrapper.appendChild(btn);
+                chatInputArea.appendChild(wrapper);
+            });
+        }
+
+        askLeadQuestion();
+    }
+
+    /**
+     * リード保存 API
+     */
+    function submitLead(leadData) {
+        var apiUrl = (typeof subsidyMatchApi !== 'undefined')
+            ? subsidyMatchApi.root + 'subsidy/v1/lead'
+            : '/wp-json/subsidy/v1/lead';
+
+        var headers = { 'Content-Type': 'application/json' };
+        if (typeof subsidyMatchApi !== 'undefined' && subsidyMatchApi.nonce) {
+            headers['X-WP-Nonce'] = subsidyMatchApi.nonce;
+        }
+
+        var payload = {
+            company_name: leadData.company_name,
+            contact_name: leadData.contact_name,
+            phone: leadData.phone,
+            email: leadData.email,
+            diagnosis_answers: answers,
+            results_count: matchResults ? matchResults.length : 0
+        };
+
+        addAiMessage('情報をお預かりしています...', function() {
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(payload)
+            })
+            .then(function(res) { return res.json(); })
+            .then(function() {
+                showFullResults();
+            })
+            .catch(function() {
+                // APIエラーでも結果は表示
+                showFullResults();
+            });
+        });
+    }
+
+    /**
+     * すりガラス解除→全件表示→システム興味質問
+     */
+    function showFullResults() {
+        var chatContainer = document.getElementById('chat-container');
+        chatContainer.style.display = 'none';
+        resultContainer.style.display = 'block';
+
+        // すりガラス解除
+        var blurredWrapper = document.getElementById('blurred-results');
+        if (blurredWrapper) {
+            var overlay = document.getElementById('blurred-overlay');
+            if (overlay) overlay.remove();
+            blurredWrapper.classList.add('revealed');
+        }
+
+        // 進捗を100%に
+        if (progressContainer) {
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '100%';
+            progressPercent.textContent = '100%';
+            progressBar.style.background = 'linear-gradient(90deg, #2E7D32, #43A047)';
+        }
+
+        addAiMessage('すべての結果を表示しました！', function() {
+            // スクロールを一番上に
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // システム興味質問を結果の下に追加
+            setTimeout(function() {
+                appendSystemInterestQuestion();
+            }, 1500);
+        });
+    }
+
+    /**
+     * システム開発興味質問 + 無料相談CTA
+     */
+    function appendSystemInterestQuestion() {
+        var interestSection = document.createElement('div');
+        interestSection.className = 'system-interest-section';
+        interestSection.innerHTML =
+            '<div class="system-interest-card">' +
+            '  <h3 class="system-interest-title">補助金を使ってシステム開発・導入を検討していますか？</h3>' +
+            '  <div class="system-interest-buttons">' +
+            '    <button class="system-interest-btn" data-value="yes">はい</button>' +
+            '    <button class="system-interest-btn" data-value="no">いいえ</button>' +
+            '    <button class="system-interest-btn" data-value="undecided">まだわからない</button>' +
+            '  </div>' +
+            '</div>';
+
+        resultContainer.appendChild(interestSection);
+
+        // スクロールして見せる
+        interestSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        var buttons = interestSection.querySelectorAll('.system-interest-btn');
+        buttons.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var value = btn.getAttribute('data-value');
+
+                // 選択状態を表示
+                buttons.forEach(function(b) { b.classList.remove('selected'); });
+                btn.classList.add('selected');
+
+                // API でリードに追記
+                updateLeadSystemInterest(value);
+
+                // CTA表示
+                setTimeout(function() {
+                    showFinalCta();
+                }, 500);
+            });
+        });
+    }
+
+    /**
+     * リードにsystem_interestを追記
+     */
+    function updateLeadSystemInterest(value) {
+        var apiUrl = (typeof subsidyMatchApi !== 'undefined')
+            ? subsidyMatchApi.root + 'subsidy/v1/lead/update'
+            : '/wp-json/subsidy/v1/lead/update';
+
+        var headers = { 'Content-Type': 'application/json' };
+        if (typeof subsidyMatchApi !== 'undefined' && subsidyMatchApi.nonce) {
+            headers['X-WP-Nonce'] = subsidyMatchApi.nonce;
+        }
+
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({ system_interest: value, email: answers.email || '' })
+        }).catch(function() { /* ignore */ });
+    }
+
+    /**
+     * 最終CTA（無料相談誘導）
+     */
+    function showFinalCta() {
+        // 既にあれば追加しない
+        if (document.getElementById('final-cta-section')) return;
+
+        var ctaSection = document.createElement('div');
+        ctaSection.id = 'final-cta-section';
+        ctaSection.className = 'final-cta-section';
+        ctaSection.innerHTML =
+            '<div class="final-cta-card">' +
+            '  <p class="final-cta-text">ただし、あなたがやりたいことに該当するかは<strong>個別の確認</strong>が必要です。<br>プロに<strong>無料</strong>で相談してみませんか？</p>' +
+            '  <a href="' + getContactUrl() + '" class="final-cta-btn">無料相談する</a>' +
+            '  <p class="final-cta-note">※ 相談は完全無料です。お気軽にお問い合わせください。</p>' +
+            '</div>';
+
+        resultContainer.appendChild(ctaSection);
+        ctaSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     /**
@@ -987,7 +1140,7 @@
             { title: '小規模事業者持続化補助金', max_amount: 2000000, rate: '2/3', summary: '小規模事業者が経営計画を策定して取り組む販路開拓等の取組を支援する制度です。', deadline: '2026年5月31日', official_url: '', match_level: 'medium', adoption_rate: 0.55 },
             { title: '事業再構築補助金', max_amount: 150000000, rate: '1/2〜3/4', summary: 'ポストコロナ時代の経済社会の変化に対応するため、中小企業等の思い切った事業再構築を支援します。', deadline: '2026年7月31日', official_url: '', match_level: 'low', adoption_rate: 0.38 }
         ];
-        renderProposalResults(sampleResults, null);
+        renderLeadGateResults(sampleResults);
     }
 
     function formatAmount(amount) {
