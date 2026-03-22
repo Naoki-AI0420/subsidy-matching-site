@@ -353,7 +353,9 @@ get_header();
         btn.className = 'chat-send-btn';
         btn.innerHTML = '➤';
         btn.onclick = function() { submit(); };
-        input.onkeydown = function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); } };
+        if (!isTextarea) {
+            input.onkeydown = function(e) { if (e.key === 'Enter') { e.preventDefault(); submit(); } };
+        }
 
         function submit() {
             var val = input.value.trim();
