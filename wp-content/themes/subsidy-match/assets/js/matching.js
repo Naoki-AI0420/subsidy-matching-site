@@ -407,20 +407,91 @@
         if (teaserEl) teaserEl.style.display = 'none';
         resultContainer.style.display = 'block';
 
-        // ローディング中に採択事例をスライドショー表示
-        var adoptionCases = [
-            { industry: '飲食業', type: '小規模事業者持続化補助金', amount: '50万円', use: 'テイクアウト用ECサイト構築', result: '売上30%増' },
-            { industry: '製造業', type: 'ものづくり補助金', amount: '1,000万円', use: '生産ライン自動化システム導入', result: '生産効率2倍' },
+        // ローディング中に採択事例をスライドショー表示（全業種網羅）
+        var allCases = {
+            'information_technology':  [
+                { industry: 'IT・通信業', type: 'ものづくり補助金', amount: '1,250万円', use: 'SaaS開発・クラウドインフラ構築', result: '月間売上4倍' },
+                { industry: 'IT・通信業', type: 'IT導入補助金', amount: '450万円', use: '社内DXツール統合・RPA導入', result: '工数60%削減' },
+            ],
+            'manufacturing': [
+                { industry: '製造業', type: 'ものづくり補助金', amount: '1,000万円', use: '生産ライン自動化システム導入', result: '生産効率2倍' },
+                { industry: '製造業', type: '省力化投資補助金', amount: '800万円', use: '検品AI・ロボットアーム導入', result: '不良品率80%減' },
+            ],
+            'food_service': [
+                { industry: '飲食業', type: '小規模事業者持続化補助金', amount: '50万円', use: 'テイクアウト用ECサイト構築', result: '売上30%増' },
+                { industry: '飲食業', type: 'IT導入補助金', amount: '150万円', use: 'モバイルオーダー・POSシステム導入', result: '回転率25%向上' },
+            ],
+            'accommodation': [
+                { industry: '宿泊業', type: 'IT導入補助金', amount: '350万円', use: '自動チェックイン・多言語対応', result: 'インバウンド客50%増' },
+                { industry: '宿泊業', type: '省力化投資補助金', amount: '500万円', use: '清掃ロボット・スマートロック導入', result: '人件費40%削減' },
+            ],
+            'wholesale_retail': [
+                { industry: '小売業', type: 'IT導入補助金', amount: '300万円', use: 'POSレジ＋在庫管理クラウド導入', result: '在庫ロス50%削減' },
+                { industry: '小売業', type: '小規模事業者持続化補助金', amount: '50万円', use: 'ECサイト構築・SNS広告', result: 'オンライン売上300%増' },
+            ],
+            'construction': [
+                { industry: '建設業', type: '事業再構築補助金', amount: '3,000万円', use: 'ドローン測量・BIMシステム導入', result: '工期20%短縮' },
+                { industry: '建設業', type: 'IT導入補助金', amount: '450万円', use: '工程管理・原価管理クラウド導入', result: '利益率15%改善' },
+            ],
+            'medical_welfare': [
+                { industry: '医療・福祉', type: 'IT導入補助金', amount: '200万円', use: '電子カルテ・オンライン予約導入', result: '受付時間70%削減' },
+                { industry: '医療・福祉', type: '省力化投資補助金', amount: '600万円', use: '見守りセンサー・記録自動化', result: '夜勤スタッフ負担50%軽減' },
+            ],
+            'education': [
+                { industry: '教育・学習支援', type: 'IT導入補助金', amount: '200万円', use: 'オンライン授業・学習管理システム導入', result: '生徒数2倍・退塾率30%減' },
+                { industry: '教育・学習支援', type: '小規模事業者持続化補助金', amount: '50万円', use: 'Web集客・LINE公式アカウント構築', result: '問い合わせ5倍' },
+            ],
+            'professional_services': [
+                { industry: '士業・専門サービス', type: '小規模事業者持続化補助金', amount: '50万円', use: 'Webマーケティング・SEO対策', result: '新規問い合わせ3倍' },
+                { industry: '士業・専門サービス', type: 'IT導入補助金', amount: '150万円', use: '案件管理・電子契約システム導入', result: '業務時間40%削減' },
+            ],
+            'transportation': [
+                { industry: '運輸・物流業', type: '省力化投資補助金', amount: '500万円', use: '配送ルート最適化AI導入', result: '燃料費25%削減' },
+                { industry: '運輸・物流業', type: 'IT導入補助金', amount: '300万円', use: '配車管理・動態管理システム導入', result: '稼働率35%向上' },
+            ],
+            'real_estate': [
+                { industry: '不動産業', type: 'IT導入補助金', amount: '250万円', use: '物件管理・内見予約システム導入', result: '成約率20%向上' },
+                { industry: '不動産業', type: '小規模事業者持続化補助金', amount: '50万円', use: 'VR内見・ポータルサイト連携', result: '来店不要の成約30%' },
+            ],
+            'agriculture': [
+                { industry: '農業', type: 'ものづくり補助金', amount: '800万円', use: 'スマート農業IoTセンサー導入', result: '収穫量20%増・人件費30%減' },
+                { industry: '農業', type: '省力化投資補助金', amount: '400万円', use: '自動灌水・ドローン農薬散布', result: '作業時間60%削減' },
+            ],
+            'other': [
+                { industry: 'サービス業', type: 'IT導入補助金', amount: '200万円', use: '予約・顧客管理クラウド導入', result: 'リピート率40%向上' },
+                { industry: 'サービス業', type: '小規模事業者持続化補助金', amount: '50万円', use: 'ホームページ制作・Google広告', result: '新規顧客3倍' },
+            ],
+        };
+
+        // 美容業を追加（selectにはないがカバー）
+        allCases['beauty'] = [
             { industry: '美容業', type: 'IT導入補助金', amount: '150万円', use: '予約管理・顧客管理システム導入', result: '予約率40%向上' },
-            { industry: '建設業', type: '事業再構築補助金', amount: '3,000万円', use: 'ドローン測量・BIMシステム導入', result: '工期20%短縮' },
-            { industry: '小売業', type: 'IT導入補助金', amount: '300万円', use: 'POSレジ＋在庫管理クラウド導入', result: '在庫ロス50%削減' },
-            { industry: '医療・福祉', type: 'IT導入補助金', amount: '200万円', use: '電子カルテ・オンライン予約導入', result: '受付時間70%削減' },
-            { industry: '運輸業', type: '省力化投資補助金', amount: '500万円', use: '配送ルート最適化AI導入', result: '燃料費25%削減' },
-            { industry: '宿泊業', type: 'IT導入補助金', amount: '350万円', use: '自動チェックイン・多言語対応', result: 'インバウンド客50%増' },
-            { industry: '農業', type: 'ものづくり補助金', amount: '800万円', use: 'スマート農業IoTセンサー導入', result: '収穫量20%増・人件費30%減' },
-            { industry: '士業', type: '小規模事業者持続化補助金', amount: '50万円', use: 'Webマーケティング・SEO対策', result: '新規問い合わせ3倍' },
+            { industry: '美容業', type: '小規模事業者持続化補助金', amount: '50万円', use: 'Instagram集客・LINE予約連携', result: '新規客60%増' },
         ];
 
+        // ユーザーの業種を最優先で表示 → 他業種をシャッフルして追加
+        var userIndustry = answers.industry || 'other';
+        var orderedCases = [];
+
+        // 自分の業種の事例を先頭に
+        if (allCases[userIndustry]) {
+            orderedCases = orderedCases.concat(allCases[userIndustry]);
+        }
+
+        // 他の業種から1件ずつランダムに追加
+        var otherKeys = Object.keys(allCases).filter(function(k) { return k !== userIndustry; });
+        // シャッフル
+        for (var si = otherKeys.length - 1; si > 0; si--) {
+            var sj = Math.floor(Math.random() * (si + 1));
+            var tmp = otherKeys[si]; otherKeys[si] = otherKeys[sj]; otherKeys[sj] = tmp;
+        }
+        otherKeys.forEach(function(k) {
+            // 各業種からランダムに1件選ぶ
+            var cases = allCases[k];
+            orderedCases.push(cases[Math.floor(Math.random() * cases.length)]);
+        });
+
+        var adoptionCases = orderedCases;
         var caseIndex = 0;
         resultContainer.innerHTML =
             '<div class="result-loading">' +
