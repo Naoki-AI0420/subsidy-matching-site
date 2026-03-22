@@ -1,17 +1,18 @@
 /* ============================================
-   一問一答マッチング — スタイル
+   チャット風マッチング UI — スタイル
    ============================================ */
 
 .matching-page {
-    padding: 40px 0 80px;
+    padding: 24px 0 40px;
     min-height: 70vh;
     overflow-x: hidden;
+    background-color: #F5F5F5;
 }
 
 /* 進捗バー */
 .progress-container {
     max-width: 600px;
-    margin: 0 auto 48px;
+    margin: 0 auto 16px;
     padding: 0 16px;
     box-sizing: border-box;
 }
@@ -20,230 +21,371 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .progress-label {
-    font-size: 13px;
+    font-size: 12px;
     color: #666666;
 }
 
 .progress-percent {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     color: #003366;
 }
 
 .progress-track {
     width: 100%;
-    height: 8px;
-    background-color: #E8E8E8;
-    border-radius: 4px;
+    height: 6px;
+    background-color: #E0E0E0;
+    border-radius: 3px;
     overflow: hidden;
 }
 
 .progress-bar {
     height: 100%;
     background: linear-gradient(90deg, #003366, #0056b3);
-    border-radius: 4px;
+    border-radius: 3px;
     transition: width 0.4s ease, background 0.4s ease;
 }
 
 .progress-step {
-    font-size: 13px;
+    font-size: 12px;
     color: #999999;
     text-align: right;
-    margin-top: 6px;
+    margin-top: 4px;
     margin-bottom: 0;
 }
 
-/* 進捗メッセージ */
-.progress-message {
+/* チャットコンテナ */
+.chat-container {
     max-width: 600px;
-    margin: -24px auto 24px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 600;
-    color: #2E7D32;
-    padding: 8px 16px;
-    background: #E8F5E9;
-    border-radius: 4px;
-    animation: fadeIn 0.4s ease;
-    box-sizing: border-box;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 200px);
+    min-height: 400px;
+    background: #F5F5F5;
+    border-radius: 12px;
+    overflow: hidden;
 }
 
-/* 金額チラ見せメッセージ */
-.amount-teaser {
-    max-width: 600px;
-    margin: 0 auto 24px;
-    padding: 14px 20px;
-    background-color: #FFF9E6;
-    border: 1px solid #F0E4B0;
-    border-left: 4px solid #F9A825;
-    border-radius: 2px;
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.chat-input-area {
+    padding: 12px 16px;
+    background: #FFFFFF;
+    border-top: 1px solid #E0E0E0;
+    min-height: 0;
+}
+
+.chat-input-area:empty {
+    display: none;
+}
+
+/* メッセージ共通 */
+.chat-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    max-width: 88%;
+    animation: chatFadeIn 0.3s ease;
+}
+
+@keyframes chatFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* AI（左側） */
+.chat-row-ai {
+    align-self: flex-start;
+}
+
+.chat-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #003366;
+}
+
+.chat-avatar svg {
+    width: 22px;
+    height: 22px;
+}
+
+.chat-bubble-ai {
+    background: #FFFFFF;
+    color: #333333;
+    padding: 12px 16px;
+    border-radius: 2px 16px 16px 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     font-size: 15px;
-    color: #1a3353;
-    line-height: 1.6;
-    animation: fadeIn 0.5s ease;
-    box-sizing: border-box;
+    line-height: 1.65;
+    word-break: break-word;
 }
 
-.amount-teaser strong {
+.chat-bubble-ai strong {
     color: #C62828;
     font-weight: 700;
 }
 
-/* 質問コンテナ */
-.question-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 0 16px;
-    box-sizing: border-box;
+.chat-ai-name {
+    font-size: 11px;
+    color: #888888;
+    margin-left: 44px;
+    margin-bottom: 2px;
+    margin-top: 8px;
 }
 
-.question-slide {
-    animation: fadeIn 0.3s ease;
+/* ユーザー（右側） */
+.chat-row-user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
+.chat-bubble-user {
+    background: #003366;
+    color: #FFFFFF;
+    padding: 12px 16px;
+    border-radius: 16px 2px 16px 16px;
+    font-size: 15px;
+    line-height: 1.65;
+    word-break: break-word;
 }
 
-.question-text {
-    font-size: 22px;
+/* タイピングインジケーター */
+.chat-typing {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    align-self: flex-start;
+    max-width: 88%;
+}
+
+.typing-dots {
+    background: #FFFFFF;
+    padding: 12px 20px;
+    border-radius: 2px 16px 16px 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #AAAAAA;
+    animation: typingBounce 1.2s infinite;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* 選択肢ボタン（チャット入力エリア内） */
+.chat-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chat-option-btn {
+    display: block;
+    width: 100%;
+    padding: 14px 16px;
+    background: #FFFFFF;
+    border: 2px solid #003366;
+    border-radius: 8px;
+    font-size: 15px;
     font-weight: 500;
     color: #003366;
-    text-align: center;
-    margin-bottom: 8px;
-}
-
-.question-sub {
-    font-size: 14px;
-    color: #666666;
-    text-align: center;
-    margin-bottom: 32px;
-}
-
-.question-input {
-    margin-bottom: 24px;
-}
-
-/* セレクト（大きめ） */
-.select-large {
-    font-size: 18px;
-    padding: 14px 18px;
-    max-width: 400px;
-    margin: 0 auto;
-    display: block;
-    box-sizing: border-box;
-}
-
-/* テキスト入力（大きめ） */
-.input-large {
-    font-size: 18px;
-    padding: 14px 18px;
-    max-width: 400px;
-    margin: 0 auto;
-    display: block;
-    box-sizing: border-box;
-}
-
-.input-note {
-    font-size: 12px;
-    color: #999999;
-    text-align: center;
-    margin-top: 8px;
-    margin-bottom: 0;
-}
-
-/* カード型選択肢 */
-.option-cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    max-width: 500px;
-    margin: 0 auto;
-    box-sizing: border-box;
-}
-
-.option-cards-two {
-    grid-template-columns: 1fr 1fr;
-}
-
-.option-cards-multi {
-    grid-template-columns: 1fr 1fr;
-}
-
-.option-card {
     cursor: pointer;
-    display: block;
-}
-
-.option-card input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.option-card-inner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 18px 16px;
-    background: #FFFFFF;
-    border: 2px solid #CCCCCC;
-    border-radius: 4px;
-    transition: border-color 0.2s, background-color 0.2s;
-    min-height: 64px;
+    text-align: left;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.option-card input:checked + .option-card-inner {
-    border-color: #003366;
-    background-color: #EBF0F5;
-}
-
-.option-card:hover .option-card-inner {
+.chat-option-btn:hover {
+    background: #EBF0F5;
     border-color: #0056b3;
 }
 
-.option-card-text {
-    font-size: 16px;
-    font-weight: 500;
-    color: #333333;
+.chat-option-btn:active,
+.chat-option-btn.selected {
+    background: #003366;
+    color: #FFFFFF;
+    border-color: #003366;
 }
 
-/* ナビゲーションボタン */
-.question-nav {
-    display: flex;
-    justify-content: space-between;
-    max-width: 600px;
-    margin: 32px auto 0;
-    padding: 0 16px;
+/* 複数選択用チェックボックスボタン */
+.chat-option-btn-multi {
+    position: relative;
+    padding-left: 42px;
+}
+
+.chat-option-btn-multi::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    border: 2px solid #003366;
+    border-radius: 3px;
+    background: #FFFFFF;
     box-sizing: border-box;
 }
 
-.btn-back {
-    padding: 12px 28px;
+.chat-option-btn-multi.selected::before {
+    background: #FFFFFF;
+    border-color: #FFFFFF;
 }
 
-.btn-next {
-    padding: 12px 40px;
-    font-size: 16px;
-    min-width: 140px;
+.chat-option-btn-multi.selected::after {
+    content: '';
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-60%) rotate(45deg);
+    width: 6px;
+    height: 10px;
+    border: solid #003366;
+    border-width: 0 2px 2px 0;
 }
 
-.btn-next:disabled {
-    background-color: #CCCCCC;
+/* 複数選択の確定ボタン */
+.chat-confirm-btn {
+    display: block;
+    width: 100%;
+    padding: 14px 16px;
+    background: #003366;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF;
+    cursor: pointer;
+    margin-top: 4px;
+    transition: background-color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.chat-confirm-btn:hover {
+    background: #004080;
+}
+
+.chat-confirm-btn:disabled {
+    background: #CCCCCC;
     cursor: not-allowed;
 }
 
-/* 同意チェックボックス */
-.consent-group {
-    max-width: 400px;
-    margin: 16px auto 0;
+/* セレクトボックス（都道府県・業種） */
+.chat-select-wrapper {
+    display: flex;
+    gap: 8px;
+}
+
+.chat-select {
+    flex: 1;
+    padding: 14px 16px;
+    font-size: 16px;
+    border: 2px solid #003366;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: #333333;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23003366' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    box-sizing: border-box;
+}
+
+.chat-select:focus {
+    outline: none;
+    border-color: #0056b3;
+}
+
+.chat-select-btn {
+    padding: 14px 24px;
+    background: #003366;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.chat-select-btn:hover {
+    background: #004080;
+}
+
+.chat-select-btn:disabled {
+    background: #CCCCCC;
+    cursor: not-allowed;
+}
+
+/* メール入力 */
+.chat-email-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-email-input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    border: 2px solid #003366;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: #333333;
+    box-sizing: border-box;
+}
+
+.chat-email-input:focus {
+    outline: none;
+    border-color: #0056b3;
+}
+
+.chat-email-input::placeholder {
+    color: #AAAAAA;
+}
+
+.chat-consent-group {
     display: flex;
     align-items: flex-start;
     gap: 8px;
@@ -252,114 +394,207 @@
     line-height: 1.6;
 }
 
-.consent-group input[type="checkbox"] {
-    margin-top: 4px;
+.chat-consent-group input[type="checkbox"] {
+    margin-top: 3px;
     flex-shrink: 0;
+    width: 16px;
+    height: 16px;
 }
 
-.consent-group a {
+.chat-consent-group a {
     color: #0056b3;
     text-decoration: underline;
+}
+
+.chat-consent-group.consent-error {
+    color: #C62828;
+    font-weight: 700;
+}
+
+.chat-email-submit {
+    padding: 14px 24px;
+    background: #003366;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: background-color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.chat-email-submit:hover {
+    background: #004080;
+}
+
+.chat-email-submit:disabled {
+    background: #CCCCCC;
+    cursor: not-allowed;
+}
+
+/* チャット内結果サマリー */
+.chat-result-summary {
+    background: linear-gradient(135deg, #003366, #004d99);
+    color: #FFFFFF;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 4px 0;
+}
+
+.chat-result-summary h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 12px;
+    color: #FFFFFF;
+}
+
+.chat-result-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.chat-result-item:last-child {
+    border-bottom: none;
+}
+
+.chat-result-value {
+    font-weight: 700;
+    color: #FFD54F;
+}
+
+/* チャット内CTA */
+.chat-cta-area {
+    text-align: center;
+    padding: 16px 0 8px;
+}
+
+.chat-cta-btn {
+    display: inline-block;
+    width: 100%;
+    max-width: 400px;
+    padding: 18px 24px;
+    background: linear-gradient(135deg, #C62828, #E53935);
+    color: #FFFFFF;
+    font-size: 17px;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(198,40,40,0.3);
+    transition: transform 0.15s, box-shadow 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    animation: ctaPulse 2s infinite;
+}
+
+.chat-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(198,40,40,0.4);
+}
+
+@keyframes ctaPulse {
+    0%, 100% { box-shadow: 0 4px 12px rgba(198,40,40,0.3); }
+    50% { box-shadow: 0 4px 20px rgba(198,40,40,0.5); }
+}
+
+.chat-cta-sub {
+    display: block;
+    margin-top: 10px;
+}
+
+.chat-cta-sub a {
+    font-size: 14px;
+    color: #0056b3;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
     .matching-page {
-        padding: 24px 16px 60px;
-        overflow-x: hidden;
-    }
-
-    .progress-container,
-    .question-container,
-    .amount-teaser,
-    .progress-message {
-        max-width: 100%;
-        width: 100%;
-        box-sizing: border-box;
-        padding-left: 0;
-        padding-right: 0;
+        padding: 12px 0 24px;
     }
 
     .progress-container {
-        padding: 0;
+        max-width: 100%;
+        padding: 0 12px;
     }
 
-    .question-container {
-        padding: 0;
+    .chat-container {
+        max-width: 100%;
+        height: calc(100vh - 180px);
+        border-radius: 0;
     }
 
-    .question-text {
-        font-size: 17px;
+    .chat-messages {
+        padding: 12px;
     }
 
-    .question-sub {
-        font-size: 13px;
-        margin-bottom: 24px;
+    .chat-input-area {
+        padding: 10px 12px;
     }
 
-    .option-cards {
-        grid-template-columns: 1fr;
+    .chat-row {
+        max-width: 92%;
     }
 
-    .option-card-inner {
-        padding: 14px 12px;
-        min-height: 52px;
+    .chat-avatar {
+        width: 32px;
+        height: 32px;
     }
 
-    .option-card-text {
+    .chat-avatar svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .chat-bubble-ai,
+    .chat-bubble-user {
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+
+    .chat-ai-name {
+        margin-left: 40px;
+    }
+
+    .chat-option-btn {
+        padding: 12px 14px;
         font-size: 14px;
     }
 
-    .question-nav {
-        padding: 0;
+    .chat-option-btn-multi {
+        padding-left: 38px;
     }
 
-    .btn-next {
-        padding: 12px 28px;
-        font-size: 15px;
-        min-width: 120px;
-    }
-
-    .btn-back {
-        padding: 12px 20px;
-    }
-
-    .select-large,
-    .input-large {
-        font-size: 16px;
+    .chat-select,
+    .chat-email-input {
+        font-size: 16px; /* iOS zoom prevention */
         padding: 12px 14px;
-        max-width: 100%;
-    }
-
-    .amount-teaser {
-        font-size: 13px;
-        padding: 12px 14px;
-    }
-
-    .progress-message {
-        font-size: 13px;
     }
 }
 
 @media (max-width: 414px) {
     .matching-page {
-        padding: 20px 12px 56px;
+        padding: 8px 0 20px;
     }
 
-    .question-text {
-        font-size: 16px;
+    .chat-container {
+        height: calc(100vh - 160px);
     }
 
-    .option-card-inner {
-        padding: 12px 10px;
-        min-height: 48px;
-    }
-
-    .option-card-text {
+    .chat-option-btn {
+        padding: 11px 12px;
         font-size: 13px;
     }
 
-    .btn-next {
-        min-width: 100px;
+    .chat-cta-btn {
+        font-size: 15px;
+        padding: 16px 20px;
     }
 }
