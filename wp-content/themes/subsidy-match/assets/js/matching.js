@@ -407,11 +407,54 @@
         if (teaserEl) teaserEl.style.display = 'none';
         resultContainer.style.display = 'block';
 
+        // ローディング中に採択事例をスライドショー表示
+        var adoptionCases = [
+            { industry: '飲食業', type: '小規模事業者持続化補助金', amount: '50万円', use: 'テイクアウト用ECサイト構築', result: '売上30%増' },
+            { industry: '製造業', type: 'ものづくり補助金', amount: '1,000万円', use: '生産ライン自動化システム導入', result: '生産効率2倍' },
+            { industry: '美容業', type: 'IT導入補助金', amount: '150万円', use: '予約管理・顧客管理システム導入', result: '予約率40%向上' },
+            { industry: '建設業', type: '事業再構築補助金', amount: '3,000万円', use: 'ドローン測量・BIMシステム導入', result: '工期20%短縮' },
+            { industry: '小売業', type: 'IT導入補助金', amount: '300万円', use: 'POSレジ＋在庫管理クラウド導入', result: '在庫ロス50%削減' },
+            { industry: '医療・福祉', type: 'IT導入補助金', amount: '200万円', use: '電子カルテ・オンライン予約導入', result: '受付時間70%削減' },
+            { industry: '運輸業', type: '省力化投資補助金', amount: '500万円', use: '配送ルート最適化AI導入', result: '燃料費25%削減' },
+            { industry: '宿泊業', type: 'IT導入補助金', amount: '350万円', use: '自動チェックイン・多言語対応', result: 'インバウンド客50%増' },
+            { industry: '農業', type: 'ものづくり補助金', amount: '800万円', use: 'スマート農業IoTセンサー導入', result: '収穫量20%増・人件費30%減' },
+            { industry: '士業', type: '小規模事業者持続化補助金', amount: '50万円', use: 'Webマーケティング・SEO対策', result: '新規問い合わせ3倍' },
+        ];
+
+        var caseIndex = 0;
         resultContainer.innerHTML =
             '<div class="result-loading">' +
             '  <div class="spinner"></div>' +
-            '  <p>診断結果を分析しています...</p>' +
+            '  <p class="loading-main-text">診断結果を分析しています...</p>' +
+            '  <div class="loading-case-carousel">' +
+            '    <p class="loading-case-label">💡 採択事例</p>' +
+            '    <div class="loading-case-card" id="loading-case">' +
+            '      <span class="loading-case-industry">' + adoptionCases[0].industry + '</span>' +
+            '      <span class="loading-case-type">' + adoptionCases[0].type + '</span>' +
+            '      <span class="loading-case-amount">補助額 ' + adoptionCases[0].amount + '</span>' +
+            '      <span class="loading-case-use">' + adoptionCases[0].use + '</span>' +
+            '      <span class="loading-case-result">→ ' + adoptionCases[0].result + '</span>' +
+            '    </div>' +
+            '  </div>' +
             '</div>';
+
+        var caseInterval = setInterval(function() {
+            caseIndex = (caseIndex + 1) % adoptionCases.length;
+            var c = adoptionCases[caseIndex];
+            var el = document.getElementById('loading-case');
+            if (el) {
+                el.style.opacity = '0';
+                setTimeout(function() {
+                    el.innerHTML =
+                        '<span class="loading-case-industry">' + c.industry + '</span>' +
+                        '<span class="loading-case-type">' + c.type + '</span>' +
+                        '<span class="loading-case-amount">補助額 ' + c.amount + '</span>' +
+                        '<span class="loading-case-use">' + c.use + '</span>' +
+                        '<span class="loading-case-result">→ ' + c.result + '</span>';
+                    el.style.opacity = '1';
+                }, 300);
+            }
+        }, 3000);
 
         var apiUrl = (typeof subsidyMatchApi !== 'undefined')
             ? subsidyMatchApi.root + 'subsidy/v1/match'
@@ -429,6 +472,7 @@
         })
             .then(function (res) { return res.json(); })
             .then(function (data) {
+                clearInterval(caseInterval);
                 if (data.success && data.results) {
                     renderProposalResults(data.results, data.dx_analysis || null);
                 } else {
@@ -436,6 +480,7 @@
                 }
             })
             .catch(function () {
+                clearInterval(caseInterval);
                 renderFallbackResults();
             });
     }

@@ -940,9 +940,70 @@
     to { transform: rotate(360deg); }
 }
 
-.result-loading p {
+.result-loading .loading-main-text {
     font-size: 14px;
     color: #666666;
+    margin-bottom: 24px;
+}
+
+/* 採択事例カルーセル */
+.loading-case-carousel {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.loading-case-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.loading-case-card {
+    background: #F5F8FC;
+    border: 1px solid #D8E2ED;
+    border-radius: 6px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: opacity 0.3s ease;
+    text-align: left;
+}
+
+.loading-case-industry {
+    font-size: 11px;
+    color: #FFFFFF;
+    background: #003366;
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 2px;
+    align-self: flex-start;
+    font-weight: 600;
+}
+
+.loading-case-type {
+    font-size: 14px;
+    font-weight: 600;
+    color: #003366;
+}
+
+.loading-case-amount {
+    font-size: 18px;
+    font-weight: 700;
+    color: #C62828;
+}
+
+.loading-case-use {
+    font-size: 13px;
+    color: #555555;
+}
+
+.loading-case-result {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2E7D32;
 }
 
 /* ========== Responsive ========== */
