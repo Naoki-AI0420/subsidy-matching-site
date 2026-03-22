@@ -42,7 +42,7 @@ get_header();
     <!-- 採択事例スライダー（FV直下） -->
     <section class="adoption-ticker">
         <div class="adoption-ticker-inner">
-            <span class="adoption-ticker-label">💡 採択事例</span>
+            <span class="adoption-ticker-label">採択事例</span>
             <div class="adoption-ticker-track" id="adoption-ticker-track"></div>
         </div>
     </section>
