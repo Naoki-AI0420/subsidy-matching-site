@@ -340,8 +340,13 @@
             selectItem(val);
         });
 
+        // IME変換中フラグ（日本語入力の確定Enterで送信しない）
+        var isComposing = false;
+        input.addEventListener('compositionstart', function() { isComposing = true; });
+        input.addEventListener('compositionend', function() { isComposing = false; });
+
         input.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' && !isComposing) {
                 e.preventDefault();
                 var val = input.value.trim();
                 if (val) selectItem(val);
@@ -789,8 +794,11 @@
         var sendBtn = document.getElementById('ai-chat-send');
         var input = document.getElementById('ai-chat-input');
         sendBtn.addEventListener('click', function() { sendAiChat(); });
+        var aiComposing = false;
+        input.addEventListener('compositionstart', function() { aiComposing = true; });
+        input.addEventListener('compositionend', function() { aiComposing = false; });
         input.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') { e.preventDefault(); sendAiChat(); }
+            if (e.key === 'Enter' && !aiComposing) { e.preventDefault(); sendAiChat(); }
         });
     }
 
