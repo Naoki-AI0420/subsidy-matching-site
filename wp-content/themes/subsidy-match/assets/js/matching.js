@@ -604,9 +604,7 @@
         }
         html += '  </div>';
         html += '  <p class="subsidy-card-summary">' + escapeHtml(item.summary || '') + '</p>';
-        if (item.official_url) {
-            html += '  <a href="' + escapeHtml(item.official_url) + '" target="_blank" rel="noopener" class="subsidy-card-link">公募要領を確認する →</a>';
-        }
+        /* 公募要領リンク廃止 — 大半が404のため */
         html += '</div>';
         return html;
     }

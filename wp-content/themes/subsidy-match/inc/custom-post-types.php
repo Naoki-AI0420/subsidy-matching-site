@@ -164,71 +164,81 @@ function subsidy_match_save_meta($post_id) {
 add_action('save_post_subsidy', 'subsidy_match_save_meta');
 
 /**
- * マスタデータ
+ * マスタデータ — function_exists ガード付き（functions.php との重複防止）
  */
-function subsidy_match_get_industries() {
-    return array(
-        'manufacturing'        => '製造業',
-        'construction'         => '建設業',
-        'information_technology' => '情報通信業',
-        'wholesale_retail'     => '卸売業・小売業',
-        'food_service'         => '飲食サービス業',
-        'accommodation'        => '宿泊業',
-        'medical_welfare'      => '医療・福祉',
-        'education'            => '教育・学習支援業',
-        'professional_services' => '専門・技術サービス業',
-        'transportation'       => '運輸業・郵便業',
-        'real_estate'          => '不動産業',
-        'agriculture'          => '農業・林業・漁業',
-        'other'                => 'その他',
-    );
+if (!function_exists('subsidy_match_get_industries')) {
+    function subsidy_match_get_industries() {
+        return array(
+            'manufacturing'        => '製造業',
+            'construction'         => '建設業',
+            'information_technology' => '情報通信業',
+            'wholesale_retail'     => '卸売業・小売業',
+            'food_service'         => '飲食サービス業',
+            'accommodation'        => '宿泊業',
+            'medical_welfare'      => '医療・福祉',
+            'education'            => '教育・学習支援業',
+            'professional_services' => '専門・技術サービス業',
+            'transportation'       => '運輸業・郵便業',
+            'real_estate'          => '不動産業',
+            'agriculture'          => '農業・林業・漁業',
+            'other'                => 'その他',
+        );
+    }
 }
 
-function subsidy_match_get_regions() {
-    return array(
-        'all'  => '全国',
-        '01' => '北海道', '02' => '青森', '03' => '岩手', '04' => '宮城',
-        '05' => '秋田', '06' => '山形', '07' => '福島', '08' => '茨城',
-        '09' => '栃木', '10' => '群馬', '11' => '埼玉', '12' => '千葉',
-        '13' => '東京', '14' => '神奈川', '15' => '新潟', '16' => '富山',
-        '17' => '石川', '18' => '福井', '19' => '山梨', '20' => '長野',
-        '21' => '岐阜', '22' => '静岡', '23' => '愛知', '24' => '三重',
-        '25' => '滋賀', '26' => '京都', '27' => '大阪', '28' => '兵庫',
-        '29' => '奈良', '30' => '和歌山', '31' => '鳥取', '32' => '島根',
-        '33' => '岡山', '34' => '広島', '35' => '山口', '36' => '徳島',
-        '37' => '香川', '38' => '愛媛', '39' => '高知', '40' => '福岡',
-        '41' => '佐賀', '42' => '長崎', '43' => '熊本', '44' => '大分',
-        '45' => '宮崎', '46' => '鹿児島', '47' => '沖縄',
-    );
+if (!function_exists('subsidy_match_get_regions')) {
+    function subsidy_match_get_regions() {
+        return array(
+            'all'  => '全国',
+            '01' => '北海道', '02' => '青森', '03' => '岩手', '04' => '宮城',
+            '05' => '秋田', '06' => '山形', '07' => '福島', '08' => '茨城',
+            '09' => '栃木', '10' => '群馬', '11' => '埼玉', '12' => '千葉',
+            '13' => '東京', '14' => '神奈川', '15' => '新潟', '16' => '富山',
+            '17' => '石川', '18' => '福井', '19' => '山梨', '20' => '長野',
+            '21' => '岐阜', '22' => '静岡', '23' => '愛知', '24' => '三重',
+            '25' => '滋賀', '26' => '京都', '27' => '大阪', '28' => '兵庫',
+            '29' => '奈良', '30' => '和歌山', '31' => '鳥取', '32' => '島根',
+            '33' => '岡山', '34' => '広島', '35' => '山口', '36' => '徳島',
+            '37' => '香川', '38' => '愛媛', '39' => '高知', '40' => '福岡',
+            '41' => '佐賀', '42' => '長崎', '43' => '熊本', '44' => '大分',
+            '45' => '宮崎', '46' => '鹿児島', '47' => '沖縄',
+        );
+    }
 }
 
-function subsidy_match_get_employee_sizes() {
-    return array(
-        '1-5'   => '1〜5名',
-        '6-20'  => '6〜20名',
-        '21-50' => '21〜50名',
-        '51-100' => '51〜100名',
-        '101+'  => '101名以上',
-    );
+if (!function_exists('subsidy_match_get_employee_sizes')) {
+    function subsidy_match_get_employee_sizes() {
+        return array(
+            '1-5'   => '1〜5名',
+            '6-20'  => '6〜20名',
+            '21-50' => '21〜50名',
+            '51-100' => '51〜100名',
+            '101+'  => '101名以上',
+        );
+    }
 }
 
-function subsidy_match_get_capital_ranges() {
-    return array(
-        'under_3m'  => '300万円未満',
-        '3m_10m'    => '300万〜1,000万円',
-        '10m_30m'   => '1,000万〜3,000万円',
-        '30m_100m'  => '3,000万〜1億円',
-        'over_100m' => '1億円以上',
-    );
+if (!function_exists('subsidy_match_get_capital_ranges')) {
+    function subsidy_match_get_capital_ranges() {
+        return array(
+            'under_3m'  => '300万円未満',
+            '3m_10m'    => '300万〜1,000万円',
+            '10m_30m'   => '1,000万〜3,000万円',
+            '30m_100m'  => '3,000万〜1億円',
+            'over_100m' => '1億円以上',
+        );
+    }
 }
 
-function subsidy_match_get_challenges() {
-    return array(
-        'equipment'  => '設備投資',
-        'it_dx'      => 'IT化・DX',
-        'hiring'     => '人材採用',
-        'overseas'   => '海外展開',
-        'rnd'        => '研究開発',
-        'succession' => '事業承継',
-    );
+if (!function_exists('subsidy_match_get_challenges')) {
+    function subsidy_match_get_challenges() {
+        return array(
+            'equipment'  => '設備投資',
+            'it_dx'      => 'IT化・DX',
+            'hiring'     => '人材採用',
+            'overseas'   => '海外展開',
+            'rnd'        => '研究開発',
+            'succession' => '事業承継',
+        );
+    }
 }
