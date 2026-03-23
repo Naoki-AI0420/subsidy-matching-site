@@ -297,6 +297,19 @@
         var dropdown = document.createElement('div');
         dropdown.className = 'chat-suggest-dropdown';
         dropdown.style.display = 'none';
+        dropdown.style.position = 'absolute';
+        dropdown.style.bottom = '100%';
+        dropdown.style.top = 'auto';
+        dropdown.style.left = '0';
+        dropdown.style.right = '0';
+        dropdown.style.zIndex = '200';
+        dropdown.style.maxHeight = '250px';
+        dropdown.style.overflowY = 'auto';
+        dropdown.style.background = '#FFFFFF';
+        dropdown.style.border = '1px solid #CCCCCC';
+        dropdown.style.borderRadius = '8px';
+        dropdown.style.boxShadow = '0 -4px 12px rgba(0,0,0,0.15)';
+        dropdown.style.marginBottom = '4px';
 
         var candidates = q.candidates || (q.getCandidates ? q.getCandidates() : []);
 
