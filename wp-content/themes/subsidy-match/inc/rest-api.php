@@ -129,13 +129,52 @@ function subsidy_match_handle_match($request) {
 
         if (!$region_matched) continue;
 
+        // 個人向け補助金を除外
+        $target_type = get_post_meta($post->ID, '_subsidy_target_type', true);
+        if ($target_type === 'personal') continue;
+
+        // 公募中のみ優先（公募終了は除外）
+        $subsidy_status = get_post_meta($post->ID, '_subsidy_status', true);
+        if ($subsidy_status === 'closed') continue;
+
         // 業種マッチ（25点）
         $target_industries = get_post_meta($post->ID, '_subsidy_target_industries', true);
         $target_industries = is_array($target_industries) ? $target_industries : array();
+
+        // 補助金のタイトル・概要から業種関連キーワードを判定
+        $title_content = $post->post_title . ' ' . $post->post_content;
+        $industry_label = '';
+        $industry_map = array(
+            'food_service' => array('飲食', '食品', 'レストラン', 'カフェ'),
+            'manufacturing' => array('製造', 'ものづくり', '工場', '金属'),
+            'construction' => array('建設', '建築', '工事', '土木'),
+            'wholesale_retail' => array('小売', '商店', '店舗', '販売'),
+            'medical_welfare' => array('医療', '介護', '福祉', '病院'),
+            'accommodation' => array('宿泊', 'ホテル', '旅館', '民泊'),
+            'transportation' => array('運輸', '物流', '運送', 'タクシー'),
+            'information_technology' => array('IT', 'ソフトウェア', 'システム', 'プログラム'),
+            'agriculture' => array('農業', '農家', '畜産', '漁業', '林業'),
+            'education' => array('教育', '学習', '塾', 'スクール'),
+            'real_estate' => array('不動産', '賃貸', 'マンション'),
+            'professional_services' => array('士業', '会計', '法律', 'コンサル'),
+        );
+
+        $industry_keyword_match = false;
+        if (!empty($industry) && isset($industry_map[$industry])) {
+            foreach ($industry_map[$industry] as $kw) {
+                if (mb_strpos($title_content, $kw) !== false) {
+                    $industry_keyword_match = true;
+                    break;
+                }
+            }
+        }
+
         if (!empty($target_industries) && in_array($industry, $target_industries)) {
             $score += 25;
+        } elseif ($industry_keyword_match) {
+            $score += 20; // タイトル・概要に業種キーワードがある
         } elseif (empty($target_industries)) {
-            $score += 15;
+            $score += 5; // タグなしは大幅減点（全部マッチさせない）
         }
 
         // 従業員規模マッチ（20点）
@@ -144,7 +183,7 @@ function subsidy_match_handle_match($request) {
         if (!empty($target_emp) && in_array($employee_size, $target_emp)) {
             $score += 20;
         } elseif (empty($target_emp)) {
-            $score += 12;
+            $score += 5; // タグなしは大幅減点
         }
 
         // 資本金マッチ（15点）
@@ -153,11 +192,10 @@ function subsidy_match_handle_match($request) {
         if (!empty($target_cap) && in_array($capital, $target_cap)) {
             $score += 15;
         } elseif (empty($target_cap)) {
-            $score += 10;
+            $score += 3; // タグなしは大幅減点
         }
 
         // 設立年数ボーナス（15点）
-        // 設立が浅い企業は創業系補助金にマッチしやすい
         $is_startup_subsidy = (
             strpos($post->post_title, '創業') !== false ||
             strpos($post->post_title, 'スタートアップ') !== false ||
@@ -166,19 +204,19 @@ function subsidy_match_handle_match($request) {
         if (in_array($establishment_years, array('under_1y', '1_3y')) && $is_startup_subsidy) {
             $score += 15;
         } elseif (!$is_startup_subsidy) {
-            $score += 8; // 一般的な補助金は設立年数問わず
+            $score += 3; // 一般補助金は設立年数ボーナス小さく
         }
 
         // 適合度
-        if ($score >= 75) {
+        if ($score >= 65) {
             $match_level = 'high';
-        } elseif ($score >= 50) {
+        } elseif ($score >= 45) {
             $match_level = 'medium';
         } else {
             $match_level = 'low';
         }
 
-        if ($score < 25) continue;
+        if ($score < 35) continue; // 閾値を上げて無関係な補助金を除外
 
         $adoption_rate = get_post_meta($post->ID, '_subsidy_adoption_rate', true);
         $adoption_rate = $adoption_rate ? (float) $adoption_rate : null;
