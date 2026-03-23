@@ -75,7 +75,9 @@ function subsidy_match_get_pref_map() {
  * マッチング処理（6問版）
  */
 function subsidy_match_handle_match($request) {
-    $params = $request->get_json_params();
+    // POST JSON ボディとクエリパラメータの両方に対応
+    $json_params = $request->get_json_params();
+    $params = !empty($json_params) ? $json_params : $request->get_params();
 
     $prefecture          = sanitize_text_field($params['prefecture'] ?? '');
     $city                = sanitize_text_field($params['city'] ?? '');
@@ -275,7 +277,7 @@ function subsidy_match_handle_match($request) {
  * リード登録（結果画面のリードゲート + 通知）
  */
 function subsidy_match_handle_register_lead($request) {
-    $params = $request->get_json_params();
+    $json_params = $request->get_json_params(); $params = !empty($json_params) ? $json_params : $request->get_params();
 
     $company_name = sanitize_text_field($params['company_name'] ?? '');
     $contact_name = sanitize_text_field($params['contact_name'] ?? '');
@@ -429,7 +431,7 @@ function subsidy_match_handle_system_interest($request) {
  * お問い合わせ処理
  */
 function subsidy_match_handle_contact($request) {
-    $params = $request->get_json_params();
+    $json_params = $request->get_json_params(); $params = !empty($json_params) ? $json_params : $request->get_params();
 
     $company = sanitize_text_field($params['company_name'] ?? '');
     $name    = sanitize_text_field($params['contact_name'] ?? '');
