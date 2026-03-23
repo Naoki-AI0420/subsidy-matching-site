@@ -342,7 +342,6 @@
         }
 
         input.addEventListener('input', updateDropdown);
-        input.addEventListener('focus', updateDropdown);
 
         var btn = document.createElement('button');
         btn.className = 'chat-select-btn';
