@@ -179,7 +179,7 @@ PROMPT;
             'anthropic-version' => '2023-06-01',
         ),
         'body' => wp_json_encode(array(
-            'model'      => 'claude-haiku-4-5-20251001',
+            'model'      => 'claude-3-5-haiku-20241022',
             'max_tokens' => 512,
             'system'     => $system_prompt,
             'messages'   => $messages,
@@ -196,9 +196,22 @@ PROMPT;
     $body = json_decode(wp_remote_retrieve_body($response), true);
 
     if (empty($body['content'][0]['text'])) {
+        // エラー詳細をログ
+        $error_detail = isset($body['error']) ? $body['error']['message'] : wp_json_encode($body);
+        error_log('[SubsidyMatch AI Chat] API Error: ' . $error_detail);
+        
+        // ユーザーにはフレンドリーなメッセージ + フォールバック
+        $fallback = subsidy_match_ai_fallback($message, $context);
+        if ($fallback) {
+            return new WP_REST_Response(array(
+                'success' => true,
+                'reply'   => $fallback,
+            ), 200);
+        }
+        
         return new WP_REST_Response(array(
             'success' => false,
-            'message' => 'AI応答の取得に失敗しました。',
+            'message' => 'ただいま混み合っております。お電話（03-XXXX-XXXX）または下のお問い合わせフォームからもご相談いただけます。',
         ), 500);
     }
 
@@ -206,4 +219,31 @@ PROMPT;
         'success' => true,
         'reply'   => $body['content'][0]['text'],
     ), 200);
+}
+
+/**
+ * APIエラー時のフォールバック応答
+ */
+function subsidy_match_ai_fallback($message, $context) {
+    $msg = mb_strtolower($message);
+    $subsidies = isset($context['matched_subsidies']) ? $context['matched_subsidies'] : array();
+    $top = !empty($subsidies) ? $subsidies[0] : null;
+    
+    // キーワードベースの応答
+    if (mb_strpos($msg, '予約') !== false || mb_strpos($msg, 'システム') !== false || mb_strpos($msg, 'IT') !== false) {
+        return 'システム導入をお考えですね！IT導入補助金（補助率1/2〜3/4、最大450万円）がぴったりです。予約システムや顧客管理など、幅広いITツールが対象になります。詳しい要件や申請のコツを15分の無料面談でご説明できますが、ご都合いかがですか？';
+    }
+    if (mb_strpos($msg, 'EC') !== false || mb_strpos($msg, 'ネット') !== false || mb_strpos($msg, 'オンライン') !== false) {
+        return 'ECサイトの構築ですね！IT導入補助金やIT小規模事業者持続化補助金が活用できます。補助率2/3で最大50万円、IT導入補助金なら最大450万円です。具体的な申請方法を無料面談でご説明できますが、いかがですか？';
+    }
+    if (mb_strpos($msg, '設備') !== false || mb_strpos($msg, '機械') !== false || mb_strpos($msg, '工場') !== false) {
+        return '設備投資をお考えですね！ものづくり補助金（最大1,250万円、補助率1/2〜2/3）が最適です。生産設備、検査装置、工作機械などが対象です。申請のポイントを無料面談でお伝えできますが、ご都合いかがですか？';
+    }
+    if (mb_strpos($msg, '人') !== false || mb_strpos($msg, '採用') !== false || mb_strpos($msg, '雇用') !== false) {
+        return '人材確保をお考えですね！雇用関連の助成金（キャリアアップ助成金、トライアル雇用助成金など）が活用できます。採用計画に合わせた最適な助成金を無料面談でご提案できますが、いかがですか？';
+    }
+    if ($top) {
+        return $top['title'] . '（最大' . ($top['amount_text'] ?: '') . '）についてのご質問ですね。この補助金の詳しい申請要件や採択のコツを、15分の無料面談でご説明できます。ご都合の良い日時はありますか？';
+    }
+    return '気になる補助金はありましたか？具体的にどんなことに活用したいか教えていただければ、最適な補助金をご提案できます。また、15分の無料面談で詳しくご説明することもできますよ。';
 }
