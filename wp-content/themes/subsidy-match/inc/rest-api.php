@@ -168,6 +168,8 @@ function subsidy_match_handle_match($request) {
             'education' => array('教育', '学習', '塾', 'スクール'),
             'real_estate' => array('不動産', '賃貸', 'マンション'),
             'professional_services' => array('士業', '会計', '法律', 'コンサル'),
+            'beauty' => array('美容', '理容', 'エステ', 'ネイル', 'サロン', '美容室', '理髪'),
+            'other' => array(), // その他は汎用キーワードマッチに任せる
         );
 
         $industry_keyword_match = false;
@@ -239,7 +241,7 @@ function subsidy_match_handle_match($request) {
             $match_level = 'low';
         }
 
-        if ($score < 40) continue; // 閾値を上げて無関係な補助金を除外
+        if ($score < 50) continue; // 閾値50 — マッチ度の高いものだけ通す
 
         $adoption_rate = get_post_meta($post->ID, '_subsidy_adoption_rate', true);
         $adoption_rate = $adoption_rate ? (float) $adoption_rate : null;
@@ -288,9 +290,14 @@ function subsidy_match_handle_match($request) {
     }
     $results = $unique_results;
 
+    // 上位20件に制限（厳選結果）
+    $total_matched = count($results);
+    $results = array_slice($results, 0, 20);
+
     return new WP_REST_Response(array(
-        'success' => true,
-        'results' => $results,
+        'success'       => true,
+        'results'       => $results,
+        'total_matched' => $total_matched,
     ), 200);
 }
 

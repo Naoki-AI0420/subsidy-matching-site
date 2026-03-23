@@ -544,7 +544,8 @@
         // ヘッダー
         html += '<div class="proposal-header">';
         html += '  <div class="proposal-header-badge">診断結果レポート</div>';
-        html += '  <h2>' + results.length + '件の補助金が見つかりました！</h2>';
+        html += '  <h2>御社に該当する補助金を厳選しました</h2>';
+        html += '  <p style="font-size:14px;opacity:0.9;">マッチ度の高い ' + results.length + ' 件をご案内します</p>';
         html += '  <p>' + escapeHtml(answers.prefecture + (answers.city || '')) + 'の' + escapeHtml(industryLabelMap[answers.industry] || answers.industry) + '企業様向け</p>';
         html += '</div>';
 
