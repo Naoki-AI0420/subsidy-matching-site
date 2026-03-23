@@ -112,10 +112,12 @@ function subsidy_match_handle_chat($request) {
 
     $api_key = subsidy_match_get_anthropic_key();
     if (empty($api_key)) {
+        // APIキーなしでもフォールバック応答を返す
+        $fallback = subsidy_match_ai_fallback($message, $context);
         return new WP_REST_Response(array(
-            'success' => false,
-            'message' => 'AI機能が設定されていません。',
-        ), 500);
+            'success' => true,
+            'reply'   => $fallback,
+        ), 200);
     }
 
     // コンテキストからシステムプロンプトを構築
