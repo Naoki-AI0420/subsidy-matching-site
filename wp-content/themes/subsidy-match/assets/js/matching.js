@@ -556,18 +556,20 @@
             html += '</section>';
         }
 
-        // 2件目以降はすりガラス
+        // 2件目以降はすりガラス + フォームを2件目に重ねる
         if (results.length > 1) {
-            html += '<div id="blurred-section">';
+            html += '<div id="blurred-section" style="position:relative;">';
+            // 2件目以降のカード（ぼかし表示）
             html += '<div class="blurred-cards">';
             for (var i = 1; i < Math.min(results.length, 4); i++) {
                 html += '<div class="subsidy-card-blurred">' + renderSubsidyCard(results[i]) + '</div>';
             }
             html += '</div>';
-
-            html += '<div class="blur-overlay">';
-            html += '  <h3>該当するすべての補助金情報を見る</h3>';
-            html += '  <p class="blur-overlay-desc">会社情報をご入力いただくと、すべての診断結果をご覧いただけます。</p>';
+            // フォームを2件目の上に重ねて表示
+            html += '<div class="blur-overlay" style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:flex-start;justify-content:center;padding-top:20px;background:linear-gradient(180deg,rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.95) 30%,rgba(255,255,255,1) 60%);z-index:10;border-radius:8px;">';
+            html += '  <div style="width:100%;max-width:480px;padding:0 20px;">';
+            html += '  <h3 style="text-align:center;margin-bottom:8px;">該当するすべての補助金情報を見る</h3>';
+            html += '  <p class="blur-overlay-desc" style="text-align:center;font-size:13px;color:#666;margin-bottom:16px;">会社情報をご入力いただくと、すべての診断結果をご覧いただけます。</p>';
             html += '  <div class="lead-gate-form" id="lead-gate-form">';
             html += '    <div class="lead-gate-field"><input type="text" id="gate-company" placeholder="会社名（必須）" class="lead-gate-input" required></div>';
             html += '    <div class="lead-gate-field"><input type="text" id="gate-name" placeholder="担当者名（必須）" class="lead-gate-input" required></div>';
@@ -576,6 +578,7 @@
             html += '    <div class="lead-gate-consent"><input type="checkbox" id="gate-consent"><label for="gate-consent"><a href="/privacy/" target="_blank" rel="noopener">個人情報の取り扱い</a>に同意する</label></div>';
             html += '    <button id="gate-submit-btn" class="btn btn-primary btn-large lead-gate-submit">すべての補助金を見る</button>';
             html += '    <p class="lead-gate-error" id="gate-error" style="display:none"></p>';
+            html += '  </div>';
             html += '  </div>';
             html += '</div>';
             html += '</div>';
