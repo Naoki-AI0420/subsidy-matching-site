@@ -69,6 +69,32 @@
     background: #F5F5F5;
     border-radius: 12px;
     overflow: hidden;
+    position: relative;
+}
+
+.chat-input-area {
+    overflow: visible !important;
+    position: relative;
+    z-index: 50;
+}
+
+.chat-suggest-wrapper {
+    position: relative;
+}
+
+.chat-suggest-dropdown {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    max-height: 250px;
+    overflow-y: auto;
+    background: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 8px;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
+    margin-bottom: 4px;
 }
 
 .chat-messages {
