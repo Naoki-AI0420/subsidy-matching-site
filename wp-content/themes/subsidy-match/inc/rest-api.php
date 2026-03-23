@@ -169,12 +169,24 @@ function subsidy_match_handle_match($request) {
             }
         }
 
+        // 汎用キーワード（全業種に関連する補助金）
+        $generic_keywords = array('中小企業', '小規模事業者', '事業者', '経営', '補助金', '設備投資', '販路', '生産性', 'DX', 'デジタル', '省力化', '創業', '起業', '雇用', '賃上げ', '人材');
+        $is_generic = false;
+        foreach ($generic_keywords as $gk) {
+            if (mb_strpos($title_content, $gk) !== false) {
+                $is_generic = true;
+                break;
+            }
+        }
+
         if (!empty($target_industries) && in_array($industry, $target_industries)) {
             $score += 25;
         } elseif ($industry_keyword_match) {
-            $score += 20; // タイトル・概要に業種キーワードがある
+            $score += 20; // タイトル・概要にユーザーの業種キーワードがある
+        } elseif ($is_generic) {
+            $score += 10; // 汎用的な補助金（全業種対象っぽい）
         } elseif (empty($target_industries)) {
-            $score += 5; // タグなしは大幅減点（全部マッチさせない）
+            $score += 0; // 業種不明 + 汎用でもない → 0点
         }
 
         // 従業員規模マッチ（20点）
@@ -216,7 +228,7 @@ function subsidy_match_handle_match($request) {
             $match_level = 'low';
         }
 
-        if ($score < 35) continue; // 閾値を上げて無関係な補助金を除外
+        if ($score < 40) continue; // 閾値を上げて無関係な補助金を除外
 
         $adoption_rate = get_post_meta($post->ID, '_subsidy_adoption_rate', true);
         $adoption_rate = $adoption_rate ? (float) $adoption_rate : null;
