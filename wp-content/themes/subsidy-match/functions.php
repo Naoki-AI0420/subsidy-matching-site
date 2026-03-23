@@ -5,7 +5,12 @@
  * @package SubsidyMatch
  */
 
-define('SUBSIDY_MATCH_VERSION', '2.0.' . filemtime(get_template_directory() . '/assets/css/common.css'));
+define('SUBSIDY_MATCH_VERSION', '3.0.' . max(
+    filemtime(get_template_directory() . '/assets/css/common.css'),
+    filemtime(get_template_directory() . '/assets/css/matching.css'),
+    filemtime(get_template_directory() . '/assets/js/matching.js'),
+    filemtime(get_template_directory() . '/functions.php')
+));
 
 /**
  * テーマセットアップ
