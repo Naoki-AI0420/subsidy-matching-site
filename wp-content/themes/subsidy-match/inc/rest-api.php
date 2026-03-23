@@ -139,6 +139,15 @@ function subsidy_match_handle_match($request) {
         $subsidy_status = get_post_meta($post->ID, '_subsidy_status', true);
         if ($subsidy_status === 'closed') continue;
 
+        // 融資・ファンド・卸売市場など補助金ではないものを除外
+        $title_lower = $post->post_title;
+        $exclude_keywords = array('融資', '金融公庫', 'ファンド出資', '卸売市場', '貸付', '信用保証');
+        $is_excluded = false;
+        foreach ($exclude_keywords as $ek) {
+            if (mb_strpos($title_lower, $ek) !== false) { $is_excluded = true; break; }
+        }
+        if ($is_excluded) continue;
+
         // 業種マッチ（25点）
         $target_industries = get_post_meta($post->ID, '_subsidy_target_industries', true);
         $target_industries = is_array($target_industries) ? $target_industries : array();
@@ -147,7 +156,7 @@ function subsidy_match_handle_match($request) {
         $title_content = $post->post_title . ' ' . $post->post_content;
         $industry_label = '';
         $industry_map = array(
-            'food_service' => array('飲食', '食品', 'レストラン', 'カフェ'),
+            'food_service' => array('飲食', 'レストラン', 'カフェ', '居酒屋', '食堂', 'テイクアウト', 'デリバリー'),
             'manufacturing' => array('製造', 'ものづくり', '工場', '金属'),
             'construction' => array('建設', '建築', '工事', '土木'),
             'wholesale_retail' => array('小売', '商店', '店舗', '販売'),
@@ -266,6 +275,18 @@ function subsidy_match_handle_match($request) {
         $rate_b = $b['adoption_rate'] ?? 0;
         return $rate_b <=> $rate_a;
     });
+
+    // 重複タイトル排除
+    $seen_titles = array();
+    $unique_results = array();
+    foreach ($results as $r) {
+        $clean_title = preg_replace('/[（(].+$/', '', $r['title']);
+        if (!isset($seen_titles[$clean_title])) {
+            $seen_titles[$clean_title] = true;
+            $unique_results[] = $r;
+        }
+    }
+    $results = $unique_results;
 
     return new WP_REST_Response(array(
         'success' => true,
