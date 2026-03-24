@@ -227,7 +227,7 @@ PROMPT;
  * APIエラー時のフォールバック応答
  */
 function subsidy_match_ai_fallback($message, $context) {
-    $msg = mb_strtolower($message);
+    $msg = $message;
     $subsidies = isset($context['matched_subsidies']) ? $context['matched_subsidies'] : array();
     $top = !empty($subsidies) ? $subsidies[0] : null;
     
@@ -235,7 +235,7 @@ function subsidy_match_ai_fallback($message, $context) {
     if (mb_strpos($msg, '予約') !== false || mb_strpos($msg, 'システム') !== false || mb_strpos($msg, 'IT') !== false) {
         return 'システム導入をお考えですね！IT導入補助金（補助率1/2〜3/4、最大450万円）がぴったりです。予約システムや顧客管理など、幅広いITツールが対象になります。詳しい要件や申請のコツを15分の無料面談でご説明できますが、ご都合いかがですか？';
     }
-    if (mb_strpos($msg, 'EC') !== false || mb_strpos($msg, 'ネット') !== false || mb_strpos($msg, 'オンライン') !== false) {
+    if (mb_strpos($msg, 'EC') !== false || mb_strpos($msg, 'ec') !== false || mb_strpos($msg, 'ネット') !== false || mb_strpos($msg, 'オンライン') !== false) {
         return 'ECサイトの構築ですね！IT導入補助金やIT小規模事業者持続化補助金が活用できます。補助率2/3で最大50万円、IT導入補助金なら最大450万円です。具体的な申請方法を無料面談でご説明できますが、いかがですか？';
     }
     if (mb_strpos($msg, '設備') !== false || mb_strpos($msg, '機械') !== false || mb_strpos($msg, '工場') !== false) {
