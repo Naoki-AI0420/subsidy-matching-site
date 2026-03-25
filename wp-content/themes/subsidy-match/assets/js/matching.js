@@ -539,6 +539,23 @@
      */
     function renderResultsWithGate(results) {
         pushDataLayer('matching_complete');
+
+        // 診断完了時にDiscord通知（メアドなし段階でも企業情報を通知）
+        var diagWebhook = 'https://discord.com/api/webhooks/1486161767561433100/0NS5v1q0fqf9Yzb4xN8PbeSQkdD2iJQohzZMh2rPI2IPtzU9eJFJDEBWpQ_6UtPVhn4i';
+        var industryName = industryLabelMap[answers.industry] || answers.industry || '不明';
+        var diagMsg = '🔍 **【診断完了】**\n'
+            + '所在地: ' + (answers.prefecture || '') + (answers.city || '') + '\n'
+            + '業種: ' + industryName + '\n'
+            + '資本金: ' + (answers.capital || '') + '\n'
+            + '従業員: ' + (answers.employee_size || '') + '\n'
+            + '設立: ' + (answers.establishment_years || '') + '\n'
+            + 'マッチ: ' + results.length + '件';
+        fetch(diagWebhook, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: diagMsg })
+        }).catch(function() {});
+
         var html = '';
 
         // ヘッダー
