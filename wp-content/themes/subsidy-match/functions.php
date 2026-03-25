@@ -5,6 +5,14 @@
  * @package SubsidyMatch
  */
 
+// .envが読めない場合のフォールバック定義
+if (!defined('DISCORD_WEBHOOK_URL')) {
+    define('DISCORD_WEBHOOK_URL', 'https://discord.com/api/webhooks/1486161767561433100/0NS5v1q0fqf9Yzb4xN8PbeSQkdD2iJQohzZMh2rPI2IPtzU9eJFJDEBWpQ_6UtPVhn4i');
+}
+if (!defined('NOTIFICATION_EMAIL')) {
+    define('NOTIFICATION_EMAIL', 'info@ai-growing-up.co.jp');
+}
+
 define('SUBSIDY_MATCH_VERSION', '3.0.' . max(
     filemtime(get_template_directory() . '/assets/css/common.css'),
     filemtime(get_template_directory() . '/assets/css/matching.css'),
