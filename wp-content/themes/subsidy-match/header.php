@@ -27,6 +27,14 @@
     src="https://www.facebook.com/tr?id=1224756433162167&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W2ML6W0KJG"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-W2ML6W0KJG');
+    </script>
     <meta name="format-detection" content="telephone=no">
     <meta name="description" content="中小企業・小規模事業者向け補助金・助成金マッチングサービス。簡単な質問に答えるだけで、活用可能な補助金をご案内します。">
     <meta property="og:title" content="<?php wp_title('|', true, 'right'); bloginfo('name'); ?>">
