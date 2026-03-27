@@ -349,6 +349,14 @@
         btn.addEventListener('click', function() {
             var val = input.value.trim();
             if (!val) return;
+            // 都道府県の場合はサジェストリストにある値のみ許可
+            if (q.key === 'prefecture' && candidates.indexOf(val) === -1) {
+                input.style.borderColor = '#C62828';
+                input.setAttribute('placeholder', '候補から選択してください');
+                input.value = '';
+                input.dispatchEvent(new Event('input'));
+                return;
+            }
             selectItem(val);
         });
 
@@ -520,12 +528,13 @@
         })
             .then(function (res) { return res.json(); })
             .then(function (data) {
-                if (data.success && data.results) {
+                if (data.success && data.results && data.results.length > 0) {
                     matchResults = data.results;
                     renderResultsWithGate(data.results);
                 } else {
+                    // 0件の場合はサンプル結果を表示（ユーザーを手ぶらで帰さない）
                     matchResults = getSampleResults();
-                    renderResultsWithGate(matchResults);
+                    renderResultsWithGate(matchResults, true);
                 }
             })
             .catch(function () {
@@ -537,7 +546,7 @@
     /**
      * 結果画面（リードゲート付き）
      */
-    function renderResultsWithGate(results) {
+    function renderResultsWithGate(results, isFallback) {
         pushDataLayer('matching_complete');
 
         // 診断完了時にDiscord通知（メアドなし段階でも企業情報を通知）
@@ -561,8 +570,13 @@
         // ヘッダー
         html += '<div class="proposal-header">';
         html += '  <div class="proposal-header-badge">診断結果レポート</div>';
-        html += '  <h2>御社に該当する補助金を厳選しました</h2>';
-        html += '  <p style="font-size:14px;opacity:0.9;">マッチ度の高い ' + results.length + ' 件をご案内します</p>';
+        if (isFallback) {
+            html += '  <h2>主要な補助金・助成金をご案内します</h2>';
+            html += '  <p style="font-size:14px;opacity:0.9;">御社の業種・地域で活用可能性の高い補助金をピックアップしました</p>';
+        } else {
+            html += '  <h2>御社に該当する補助金を厳選しました</h2>';
+            html += '  <p style="font-size:14px;opacity:0.9;">マッチ度の高い ' + results.length + ' 件をご案内します</p>';
+        }
         html += '  <p>' + escapeHtml(answers.prefecture + (answers.city || '')) + 'の' + escapeHtml(industryLabelMap[answers.industry] || answers.industry) + '企業様向け</p>';
         html += '</div>';
 
