@@ -197,7 +197,10 @@ function subsidy_match_handle_match($request) {
         } elseif ($industry_keyword_match) {
             $score += 20; // タイトル・概要にユーザーの業種キーワードがある
         } elseif ($is_generic) {
-            $score += 10; // 汎用的な補助金（全業種対象っぽい）
+            // 「その他」業種の場合は汎用補助金を多めに通す
+            $score += ($industry === 'other') ? 18 : 10;
+        } elseif (empty($target_industries) && $industry === 'other') {
+            $score += 5; // 「その他」業種はタグなしでも少し通す
         } elseif (empty($target_industries)) {
             $score += 0; // 業種不明 + 汎用でもない → 0点
         }
