@@ -580,35 +580,28 @@
         html += '  <p>' + escapeHtml(answers.prefecture + (answers.city || '')) + 'の' + escapeHtml(industryLabelMap[answers.industry] || answers.industry) + '企業様向け</p>';
         html += '</div>';
 
-        // 最初の1件を完全表示
+        // 全件すりガラス + メアドオプトインで解除
         if (results.length > 0) {
             html += '<section class="proposal-section">';
             html += '  <div class="proposal-section-header"><h3>該当する補助金・助成金</h3><span class="proposal-section-count">' + results.length + '件</span></div>';
-            html += renderSubsidyCard(results[0]);
             html += '</section>';
-        }
 
-        // 2件目以降はすりガラス + フォームを2件目に重ねる
-        if (results.length > 1) {
             html += '<div id="blurred-section" style="position:relative;">';
-            // 2件目以降のカード（ぼかし表示）
+            // 全カードをぼかし表示
             html += '<div class="blurred-cards">';
-            for (var i = 1; i < Math.min(results.length, 4); i++) {
+            for (var i = 0; i < Math.min(results.length, 4); i++) {
                 html += '<div class="subsidy-card-blurred">' + renderSubsidyCard(results[i]) + '</div>';
             }
             html += '</div>';
-            // フォームを2件目の上に重ねて表示
-            html += '<div class="blur-overlay" style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:flex-start;justify-content:center;padding-top:20px;background:linear-gradient(180deg,rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.95) 30%,rgba(255,255,255,1) 60%);z-index:10;border-radius:8px;">';
+            // フォームを重ねて表示（メアドのみ）
+            html += '<div class="blur-overlay" style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:flex-start;justify-content:center;padding-top:30px;background:linear-gradient(180deg,rgba(255,255,255,0.6) 0%,rgba(255,255,255,0.95) 40%,rgba(255,255,255,1) 70%);z-index:10;border-radius:8px;">';
             html += '  <div style="width:100%;max-width:480px;padding:0 20px;">';
-            html += '  <h3 style="text-align:center;margin-bottom:8px;">該当するすべての補助金情報を見る</h3>';
-            html += '  <p class="blur-overlay-desc" style="text-align:center;font-size:13px;color:#666;margin-bottom:16px;">会社情報をご入力いただくと、すべての診断結果をご覧いただけます。</p>';
+            html += '  <h3 style="text-align:center;margin-bottom:8px;">診断結果を確認する</h3>';
+            html += '  <p class="blur-overlay-desc" style="text-align:center;font-size:13px;color:#666;margin-bottom:16px;">メールアドレスをご入力いただくと、診断結果をご覧いただけます。</p>';
             html += '  <div class="lead-gate-form" id="lead-gate-form">';
-            html += '    <div class="lead-gate-field"><input type="text" id="gate-company" placeholder="会社名（必須）" class="lead-gate-input" required></div>';
-            html += '    <div class="lead-gate-field"><input type="text" id="gate-name" placeholder="担当者名（必須）" class="lead-gate-input" required></div>';
-            html += '    <div class="lead-gate-field"><input type="tel" id="gate-phone" placeholder="電話番号（必須）" class="lead-gate-input" required></div>';
-            html += '    <div class="lead-gate-field"><input type="email" id="gate-email" placeholder="メールアドレス（必須）" class="lead-gate-input" required></div>';
+            html += '    <div class="lead-gate-field"><input type="email" id="gate-email" placeholder="メールアドレス" class="lead-gate-input" required></div>';
             html += '    <div class="lead-gate-consent"><input type="checkbox" id="gate-consent"><label for="gate-consent"><a href="/privacy/" target="_blank" rel="noopener">個人情報の取り扱い</a>に同意する</label></div>';
-            html += '    <button id="gate-submit-btn" class="btn btn-primary btn-large lead-gate-submit">すべての補助金を見る</button>';
+            html += '    <button id="gate-submit-btn" class="btn btn-primary btn-large lead-gate-submit">診断結果を見る</button>';
             html += '    <p class="lead-gate-error" id="gate-error" style="display:none"></p>';
             html += '  </div>';
             html += '  </div>';
@@ -647,15 +640,18 @@
      * リードゲート処理
      */
     function handleLeadGate() {
-        var company = document.getElementById('gate-company').value.trim();
-        var name    = document.getElementById('gate-name').value.trim();
-        var phone   = document.getElementById('gate-phone').value.trim();
+        var companyEl = document.getElementById('gate-company');
+        var nameEl    = document.getElementById('gate-name');
+        var phoneEl   = document.getElementById('gate-phone');
+        var company = companyEl ? companyEl.value.trim() : '';
+        var name    = nameEl ? nameEl.value.trim() : '';
+        var phone   = phoneEl ? phoneEl.value.trim() : '';
         var email   = document.getElementById('gate-email').value.trim();
         var consent = document.getElementById('gate-consent').checked;
         var errorEl = document.getElementById('gate-error');
 
-        if (!company || !name || !phone || !email) {
-            errorEl.textContent = '全ての項目を入力してください。';
+        if (!email) {
+            errorEl.textContent = 'メールアドレスを入力してください。';
             errorEl.style.display = 'block';
             return;
         }
